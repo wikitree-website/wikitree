@@ -1,0 +1,122 @@
+<html>
+<head>
+<link rel="stylesheet" href="//bits.wikimedia.org/en.wikipedia.org/load.php?debug=false&amp;lang=en&amp;modules=ext.gadget.DRN-wizard%2CReferenceTooltips%2Ccharinsert%2Cfeatured-articles-links%2CrefToolbar%2Cswitcher%2Cteahouse%7Cext.math.styles%7Cext.uls.nojs%7Cext.visualEditor.viewPageTarget.noscript%7Cext.wikihiero%2CwikimediaBadges%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cmw.PopUpMediaTransform%7Cskins.vector.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector&amp;*">
+<link rel="stylesheet" href="//bits.wikimedia.org/en.wikipedia.org/load.php?debug=false&amp;lang=en&amp;modules=site&amp;only=styles&amp;skin=vector&amp;*">
+<style>
+    a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+    /* cache key: enwiki:resourceloader:filter:minify-css:7:3904d24a08aa08f6a68dc338f9be277e */
+
+    /**
+     * Custom CSS to clean things up
+     */
+    body {
+    	background: white;
+    }
+    #wikipedia-article {
+    	visibility: hidden;
+    }
+    .mw-body {
+        margin: 0;
+        border: none;
+    }
+
+</style>
+</head>
+<body>
+<div id="wikipedia-article">
+	<!-- substructure stolen from wikipedia -->
+	<div id="content" class="mw-body" role="main">
+		<a id="top"></a>
+		<div id="siteNotice"><div id="centralNotice"></div></div>
+		<div class="mw-indicators"></div>
+		<h1 id="firstHeading" class="firstHeading" lang="en">
+			<!-- article title goes here -->
+		</h1>
+		<div id="bodyContent" class="mw-body-content">
+			<div id="siteSub">From Wikipedia, the free encyclopedia</div>
+			<div id="contentSub"></div>
+			<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr">
+				<!-- article content goes here -->
+			</div>
+			<div id="wikipedia-categories">
+				<!-- article categories go here -->
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+	var $article = $('#wikipedia-article');
+	var $title = $('#firstHeading');
+	var $content = $('#mw-content-text');
+	var $categories = $('#wikipedia-categories');
+	var $htmlbody = $('html, body');
+
+	/**
+	 * Loads wikipedia article HTML content into page (iframe)
+	 * Overrides <a> events, passing them back to callback
+	 *
+	 * @param  {String}   title     	HTML article title
+	 * @param  {String}   content     	HTML article content
+	 * @param  {String}   categories    HTML article categories
+	 * @param  {Function} callback 		Fn to call on <a> click
+	 *                               	(will be passed {String} article title slug)
+	 */
+	function loadArticle(title, content, categories, callback) {
+		// load content
+		$title.html(title);
+		$content.html(content);
+		$categories.html(categories);
+		// prepare for display
+		$htmlbody.scrollTop(0);
+		$article.css({'visibility': 'visible'});
+		// override all <a> tag clicks
+		$article.find('a').on('click', function (e) {
+
+			// safety check
+			if (!(e && e.currentTarget && e.currentTarget.getAttribute('href'))) {
+				// block them just in case
+				e.preventDefault();
+				return;
+			}
+
+			// grab target href
+			var href = e.currentTarget.getAttribute('href');
+
+			console.log(href);
+
+			// check type of anchor
+			if (href.match(/^#/)) {
+				// within page
+				// let it go
+				return;
+			} else if (href.match(/^\/wiki\/(File|Image|Media):/)) {
+				// file page (won't work with mediawiki API)
+				// open in new window
+				e.preventDefault();
+				href = 'https://en.wikipedia.org' + href;
+				window.parent.open(href, '_blank');
+				return;
+			} else if (href.match(/^\/wiki\//)) {
+				// wiki page!
+				// callback
+				e.preventDefault();
+				callback(href.slice(6));
+			} else {
+				// unknown
+				// open in new window
+				e.preventDefault();
+				if (!href.match(/\/\//)) {
+					// no protocol, assume wikipedia
+					href = 'https://en.wikipedia.org' + href;
+				}
+				window.parent.open(href, '_blank');
+				return;
+			}
+		});
+	}
+
+</script>
+</body>
+</html>

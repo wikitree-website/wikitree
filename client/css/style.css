@@ -1,0 +1,474 @@
+/**
+ * Typography hacks via Medium
+ */
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -moz-font-feature-settings: "liga" on;
+}
+
+
+/**
+ * Globals
+ */
+
+html, body {
+    background-color: #CCC;
+    background-image: url('/img/noise.png');
+}
+
+.modal-700 {
+    min-width: 750px;
+}
+
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/**
+ * Screen too small
+ */
+.small-display-screen {
+    display: none;
+}
+@media (max-width: 700px) {
+    .small-display-screen {
+        display: block;
+        padding: 60px 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100000;
+        text-align: center;
+        font-weight: bold;
+        background: white;
+    }
+}
+
+
+/**
+ * Home page stylings
+ */
+
+#home-graph {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.home .up-left {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.home .up-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+}
+
+.home .up-right .account {
+    padding-bottom: 4px;
+}
+
+.home .page-title {
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 64px;
+    color: #222;
+}
+
+.home .jumbotron {
+    max-width: 700px;
+    margin: auto;
+    margin-top: 160px;
+    padding: 0;
+    background: none;
+}
+
+
+
+/**
+ * Main page stylings
+ */
+
+#resizer {
+    width: 20px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 9000;
+    cursor: col-resize;
+    cursor: ew-resize;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.overlay > .inner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+}
+
+
+.overlay#menu {
+    left: 0;
+    z-index: 700;
+    width: 270px;
+    background-color: #ECECEC;
+    -webkit-transition: all ease 0.1s;
+    -moz-transition: all ease 0.1s;
+    -o-transition: all ease 0.1s;
+    transition: all ease 0.1s;
+}
+
+.overlay#menu.ng-hide {
+    left: -270px;
+}
+
+.overlay#reader {
+    right: 0;
+    z-index: 600;
+    width: 60%;
+    background-color: #ECECEC;
+}
+
+#menu .map-controls {
+    width: auto;
+    height: 30px;
+    position: absolute;
+    right: -120px;
+    bottom: 10px;
+}
+
+.btn.btn-default.location-button {
+    /*background-color: #FC6;*/
+}
+
+.btn.btn-default.location-button:hover {
+    background-color: #FC6;
+}
+
+.menu-item {
+    position: relative;
+    border-top: 1px solid #CCC;
+    background-color: #ECECEC;
+}
+.menu-item:first-of-type {
+    border-top: none;
+}
+
+.menu-item.header {
+    height: 45px;
+}
+.menu-item.account {
+    height: 65px;
+}
+.menu-item.new-session {
+    height: 55px;
+}
+.menu-item.saved-sessions {
+    position: absolute;
+    top: 165px;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+}
+.menu-item.site-links {
+    height: 40px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.menu-item.header .title {
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+    line-height: 36px;
+}
+
+.menu-item.header .title a {
+    color: #333;
+}
+
+.menu-item.header .close-button {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+.menu-item.header .open-button {
+    position: absolute;
+    top: -1px;
+    right: -52px;
+}
+
+.menu-item.account .icon {
+    width: 55px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    line-height: 60px;
+    font-size: 36px;
+}
+.menu-item.account .text {
+    position: absolute;
+    top: 0;
+    left: 55px;
+    right: 0;
+    bottom: 0;
+}
+.menu-item.account .text h5 {
+    margin-bottom: 5px;
+}
+
+.menu-item.new-session .button {
+    padding: 10px 5px;
+}
+
+.menu-item.saved-sessions > .title {
+    margin: 0;
+    padding: 15px 8px;
+}
+.menu-item.saved-sessions > .title a {
+    color: #333;
+}
+
+.menu-item.saved-sessions .sessions {
+    position: absolute;
+    top: 45px;
+    left: 5px;
+    right: 5px;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.menu-item.saved-sessions .session {
+    display: block;
+    position: relative;
+    margin-bottom: 1px;
+    padding: 12px 13px;
+    text-decoration: none;
+    color: #333;
+    background-color: #FFF;
+}
+
+.menu-item.saved-sessions .session.active {
+    padding-left: 9px;
+    background-color: #DDD;
+    border-left: 5px solid #333;
+    color: #222;
+}
+
+.menu-item.saved-sessions .session:hover {
+    background-color: #CCC;
+    color: #222;
+}
+
+.menu-item.saved-sessions .session .controls {
+    display: none;
+}
+
+.menu-item.saved-sessions .session:hover .controls {
+    display: inline;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.menu-item.saved-sessions .session .title {
+    margin: 0;
+    margin-bottom: 1px;
+}
+
+.menu-item.saved-sessions .session .date {
+    margin-left: 1px;
+    font-size: 10px;
+    color: #555;
+}
+
+.menu-item.saved-sessions .session.active .date,
+.menu-item.saved-sessions .session:hover .date {
+    color: #444;
+}
+
+.menu-item.site-links .links {
+    padding-top: 8px;
+    text-align: center;
+}
+
+#reader .search .logo {
+    width: 50px;
+    height: 45px;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    text-align: center;
+}
+
+#reader .search .logo .spinner {
+    visibility: hidden;
+}
+
+#reader .search .bar {
+    height: 45px;
+    position: absolute;
+    top: 0;
+    left: 55px;
+    right: 127px;
+}
+
+#reader .search .head-controls {
+    height: 45px;
+    width: 40px;
+    position: absolute;
+    top: 0;
+    right: 81px;
+}
+
+#reader .search .history {
+    height: 45px;
+    width: 75px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#reader .article {
+    position: absolute;
+    top: 46px; /* +1 for border hack */
+    left: 0;
+    right: 0;
+    bottom: 1px; /* +1 for border hack */
+    overflow: hidden;
+    background: white;
+}
+
+#reader .article-border-top {
+    height: 1px;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    right: 0;
+    background: #CCC;
+}
+#reader .article-border-bottom {
+    height: 1px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #CCC;
+}
+
+#reader .article iframe {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: white;
+}
+
+
+
+#new-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 60%; /* width of reader */
+    bottom: 0;
+}
+
+
+
+
+/**
+ * D3 force graph styles
+ */
+
+svg {
+    position: relative;
+    z-index: 10;
+}
+
+g.node {
+
+}
+
+
+g.node circle {
+    fill: #FFF;
+    stroke: #FFF;
+    stroke-width: 12px;
+    cursor: pointer;
+}
+
+g.node text.title {
+    fill: #333;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+g.node:hover text.title,
+g.node text.title:hover {
+    font-weight: bold;
+}
+
+
+g.node.active circle {
+    fill: #FC6;
+    stroke: #FC6;
+}
+
+g.node.active text.title {
+    font-weight: bold;
+}
+
+
+g.node.fixed circle {
+    fill: #676767;
+    stroke: #FFF;
+}
+
+g.node.active.fixed circle {
+    fill: #676767;
+    stroke: #FC6;
+}
+
+
+line.link {
+    stroke: #AAA;
+    stroke-width: 3px;
+    stroke-dasharray: 4, 3;
+}
+
+line.link.linkback {
+    stroke: transparent;
+}

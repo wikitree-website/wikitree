@@ -1,0 +1,28 @@
+<li>
+    <div class="session"
+       ng-class="{ active : active == $index }"
+       ng-class="{ hover : hover }"
+       ng-click="select($index)">
+
+        <h5 ng-hide="editing" class="title">
+            {{ session.name }}
+        </h5>
+        <input type="text" ng-show="editing" ng-click="$event.stopPropagation()" ng-model="session.rename" escpress="cancel_edit()" enterpress="rename()"/>
+        <div class="date">
+            <!--Last modified {{ session.date | date : medium }}-->
+            <span> Saved {{ session.date | amCalendar }}</span> <!--<time title="{{ session.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}" am-time-ago="session.date"></time>-->
+        </div>
+        <div class="controls">
+
+            <div class="btn-group-vertical" role="group">
+                <button type="button" ng-click="edit();$event.stopPropagation()" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <button ng-click="delete($index);$event.stopPropagation()" type="button" class="btn btn-danger btn-xs" data-toggle="modal">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</li>

@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wikitree</title>
+    <link rel="stylesheet" type="text/css" href="/css/legacy.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/lib/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="main">
+        <div id="map">
+            <div id="space-graph">
+                <div class="scroller">
+                    <div class="scrolled">
+                        <div class="content">
+                            <!-- SVG inserts here -->
+
+                            <div id="test"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="menu" class="overlay">
+            <div class="inner">
+                <div class="menu-item header">
+                    <button type="button" class="close-button btn btn-default btn-sm">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="open-button btn btn-default btn-sm">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                    <h3 class="title">
+                        <a href="/dummies/returning.html">
+                            Wikitree
+                        </a>
+                    </h3>
+                </div>
+                <!-- <div class="menu-item account">
+                    <div class="icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="text">
+                        <h5>Saved to George Costanza</h5>
+                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-account">
+                            <i class="fa fa-user"></i>
+                            &nbsp;Account&nbsp;
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs">
+                            <i class="fa fa-sign-out"></i>
+                            &nbsp;Log out&nbsp;
+                        </button>
+                    </div>
+                </div> -->
+                <div class="menu-item account">
+                    <div class="icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="text">
+                        <h5>Saved to local browser</h5>
+                        <button disabled="disabled" type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-sign-in">
+                            <s>
+                                <i class="fa fa-sign-in"></i>
+                                &nbsp;Sign in&nbsp;
+                            </s>
+                        </button>
+                        <button disabled="disabled" type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-register">
+                            <s>
+                                <i class="fa fa-user"></i>
+                                &nbsp;Register&nbsp;
+                            </s>
+                        </button>
+                    </div>
+                </div>
+                <div class="menu-item new-session">
+                    <div class="button">
+                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modal-new-session">
+                            <i class="fa fa-files-o"></i>
+                            &nbsp;New session&nbsp;
+                        </button>
+                    </div>
+                </div>
+                <div class="menu-item saved-sessions">
+                    <h4 class="title">
+                        <!-- <a href="#" data-toggle="modal" data-target="#modal-sessions">
+                            Saved sessions&nbsp;
+                        </a> -->
+                        Saved sessions&nbsp;
+                    </h4>
+                    <div class="sessions">
+                        <a class="session active" href="#">
+                            <h5 class="title">
+                                Normal mode
+                            </h5>
+                            <div class="date">
+                                Last modified 5:32pm
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                INFO 470 - Research paper
+                            </h5>
+                            <div class="date">
+                                Last modified Feb 11th
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                INFO 481 mgmt styles
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Programming paradigms
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Fringe physics &amp; philosophy
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Human spirituality &amp; wellness
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Wikirace III
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Wikirace II
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Wikirace I
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                String theory
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Quantum chromodynamics
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Anatomy
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Evolutionary biology
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                History of the human race
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                How many sessions will people have, really?
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                It's getting hard to think of more names
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                I feel like I'll only have 3, maybe 4 tops
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Isn't the fun in mixing all the nodes together and seeing how seemingly unrelated articles interweave?
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Oh but like, school projects
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Right, research tool
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Not just aimless wanderings
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Focused expeditions through the infosphere. The Wikisphere.
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Mapping the explorer's journey
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                        <a class="session" href="#">
+                            <h5 class="title">
+                                Hi
+                            </h5>
+                            <div class="date">
+                                Last modified Nov 12th, 2014
+                            </div>
+                            <div class="controls">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="menu-item site-links">
+                    <div class="links">
+                        <a href="#">
+                            About
+                        </a>
+                        &nbsp;|&nbsp;
+                        <a href="#">
+                            Help
+                        </a>
+                        &nbsp;|&nbsp;
+                        <a href="#">
+                            Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="reader" class="overlay">
+            <div class="inner">
+                <div class="search">
+                    <div class="w">
+                        <img src="/img/w.png">
+                    </div>
+                    <div class="bar">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for a Wikipedia article...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article">
+                    <iframe id="article-frame" width="100%" height="100%" src="/dummies/article-frame.html">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- MODALLLLLSSSSSSSS -->
+
+
+    <!-- Sign in -->
+    <div id="modal-sign-in" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-sign-in-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-sign-in-label">
+                        User sign in
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-sign-in-email">
+                            Email
+                        </label>
+                        <input type="email" class="form-control" id="modal-sign-in-email" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-sign-in-password">
+                            Password
+                        </label>
+                        <input type="password" class="form-control" id="modal-sign-in-password" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">
+                        Sign in&nbsp;
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel&nbsp;
+                        <i class="fa fa-ban"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register -->
+    <div id="modal-register" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-register-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-register-label">
+                        User registration
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-register-name">
+                            Name
+                        </label>
+                        <input type="name" class="form-control" id="modal-register-name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-register-email">
+                            Email
+                        </label>
+                        <input type="email" class="form-control" id="modal-register-email" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-register-password">
+                            Password
+                        </label>
+                        <input type="password" class="form-control" id="modal-register-password" placeholder="Enter password">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-register-rpassword">
+                            Repeat password
+                        </label>
+                        <input type="rpassword" class="form-control" id="modal-register-rpassword" placeholder="Enter password again">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">
+                        Register&nbsp;
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel&nbsp;
+                        <i class="fa fa-ban"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account -->
+    <div id="modal-account" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-account-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-account-label">
+                        User account
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-account-name">
+                            Name
+                        </label>
+                        <input type="name" class="form-control" id="modal-account-name" value="George Costanza">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-account-email">
+                            Email
+                        </label>
+                        <input type="email" class="form-control" id="modal-account-email" value="george@costanza.net">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-account-new-password">
+                            New password
+                        </label>
+                        <input type="password" class="form-control" id="modal-account-new-password" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-account-new-rpassword">
+                            Repeat new password
+                        </label>
+                        <input type="new-rpassword" class="form-control" id="modal-account-new-rpassword" placeholder="Enter new password again">
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="modal-account-password">
+                            Current password
+                        </label>
+                        <input type="password" class="form-control" id="modal-account-password" placeholder="Enter current password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger">
+                        Delete account&nbsp;
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button type="button" class="btn btn-success">
+                        Save changes&nbsp;
+                        <i class="fa fa-save"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel&nbsp;
+                        <i class="fa fa-ban"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit session -->
+    <div id="modal-edit-session" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-edit-session-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-edit-session-label">
+                        Edit session
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-edit-session-name">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" id="modal-edit-session-name" value="Normal mode">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger">
+                        Delete session&nbsp;
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button type="button" class="btn btn-success">
+                        Save changes&nbsp;
+                        <i class="fa fa-save"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel&nbsp;
+                        <i class="fa fa-ban"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New session -->
+    <div id="modal-new-session" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-new-session-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-700">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-new-session-label">
+                        Wikitree
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="home sessions">
+                        <div class="jumbotron search">
+                            <div class="container">
+                                <h2 class="search-title">New session</h2>
+                                <!-- search -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control input-lg" placeholder="Search for a Wikipedia article...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-lg btn-default" type="button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/lib/d3/d3.min.js"></script>
+    <script type="text/javascript">
+
+
+
+        /**
+         * Activate scroll-to-drag on a .scroller/.scrolled pair
+         *
+         * @param  {HTMLElement} containerEl    Element to find pair in
+         * @requires jQuery as $
+         */
+        function dragToScroll(containerEl) {
+
+            // find target elements
+            var $container = $(containerEl);
+            var $scroller = $container.find('.scroller');
+            var $scrolled = $container.find('.scrolled');
+
+            // scroll to center
+            $scroller.scrollLeft(
+                $scrolled.width() / 2 -
+                $scroller.width() / 2 +
+
+                // hacky? center x in respect to reader
+                // todo: half n half for map n reader
+                $('#reader').width() / 2
+
+            );
+            $scroller.scrollTop(
+                $scrolled.height() / 2 -
+                $scroller.height() / 2
+            );
+
+            // start drag
+            $scrolled.on('mousedown', function (e) {
+                // attach current position as data
+                $scrolled.data('pan', {
+                    'pageX': e.pageX,
+                    'pageY': e.pageY,
+                    'scrollX': $scroller.scrollLeft(),
+                    'scrollY': $scroller.scrollTop()
+                });
+                // handle drag on any movement
+                $scrolled.on('mousemove', dragHandler);
+                // release drag handler on next mouseup
+                $(document).one('mouseup', function (e) {
+                    $scrolled.unbind('mousemove', dragHandler);
+                });
+            });
+
+            // during drag
+            function dragHandler(e) {
+                e.preventDefault();
+                // grab previous position
+                var prev = $scrolled.data('pan');
+                // calculate position change
+                var deltaX = e.pageX - prev.pageX;
+                var deltaY = e.pageY - prev.pageY;
+                // update scroll position
+                var scrollX = prev.scrollX - deltaX;
+                var scrollY = prev.scrollY - deltaY;
+                $scroller.scrollLeft(scrollX);
+                $scroller.scrollTop(scrollY);
+            }
+
+        }
+
+        // add dragging to space graph
+        dragToScroll(document.getElementById('space-graph'));
+
+
+
+
+
+
+        /**
+         * Force graph playtime
+         */
+
+        // enter, update, exit - http://bost.ocks.org/mike/join
+        // simple graph - http://bl.ocks.org/sathomas/11550728
+        // build graph - http://bl.ocks.org/mbostock/929623
+        // resizable - http://bl.ocks.org/mbostock/3355967
+        // drag + zoom - http://bl.ocks.org/mbostock/6123708
+
+        var forceGraph = (function () {
+
+            var width = 100;
+            var height = 100;
+
+            var zoom = d3.behavior.zoom()
+                .scaleExtent([0.2, 10])
+                .on('zoom', function () {
+                    container.attr(
+                        'transform',
+                        'translate(' + d3.event.translate + ')' +
+                        'scale(' + d3.event.scale + ')'
+                    );
+                });
+
+            var svg = d3.select('#map .content')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            var rect = svg.append('rect')
+                .attr('width', width)
+                .attr('height', height)
+                .style('fill', 'none')
+                .style('pointer-events', 'all')
+                .call(zoom)
+                .on('dblclick.zoom', null);
+
+            var container = svg
+                .append('g');
+
+            var force = d3.layout.force()
+                .linkDistance(60)
+                .charge(-360)
+                .gravity(0.01)
+                .on('tick', tick);
+
+            var links = force.links();
+            var nodes = force.nodes();
+
+            var linkSelection = container
+                .append('svg:g')
+                .attr('class', 'links')
+                .selectAll('line.link');
+            var nodeSelection = container
+                .append('svg:g')
+                .attr('class', 'nodes')
+                .selectAll('g.node');
+
+
+            function resize(w, h) {
+                // update globals
+                width = w;
+                height = h;
+                // update elements
+                svg
+                    .attr('width', width)
+                    .attr('height', height);
+                rect
+                    .attr('width', width)
+                    .attr('height', height);
+                force
+                    .size([width, height])
+                    .resume();
+            }
+
+
+            var isDragging = false;
+            var nodeDrag = d3.behavior.drag()
+                .on('dragstart', function (d, i) {
+                    d3.event.sourceEvent.stopPropagation();
+                })
+                .on('drag', function (d, i) {
+                    if (!isDragging) {
+                        d.fixed = true;
+                        d3.select(this).classed('fixed', true);
+                        isDragging = true;
+                    }
+                    force.start();
+                    d3.event.sourceEvent.stopPropagation();
+                    d.px += d3.event.x;
+                    d.py += d3.event.y;
+                    d.x += d3.event.x;
+                    d.y += d3.event.y;
+                    tick();
+                })
+                .on('dragend', function (d, i) {
+                    d3.event.sourceEvent.stopPropagation();
+                    if (isDragging) {
+                        tick();
+                        isDragging = false;
+                    }
+                });
+
+
+            function tick() {
+                linkSelection
+                    .attr('x1', function(d) { return d.source.x; })
+                    .attr('y1', function(d) { return d.source.y; })
+                    .attr('x2', function(d) { return d.target.x; })
+                    .attr('y2', function(d) { return d.target.y; });
+                nodeSelection
+                    .attr('transform', function(d) {
+                        return 'translate(' + d.x + ',' + d.y + ')';
+                    });
+            }
+
+
+
+            // hacky tracky
+            var currIndex = null;
+
+
+
+
+            function handleNodeClick(d, i) {
+                currIndex = i;
+                loadFrame(d.title);
+
+                nodeSelection.classed('active', function (d, i) {
+                    return (i === currIndex);
+                });
+
+            }
+
+            function handleNodeDblclick(d, i) {
+                d.fixed = false
+                d3.select(this).classed('fixed', false);
+                force.start();
+            }
+
+            function handleLabelClick(d, i) {
+                currIndex = i;
+                loadFrame(d.title);
+
+                nodeSelection.classed('active', function (d, i) {
+                    return (i === currIndex);
+                });
+
+            }
+
+            // add new node to graph
+
+            function addNode(title, sourceIndex) {
+
+                addNodeData(title, sourceIndex);
+                updateElements();
+
+                var newIndex = nodes.length - 1;
+                currIndex = newIndex;
+
+                nodeSelection.classed('active', function (d, i) {
+                    return (i === currIndex);
+                });
+
+                return newIndex;
+            }
+
+            function addNodeData(title, sourceIndex) {
+
+                // grab source node if index given
+                var sourceNode = null;
+                if (typeof sourceIndex === 'number') {
+                    // pass -1 to make unconnected node
+                    if (sourceIndex >= 0) {
+                        sourceNode = nodes[sourceIndex];
+                    }
+                } else if (typeof currIndex === 'number') {
+                    sourceNode = nodes[currIndex];
+                }
+
+                // make a new node
+                var title = title || '';
+                var newNode = {
+                    index: nodes.length,
+                    title: title
+                };
+                // set new node origin
+                if (sourceNode) {
+                    newNode.x = sourceNode.x + getJitter(10);
+                    newNode.y = sourceNode.y + getJitter(10);
+                } else {
+                    var size = force.size();
+                    newNode.x = size[0] / 2 + getJitter(10);
+                    newNode.y = size[1] / 2 + getJitter(10);
+                }
+
+                // store new node reference
+                nodes.push(newNode);
+                // link new node to source node?
+                if (sourceNode) {
+                    links.push( {
+                        index: links.length,
+                        source: sourceNode,
+                        target: newNode
+                    });
+                }
+
+            }
+
+            function updateElements() {
+
+                // update link elements
+                linkSelection = linkSelection.data(links);
+                linkSelection
+                    .enter()
+                        .append('svg:line')
+                        .attr('class', 'link');
+
+                // update node elements
+                nodeSelection = nodeSelection.data(nodes);
+                var newNodes;
+                newNodes = nodeSelection
+                    .enter()
+                        .append('svg:g')
+                        .attr('class', 'node');
+                newNodes
+                    .append('svg:circle')
+                        .attr('r', 9)
+                        .on('mousedown', handleNodeClick)
+                        .on('dblclick', handleNodeDblclick)
+                        .call(nodeDrag);
+                newNodes
+                    .append('svg:text')
+                        .attr('class', 'title')
+                        .attr('dx', 6)
+                        .attr('dy', -6)
+                        .text(function (d) { return d.title })
+                        .on('mousedown', handleLabelClick);
+
+                // keep things moving
+                force.start();
+
+            }
+
+
+            // get random +/- jitter
+            function getJitter(factor) {
+                var jitter = factor * Math.random();
+                if (Math.random() > 0.5) { jitter -= jitter * 2; }
+                return jitter;
+            }
+
+
+            // interface
+            return {
+                addNode: addNode,
+                resize: resize
+            }
+
+        })();
+
+        forceGraph.resize(4000, 4000);
+
+
+
+
+
+
+
+
+        /**
+         * MediaWiki API helpers
+         */
+
+        var wikiAPI = {
+
+            // http://www.mediawiki.org/wiki/API:Parsing_wikitext
+            getArticle: function (title, success, error) {
+                $.ajax({
+                    url: 'https://en.wikipedia.org/w/api.php',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    data: {
+                        action: 'parse',
+                        format: 'json',
+                        prop: 'text|categorieshtml|displaytitle',
+                        redirects: 'true',
+                        page: title
+                    },
+                    success: success,
+                    error: error
+                });
+            },
+
+            // http://www.mediawiki.org/wiki/API:Parsing_wikitext
+            getDisplayTitle: function (title, success, error) {
+                $.ajax({
+                    url: 'https://en.wikipedia.org/w/api.php',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    data: {
+                        action: 'parse',
+                        format: 'json',
+                        prop: 'displaytitle',
+                        redirects: 'true',
+                        page: title
+                    },
+                    success: success,
+                    error: error
+                });
+            },
+
+            // http://www.mediawiki.org/wiki/API:Opensearch
+            getSuggestions: function (title, success, error) {
+                $.ajax({
+                    url: 'https://en.wikipedia.org/w/api.php',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    data: {
+                        action: 'opensearch',
+                        format: 'json',
+                        namespace: 0,
+                        limit: 10,
+                        search: title
+                    },
+                    success: success,
+                    error: error
+                });
+            }
+
+        };
+
+
+
+        /**
+         * Testing iFrame
+         */
+
+        // grab iframe
+        var $iframe = $('#article-frame');
+        var iframe = null;
+
+        // once its loaded
+        $iframe.on('load', function () {
+
+            // how to angular?
+            // http://stackoverflow.com/questions/17547917/angularjs-image-onload-event
+
+            // grab iframe's global JS scope
+            iframe = $iframe[0].contentWindow;
+
+            // start somewhere
+            addArticle('normal mode');
+
+        });
+
+
+        // add article to "tree"
+        function addArticle(title) {
+            loadFrame(title, function (title) {
+                // add new node with human title
+                forceGraph.addNode(title);
+            })
+        }
+
+
+        // function for loading article frame
+        function loadFrame(title, callback) {
+
+            // fetch from server
+            wikiAPI.getArticle(title, function (res) {
+                if (res && res.parse) {
+
+                    // grab content from result
+                    var title = res.parse.title;
+                    var content = res.parse.text['*'];
+                    var categories = res.parse.categorieshtml['*'];
+
+                    // pass html to iframe
+                    iframe.loadArticle(title, content, categories, function (slug) {
+
+                        // translate slug
+                        slug = decodeURIComponent(slug);
+
+                        // recursion!?
+                        addArticle(slug);
+
+                    });
+
+                    // callback with human title
+                    if (callback) callback(title);
+
+                }
+            });
+
+        }
+
+    </script>
+</body>
+</html>
