@@ -48,4 +48,4 @@ master: the feature you developed.
 
 7) Get together with another developer and have them review your code.  When they sign off on it, they will merge your code in and **both of you** will be responsible for the code.  The merge can be done in pull request's comment section next to the build status.
 
-8) Kick your feet up and crack a cold one.
+8) Kick your feet up and crack open a cold one.
