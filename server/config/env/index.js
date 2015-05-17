@@ -12,13 +12,14 @@ module.exports = _.assign(
 
 	// settings for any environment
 	{
-		env: env,
+		env: env
 	},
 
-	// secret settings
-	require('./secrets') || {},
-
 	// settings for our current environment
-	require('./' + env) || {}
+	require('./' + env) || {},
+
+	// secret settings
+	require('../../../../secrets') || {},
+	require('../../../../secrets/' + env) || {}
 
 );
