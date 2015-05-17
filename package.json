@@ -1,6 +1,6 @@
 {
   "name": "wikitree",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Visual mapping companion for your Wikipedia wanderings",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexburner/wikitree.git"
+    "url": "https://github.com/wikitree-website/wikitree.git"
   },
   "keywords": [
     "Wikitree",
@@ -56,7 +56,7 @@
   "author": "Team Wikitree",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexburner/wikitree/issues"
+    "url": "https://github.com/wikitree-website/wikitree/issues"
   },
   "homepage": "http://wikitree.website"
 }
