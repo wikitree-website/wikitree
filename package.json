@@ -1,7 +1,7 @@
 {
   "name": "wikitree",
   "version": "0.1.1",
-  "description": "Visual mapping companion for your Wikipedia wanderings",
+  "description": "A web-based research tool, a visual mapping companion for your Wikipedia wanderings.",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "2.9.x",
