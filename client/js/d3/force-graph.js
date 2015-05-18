@@ -165,8 +165,8 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
         .enter()
             .append('svg:line')
             .attr('class', 'link')
-            .classed('linkback', function (d) { return d.linkback; })
-            .style('marker-end', 'url(#arrow)');
+            .style('marker-end', 'url(#arrow)')
+            .classed('linkback', function (d) { return d.linkback; });
 
     // update node elements
     this.node = this.node.data(nodes, function (d) { return d.uuid; });
