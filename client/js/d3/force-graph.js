@@ -1,52 +1,52 @@
 function ForceGraph(containerEl, session, sessions, articles) {
+    var self = this;
 
     /**
      * Properties
      */
 
     // angular things
-    this.ng = {};
-    this.ng.session = session;
-    this.ng.sessions = sessions;
-    this.ng.articles = articles;
+    self.ng = {};
+    self.ng.session = session;
+    self.ng.sessions = sessions;
+    self.ng.articles = articles;
 
     // user pressed keycode reference
-    this.keysPressed = {};
+    self.keysPressed = {};
 
     // html container
-    this.containerEl = containerEl;
+    self.containerEl = containerEl;
 
     // dimensions
-    this.width = containerEl.clientWidth;
-    this.height = containerEl.clientHeight;
+    self.width = containerEl.clientWidth;
+    self.height = containerEl.clientHeight;
 
     // d3 selections
-    this.svg;
-    this.rect;
-    this.group;
-    this.node;
-    this.link;
+    self.svg;
+    self.rect;
+    self.group;
+    self.node;
+    self.link;
 
     // d3 layouts & behaviors
-    this.tick = this.makeTick();
-    this.force = this.makeForce();
-    this.zoom = this.makeZoom();
-    this.drag = this.makeDrag();
+    self.tick = self.makeTick();
+    self.force = self.makeForce();
+    self.zoom = self.makeZoom();
+    self.drag = self.makeDrag();
 
     // event handlers
-    this.nodeClick = this.makeNodeClick();
+    self.nodeClick = self.makeNodeClick();
 
     /**
-     * Construction
+     * Initialization
      */
 
-    this.init();
+    self.init();
 
     /**
      * Global events
      */
 
-    var self = this;
     d3.select(window)
         // resize on window resize
         .on('resize', function () {
@@ -59,34 +59,42 @@ function ForceGraph(containerEl, session, sessions, articles) {
         .on('keyup', function () {
             self.keysPressed[d3.event.keyCode] = false;
         });
+
+    /**
+     * Complete
+     */
+
+    return self;
+
 }
 
 ForceGraph.prototype.init = function () {
-    this.svg = d3.select(this.containerEl)
+    var self = this;
+    self.svg = d3.select(self.containerEl)
         .append('svg')
-        .attr('width', this.width)
-        .attr('height', this.height);
-    this.rect = this.svg
+        .attr('width', self.width)
+        .attr('height', self.height);
+    self.rect = self.svg
         .append('rect')
         .attr('width', '100%')
         .attr('height', '100%')
         .style('fill', 'none')
         .style('pointer-events', 'all')
-        .call(this.zoom)
+        .call(self.zoom)
         .on('dblclick.zoom', null);
-    this.group = this.svg
+    self.group = self.svg
         .append('g');
-    this.link = this.group
+    self.link = self.group
         .append('svg:g')
         .attr('class', 'links')
         .selectAll('line.link');
-    this.node = this.group
+    self.node = self.group
         .append('svg:g')
         .attr('class', 'nodes')
         .selectAll('g.node');
 
     // link arrow markers
-    this.svg.append('defs')
+    self.svg.append('defs')
         .selectAll('marker')
             .data(['arrow'])
             .enter()
@@ -104,49 +112,52 @@ ForceGraph.prototype.init = function () {
 };
 
 ForceGraph.prototype.updateSize = function () {
-    this.width = this.containerEl.clientWidth;
-    this.height = this.containerEl.clientHeight;
+    var self = this;
+    self.width = self.containerEl.clientWidth;
+    self.height = self.containerEl.clientHeight;
 
     // NOTE TODO FIXME
-    // this is the worst solution to the problem
+    // self is the worst solution to the problem
     // for the love of god, find a better solution
-    if (!(this.width && this.height)) {
+    if (!(self.width && self.height)) {
         console.error('BAD! graph size updating with no container size');
         return;
     }
 
-    this.svg
-        .attr('width', this.width)
-        .attr('height', this.height);
-    this.force
-        .size([this.width, this.height])
+    self.svg
+        .attr('width', self.width)
+        .attr('height', self.height);
+    self.force
+        .size([self.width, self.height])
         .start();
 };
 
 ForceGraph.prototype.updateCurrentNode = function () {
-    var currentNode = this.ng.session.getCurrentNode();
-    this.node.classed('active', function (d) {
+    var self = this;
+    var currentNode = self.ng.session.getCurrentNode();
+    self.node.classed('active', function (d) {
         return d.uuid === currentNode.uuid;
     });
 };
 
 ForceGraph.prototype.updateNodesAndLinks = function () {
+    var self = this;
 
     // NOTE TODO FIXME
-    // this is the worst solution to the problem
+    // self is the worst solution to the problem
     // for the love of god, find a better solution
-    if (!(this.width && this.height)) {
+    if (!(self.width && self.height)) {
         console.error('BAD! graph nodes+links updating with no container size');
         return;
     }
 
     // grab copies of nodes & links from angular
-    var nodes = this.ng.session.getNodes().slice();
-    var links = this.ng.session.getLinks().slice();
+    var nodes = self.ng.session.getNodes().slice();
+    var links = self.ng.session.getLinks().slice();
 
     // give nodes starting positions
-    var centerX = this.width / 2;
-    var centerY = this.height / 2;
+    var centerX = self.width / 2;
+    var centerY = self.height / 2;
     nodes.forEach(function (node) {
         if (!(node.x || node.y)) {
             node.x = centerX + (Math.random() * 5);
@@ -155,13 +166,13 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
     });
 
     // add graph properties
-    this.force.nodes(nodes);
-    this.force.links(links);
+    self.force.nodes(nodes);
+    self.force.links(links);
 
     // update link elements
-    this.link = this.link.data(links, function (d) { return d.uuid; });
-    this.link.exit().remove();
-    var newLink = this.link
+    self.link = self.link.data(links, function (d) { return d.uuid; });
+    self.link.exit().remove();
+    var newLink = self.link
         .enter()
             .append('svg:line')
             .attr('class', 'link')
@@ -169,9 +180,9 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
             .classed('linkback', function (d) { return d.linkback; });
 
     // update node elements
-    this.node = this.node.data(nodes, function (d) { return d.uuid; });
-    this.node.exit().remove();
-    var newNode = this.node.enter()
+    self.node = self.node.data(nodes, function (d) { return d.uuid; });
+    self.node.exit().remove();
+    var newNode = self.node.enter()
         .append('svg:g')
             .attr('class', 'node')
             .classed('fixed', function (d) { return d.fixed; })
@@ -181,23 +192,24 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
     newNode
         .append('svg:circle')
             .attr('r', 9)
-            .on('click', this.nodeClick)
-            .call(this.drag);
+            .on('click', self.nodeClick)
+            .call(self.drag);
     newNode
         .append('svg:text')
             .attr('class', 'title')
             .attr('dx', 6)
             .attr('dy', -6)
             .text(function (d) { return d.title })
-            .on('click', this.nodeClick)
-            .call(this.drag);
+            .on('click', self.nodeClick)
+            .call(self.drag);
 
     // keep things moving
-    this.force.start();
+    self.force.start();
 
 };
 
 ForceGraph.prototype.makeTick = function () {
+    var self = this;
     // cache function creation for tiny optimization
     function x1(d) { return d.source.x; }
     function y1(d) { return d.source.y; }
@@ -206,7 +218,6 @@ ForceGraph.prototype.makeTick = function () {
     function transform(d) {
         return 'translate(' + d.x + ',' + d.y + ')';
     }
-    var self = this;
     return function () {
         self.link
             .attr('x1', x1)
@@ -303,27 +314,29 @@ ForceGraph.prototype.makeNodeClick = function () {
 };
 
 ForceGraph.prototype.toggleNodePin = function (nodeData, nodeSelection) {
+    var self = this;
     if (!nodeSelection) {
-        nodeSelection = this.node
+        nodeSelection = self.node
             .filter(function (d) {
                 return d.uuid === nodeData.uuid
             });
     }
     nodeData.fixed = !nodeData.fixed;
     nodeSelection.classed('fixed', nodeData.fixed);
-    this.force.start();
-    this.ng.sessions.save();
+    self.force.start();
+    self.ng.sessions.save();
 };
 
 ForceGraph.prototype.centerOnNode = function (node) {
+    var self = this;
     if (!node) return;
-    var scale = this.zoom.scale();
-    var w = this.width;
-    var h = this.height;
+    var scale = self.zoom.scale();
+    var w = self.width;
+    var h = self.height;
     var x = node.x * scale;
     var y = node.y * scale;
     var translateX = (w / 2) - x;
     var translateY = (h / 2) - y;
-    this.zoom.translate([translateX, translateY]);
-    this.zoom.event(this.rect.transition().duration(600));
+    self.zoom.translate([translateX, translateY]);
+    self.zoom.event(self.rect.transition().duration(600));
 };
