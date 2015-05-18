@@ -107,6 +107,7 @@
 		$htmlbody.scrollTop(0);
 		$article.css({'visibility': 'visible'});
 		// override all href clicks
+		$article.find('[href]').off('click');
 		$article.find('[href]').on('click', function (e) {
 			e.preventDefault();
 
