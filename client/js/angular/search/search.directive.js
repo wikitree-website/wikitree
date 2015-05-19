@@ -1,7 +1,7 @@
 (function() {
     angular.module('wikitree.search').
 
-        directive('search', function() {
+        directive('search', [function() {
             return {
                 restrict: 'E',
                 templateUrl: "js/angular/search/search.template.html",
@@ -10,6 +10,6 @@
                 	large: '@'
                 }
             }
-        });
+        }]);
 
 })();

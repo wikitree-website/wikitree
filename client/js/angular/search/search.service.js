@@ -1,7 +1,7 @@
 (function() {
     angular.module('wikitree.search').
 
-        factory('Search', function($http) {
+        factory('Search', ['$http', function($http) {
             var search = {};
 
             search.term = '';
@@ -20,6 +20,6 @@
             };
 
             return search;
-        });
+        }]);
 
 })();

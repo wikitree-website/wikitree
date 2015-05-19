@@ -1,7 +1,7 @@
 (function() {
     angular.module('wikitree.main.menu.session').
 
-        directive('focus', function($timeout) {
+        directive('focus', ['$timeout', function($timeout) {
             return {
                 scope : {
                     trigger : '@focus'
@@ -16,7 +16,7 @@
                     });
                 }
             };
-        });
+        }]);
 
 })();
 
