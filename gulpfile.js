@@ -3,14 +3,17 @@ var path = require('path'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     watch = require('gulp-watch'),
-    rimraf = require('gulp-rimraf'),
+    del = require('del'),
     nodemon = require('gulp-nodemon'),
     rename = require("gulp-rename"),
-    order = require('gulp-order'),
-    _ = require('lodash');
+    clone = require("gulp-clone"),
+    order = require("gulp-order"),
+    es = require('event-stream');
 
 gulp.task('build-client-js', function(){
-    return gulp.src('client/js/**/*.js')
+
+    // write all files, in order to a concat file
+    var allJS = gulp.src('client/js/**/*.js')
         .pipe(order([
             "d3/*.js",
             "angular/wikitree.module.js",
@@ -33,17 +36,24 @@ gulp.task('build-client-js', function(){
             "angular/main/resizer/*.module.js",
             "angular/main/resizer/*.js"
         ]))
-        .pipe(concat("app.js"))
-        .pipe(gulp.dest("client/build"));
+        .pipe(concat("app.js"));
+
+    // copy the concat file, uglify and rename
+    var minJS = allJS.pipe(clone())
+        .pipe(uglify())
+        .pipe(rename("app.min.js"));
+
+    // merge the two files to one dest
+    return es.merge(allJS, minJS).pipe(gulp.dest("client/build"));
+
 });
 
 gulp.task('build', function(){
     gulp.start('build-client-js');
 });
 
-gulp.task('clean',function() {
-    return gulp.src(['client/build'], { read: false })
-        .pipe(rimraf());
+gulp.task('clean',function(cb) {
+    del(['client/build/**/*'], cb);
 });
 
 gulp.task('dev', function() {
