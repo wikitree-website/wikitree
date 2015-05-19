@@ -1,7 +1,7 @@
 (function() {
     angular.module('wikitree.main.menu.session').
 
-        directive('escpress', function () {
+        directive('escpress', [function () {
             return {
                 link: function (scope, element, attrs) {
                     element.bind("keydown keypress", function (event) {
@@ -15,8 +15,6 @@
                     });
                 }
             }
-
-
-        });
+        }]);
 
 })();
