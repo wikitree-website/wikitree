@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash-node');
+var _ = require('lodash');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
