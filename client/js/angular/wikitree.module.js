@@ -7,7 +7,7 @@
         'wikitree.main',
         'wikitree.search'
     ]).
-    config(function(localStorageServiceProvider) {
+    config(['localStorageServiceProvider', function(localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('Wikitree');
-    });
+    }]);
 })();
