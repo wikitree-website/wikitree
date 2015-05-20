@@ -5,15 +5,34 @@ var path = require('path'),
     watch = require('gulp-watch'),
     del = require('del'),
     nodemon = require('gulp-nodemon'),
+    mincss = require('gulp-minify-css'),
     rename = require("gulp-rename"),
     clone = require("gulp-clone"),
     order = require("gulp-order"),
+    debug = require('gulp-debug'),
+    sourcemaps = require('gulp-sourcemaps'),
     es = require('event-stream');
+
+gulp.task('build-client-css', function() {
+
+    var allCSS = gulp.src([
+        path.join(__dirname, 'client', 'css', 'style.css')
+    ])
+        .pipe(concat('app.css'));
+
+    var minCSS = allCSS.pipe(clone())
+        .pipe(sourcemaps.init())
+        .pipe(mincss())
+        .pipe(sourcemaps.write())
+        .pipe(rename('app.min.css'));
+
+    return es.merge(allCSS, minCSS).pipe(gulp.dest(path.join(__dirname, 'client', 'build')));
+});
 
 gulp.task('build-client-js', function(){
 
     // write all files, in order to a concat file
-    var allJS = gulp.src('client/js/**/*.js')
+    var allJS = gulp.src(path.join(__dirname, 'client', 'js', '**', '*.js'))
         .pipe(order([
             "d3/*.js",
             "angular/wikitree.module.js",
@@ -44,12 +63,12 @@ gulp.task('build-client-js', function(){
         .pipe(rename("app.min.js"));
 
     // merge the two files to one dest
-    return es.merge(allJS, minJS).pipe(gulp.dest("client/build"));
+    return es.merge(allJS, minJS).pipe(gulp.dest(path.join(__dirname, 'client', 'build')));
 
 });
 
-gulp.task('build', function(){
-    gulp.start('build-client-js');
+gulp.task('build', ['build-client-css', 'build-client-js'], function(){
+    return;
 });
 
 gulp.task('clean',function(cb) {
@@ -59,7 +78,7 @@ gulp.task('clean',function(cb) {
 gulp.task('dev', function() {
     // runs nodemon on the server file and executed the default task
     nodemon({
-        script: 'server/server.js',
+        script: path.join(__dirname, 'server', 'server.js'),
         ext: 'js',
         ignore: ['node_modules/**']
     }).on('restart', ['default']);
@@ -69,7 +88,7 @@ gulp.task('dev', function() {
 
 gulp.task('default', ['clean'], function(){
     gulp.start("build");
-    watch("client/js/**/*.js", function() {
+    watch(path.join(__dirname, 'client', 'js', '**', '*.js'), function() {
         gulp.start('build-client-js');
     });
 });
