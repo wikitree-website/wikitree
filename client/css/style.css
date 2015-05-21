@@ -347,18 +347,20 @@ html, body {
 
 #reader .search .head-controls {
     height: 45px;
-    width: 40px;
+    width: 45px;
     position: absolute;
     top: 0;
     right: 81px;
+    text-align: right;
 }
 
 #reader .search .history {
     height: 45px;
-    width: 75px;
+    width: 80px;
     position: absolute;
     top: 0;
     right: 0;
+    text-align: right;
 }
 
 #reader .article {
