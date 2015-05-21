@@ -11,28 +11,37 @@
 
                 var ratio = 3/5; // updated on set size
 
+                function resizeToRatio() {
+                    setRightSize(ratio * window.innerWidth);
+                    restoreElement();
+                }
+
                 function setRightSize(size) {
-
                     var winWidth = window.innerWidth;
-
                     // make sure size is reasonable
                     if (winWidth - size < 60) return;
                     if (size < 300) return;
-
                     // update ratio
                     ratio = size / winWidth;
-
-                    // update element
-                    $resizer.css({
-                        right: size - resizerHalf
-                    });
-
                     // tell the world
                     $rootScope.$emit('split:resize', size);
                 }
 
-                function resizeToRatio() {
-                    setRightSize(ratio * window.innerWidth);
+                function fillElement() {
+                    $resizer.css({
+                        width: '100%',
+                        left: 0,
+                        right: 0
+                    });
+                }
+
+                function restoreElement() {
+                    var size = ratio * window.innerWidth;
+                    $resizer.css({
+                        width: '', // reset
+                        left: '', // reset
+                        right: size - resizerHalf
+                    });
                 }
 
                 /**
@@ -47,10 +56,15 @@
 
                 // start drag
                 $resizer.on('mousedown', function (e) {
+                    // fill screen to prevent iframe steal
+                    fillElement();
                     // handle drag on any movement
                     $window.on('mousemove', dragHandler);
                     // release drag handler on next mouseup
                     $window.one('mouseup', function (e) {
+                        // put resizer back in place
+                        restoreElement();
+                        // unbind drag event for now
                         $window.unbind('mousemove', dragHandler);
                     });
                 });
