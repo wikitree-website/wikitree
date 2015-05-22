@@ -324,7 +324,7 @@ html, body {
     text-align: center;
 }
 
-#reader .search .logo {
+#reader .head .logo {
     width: 50px;
     height: 45px;
     position: absolute;
@@ -333,11 +333,15 @@ html, body {
     text-align: center;
 }
 
-#reader .search .logo .spinner {
+#reader .head .logo {
+    cursor: pointer;
+}
+
+#reader .head .logo .spinner {
     visibility: hidden;
 }
 
-#reader .search .bar {
+#reader .head .search {
     height: 45px;
     position: absolute;
     top: 0;
@@ -345,16 +349,16 @@ html, body {
     right: 127px;
 }
 
-#reader .search .head-controls {
+#reader .head .reference {
     height: 45px;
     width: 45px;
     position: absolute;
     top: 0;
-    right: 81px;
+    right: 82px;
     text-align: right;
 }
 
-#reader .search .history {
+#reader .head .history {
     height: 45px;
     width: 80px;
     position: absolute;

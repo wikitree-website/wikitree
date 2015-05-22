@@ -49,7 +49,6 @@
 		<div id="bodyContent" class="mw-body-content">
 			<div id="siteSub">
 				From Wikipedia, the free encyclopedia
-				(<a id="original-link" href="#" target="_blank">open original article</a>)
 			</div>
 			<div id="contentSub"></div>
 			<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr">
@@ -69,7 +68,6 @@
 	var $title = $('#firstHeading');
 	var $content = $('#mw-content-text');
 	var $categories = $('#wikipedia-categories');
-	var $originallink = $('#original-link');
 	var $htmlbody = $('html, body');
 
 	/**
@@ -90,7 +88,6 @@
 			$title.html('');
 			$content.html('');
 			$categories.html('');
-			$originallink.attr('href', '#');
 			$error.html(content);
 			$error.css({'display': 'block'});
 			return;
@@ -102,12 +99,10 @@
 		$title.html(title);
 		$content.html(content);
 		$categories.html(categories);
-		$originallink.attr('href', 'https://en.wikipedia.org/wiki/' + title);
 		// prepare for display
 		$htmlbody.scrollTop(0);
 		$article.css({'visibility': 'visible'});
-		// override all href clicks
-		$article.find('[href]').off('click');
+		// override all the new href clicks
 		$article.find('[href]').on('click', function (e) {
 			e.preventDefault();
 
