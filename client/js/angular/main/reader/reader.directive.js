@@ -1,8 +1,8 @@
 (function() {
     angular.module('wikitree.main.reader').
 
-        directive('reader', ['$rootScope', 'CurrentSession', 'Sessions', 'Search', 'Articles',
-            function($rootScope, CurrentSession, Sessions, Search, Articles) {
+        directive('reader', ['$rootScope', 'CurrentSession', 'Sessions', 'Articles', 'Searches',
+            function($rootScope, CurrentSession, Sessions, Articles, Searches) {
 
                 var link = function(scope, element, attrs) {
 
@@ -79,15 +79,15 @@
 
                     var $logo = $reader.find('.w');
                     var $spinner = $reader.find('.spinner');
-                    var articleLoadingCount = 0;
-                    $rootScope.$on('articles:loadstart', function (e, data) {
-                        articleLoadingCount++;
+                    var loadingCount = 0;
+                    $rootScope.$on('mediawikiapi:loadstart', function () {
+                        loadingCount++;
                         $logo.css({ 'display': 'none' });
                         $spinner.css({ 'visibility': 'visible' });
                     });
-                    $rootScope.$on('articles:loadend', function (e, data) {
-                        articleLoadingCount--;
-                        if (articleLoadingCount < 1) {
+                    $rootScope.$on('mediawikiapi:loadend', function () {
+                        loadingCount--;
+                        if (loadingCount < 1) {
                             $logo.css({ 'display': 'inline' });
                             $spinner.css({ 'visibility': 'hidden' });
                         }
@@ -105,7 +105,7 @@
                     $iframe.on('load', function () {
                         iframe = $iframe[0].contentWindow;
                         if (missedOpportunity) {
-                            updateCurrentArticle();
+                            updateCurrentNode();
                         }
                     });
                     // THEN give iframe its src url
@@ -118,9 +118,9 @@
                     });
 
                     // handle article loading
-                    var currentTitle = null;
-                    CurrentSession.addListener('update:currentnode', updateCurrentArticle);
-                    function updateCurrentArticle() {
+                    var currentNodeName = null;
+                    CurrentSession.addListener('update:currentnode', updateCurrentNode);
+                    function updateCurrentNode() {
 
                         // make sure we got iframe
                         if (!iframe) {
@@ -133,56 +133,70 @@
 
                         // make sure we got node
                         if (!node) {
-                            currentTitle = null;
-                            iframe.loadArticle(
-                                '',
-                                'System error: could not find a current node'
-                            );
+                            currentNodeName = null;
+                            iframe.loadError('System error: could not find a current node');
                             return;
                         }
 
-                        // check if node article already displayed
-                        if (currentTitle) {
-                            if (currentTitle === node.title) {
+                        // check if node already displayed
+                        if (currentNodeName) {
+                            if (currentNodeName === node.name) {
                                 return;
                             }
                         }
 
-                         // update current title
-                        currentTitle = node.title;
+                         // update current name
+                        currentNodeName = node.name;
 
                         // save update
                         Sessions.save();
 
                         // load node into iframe
+                        switch (node.type) {
+                            case 'article': loadArticle(node); break;
+                            case 'search': loadSearch(node); break;
+                        }
+
+                    }
+
+                    function loadArticle(node) {
                         Articles.getByTitle(node.title).
                             then(function (article) {
-                                iframe.loadArticle(
-                                    article.title,
-                                    article.content,
-                                    article.categories,
-                                    function (title, noSetCurrent) {
-                                        // user clicked a title!
-                                        title = decodeURI(title);
-                                        CurrentSession.handleTitle({
-                                            title: title,
-                                            noSetCurrent: noSetCurrent,
-                                            sourceNodeId: node.uuid
-                                        });
-                                    }
-                                );
+                                iframe.loadArticle(article, makeTitleCallback(node));
                             }).
                             catch(function () {
-                                iframe.loadArticle(
-                                    '',
-                                    'System error: unable to load article "' + node.title + '"'
-                                );
-
+                                iframe.loadError('System error: unable to load article "' + node.title + '"');
                             });
                     }
 
+                    function loadSearch(node) {
+                        Searches.getByQuery(node.query).
+                            then(function (search) {
+                                iframe.loadSearch(search, makeTitleCallback(node));
+                            }).
+                            catch(function () {
+                                iframe.loadError('System error: unable to load article "' + node.title + '"');
+                            });
+                    }
+
+                    function makeTitleCallback(node) {
+                        return function (title, noSetCurrent) {
+                            // user clicked an iframe title!
+                            title = decodeURIComponent(title);
+                            CurrentSession.handleTitle({
+                                title: title,
+                                noSetCurrent: noSetCurrent,
+                                sourceNodeId: node.uuid
+                            });
+                        };
+                    }
+
+                    /**
+                     * Load article if there is one
+                     */
+
                     if (CurrentSession.getCurrentNode()) {
-                        updateCurrentArticle();
+                        updateCurrentNode();
                     }
 
                 };

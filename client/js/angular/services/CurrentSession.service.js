@@ -1,7 +1,7 @@
 (function() {
     angular.module('wikitree').
 
-		factory('CurrentSession', ['Utilities', 'Articles', function(Utilities, Articles) {
+		factory('CurrentSession', ['Utilities', 'Articles', 'Searches', function(Utilities, Articles, Searches) {
 
 			/**
 			 * Models current Wikipedia map
@@ -109,7 +109,10 @@
 
 			function Node(args) {
 				this.uuid = args.uuid || Utilities.makeUUID();
-				this.title = args.title;
+				this.type = args.type;
+				this.name = args.name;
+				this.title = args.title; // if type === article
+				this.query = args.query; // if type === search
 				// d3 force graph attributes
 				// https://github.com/mbostock/d3/wiki/Force-Layout#nodes
 				this.index = undefined; // the zero-based index of the node within the nodes array.
@@ -124,12 +127,17 @@
 			nodes = {
 				arr: [],
 				byId: {},
-				byTitle: {},
-				addNode: function (title) {
-					var node = new Node({ title: title });
+				byName: {},
+				addNode: function (args) {
+					var node = new Node({
+						type: args.type,
+						name: args.name,
+						title: args.title,
+						query: args.query
+					});
 					nodes.arr.push(node);
 					nodes.byId[node.uuid] = node;
-					nodes.byTitle[node.title] = node;
+					nodes.byName[node.name] = node;
 					return node;
 				},
 				removeNode: function (nodeId) {
@@ -137,7 +145,7 @@
 					if (!node) return null;
 					nodes.arr = nodes.arr.filter(function (n) { return n.uuid !== node.uuid });
 					delete nodes.byId[node.uuid];
-					delete nodes.byTitle[node.title];
+					delete nodes.byName[node.name];
 					return node;
 				},
 				exportState: function () {
@@ -148,16 +156,16 @@
 				importState: function (state) {
 					nodes.arr = state.arr;
 					nodes.byId = {};
-					nodes.byTitle = {};
+					nodes.byName = {};
 					nodes.arr.forEach(function (node) {
 						nodes.byId[node.uuid] = node;
-						nodes.byTitle[node.title] = node;
+						nodes.byName[node.name] = node;
 					});
 				},
 				clearState: function () {
 					nodes.arr = [];
 					nodes.byId = {};
-					nodes.byTitle = {};
+					nodes.byName = {};
 				}
 			};
 
@@ -248,16 +256,36 @@
 			function findOrAddArticle(title, callback) {
 				Articles.getByUnsafeTitle(title).
 					then(function (article) {
-						callback(article);
+						callback({
+							type: 'article',
+							name: article.title,
+							title: article.title
+						});
 					}).
 					catch(function () {
+						// no article? try searching
+						findOrAddSearch(title, callback);
+					});
+			}
+
+			function findOrAddSearch(query, callback) {
+				Searches.getByQuery(query).
+					then(function (search) {
+						callback({
+							type: 'search',
+							name: 'Search "' + query + '"',
+							query: query
+						});
+					}).
+					catch(function () {
+						// no dice
 						callback(null);
 					});
 			}
 
-			function findOrAddNode(article, callback) {
-				var node = nodes.byTitle[article.title];
-				if (!node) node = nodes.addNode(article.title);
+			function findOrAddNode(args, callback) {
+				var node = nodes.byName[args.name];
+				if (!node) node = nodes.addNode(args);
 				callback(node);
 			}
 
@@ -413,15 +441,20 @@
 					// 3. find or add link (?)
 					// 4. set current node (?)
 
-					findOrAddArticle(title, function (article) {
+					findOrAddArticle(title, function (result) {
 
 						// TODO handle failure
-						if (!article) return;
+						if (!result) {
+							alert('Sorry, something went wrong for "' + title + '"');
+							return;
+						};
 
-						findOrAddNode(article, function (node) {
+						findOrAddNode(result, function (node) {
 							if (sourceNodeId) {
 								findOrAddLink(node, sourceNodeId, function (link) {
+
 									trigger('update:nodes+links');
+
 									if (!noSetCurrent) {
 										history.setCurrentId(node.uuid);
 										trigger('update:currentnode');
@@ -432,7 +465,9 @@
 
 								});
 							} else {
+
 								trigger('update:nodes+links');
+
 								if (!noSetCurrent) {
 									history.setCurrentId(node.uuid);
 									trigger('update:currentnode');
@@ -440,6 +475,66 @@
 
 								var endTime = Date.now();
 								console.log('handleTitle complete: ', endTime - startTime);
+
+							}
+						});
+					});
+				},
+
+				handleTitleSearch: function (args) {
+
+					// identical to handleTitle
+					// EXCEPT skips straight to search results
+
+					var startTime = Date.now();
+
+					var title = args.title.trim();
+					var sourceNodeId = args.sourceNodeId; // add link from this node
+					var noSetCurrent = args.noSetCurrent; // bool, don't update current node
+
+					// must have title to handle title
+					if (!(title && title.length)) return;
+
+					// 1. find or add article
+					// 2. find or add node
+					// 3. find or add link (?)
+					// 4. set current node (?)
+
+					findOrAddSearch(title, function (result) {
+
+						// TODO handle failure
+						if (!result) {
+							alert('Sorry, something went wrong for "' + title + '"');
+							return;
+						};
+
+						findOrAddNode(result, function (node) {
+							if (sourceNodeId) {
+								findOrAddLink(node, sourceNodeId, function (link) {
+
+									trigger('update:nodes+links');
+
+									if (!noSetCurrent) {
+										history.setCurrentId(node.uuid);
+										trigger('update:currentnode');
+									}
+
+									var endTime = Date.now();
+									console.log('handleTitle complete: ', endTime - startTime);
+
+								});
+							} else {
+
+								trigger('update:nodes+links');
+
+								if (!noSetCurrent) {
+									history.setCurrentId(node.uuid);
+									trigger('update:currentnode');
+								}
+
+								var endTime = Date.now();
+								console.log('handleTitle complete: ', endTime - startTime);
+
 							}
 						});
 					});

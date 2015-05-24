@@ -8,12 +8,19 @@
                 };
 
                 $scope.openSourceArticle = function () {
-
-                	console.log('hello');
-
                     var node = CurrentSession.getCurrentNode();
-                    if (!(node && node.title)) return;
-                    var url = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(node.title);
+                    if (!(node && node.name)) return;
+                    var url = '';
+                    switch (node.type) {
+                        case 'article':
+                            url = 'https://en.wikipedia.org/wiki/';
+                            url += encodeURIComponent(node.title);
+                            break;
+                        case 'search':
+                            url = 'http://en.wikipedia.org/w/index.php?fulltext=1&search=';
+                            url += encodeURIComponent(node.query);
+                            break;
+                    }
                     var link = document.createElement('a');
 					link.target = '_blank';
 					link.href = url;

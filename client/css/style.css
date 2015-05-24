@@ -435,15 +435,15 @@ g.node circle {
     cursor: pointer;
 }
 
-g.node text.title {
+g.node text.name {
     fill: #333;
     font-family: sans-serif;
     font-size: 14px;
     cursor: pointer;
 }
 
-g.node:hover text.title,
-g.node text.title:hover {
+g.node:hover text.name,
+g.node text.name:hover {
     font-weight: bold;
 }
 
@@ -453,7 +453,7 @@ g.node.active circle {
     stroke: #FC6;
 }
 
-g.node.active text.title {
+g.node.active text.name {
     font-weight: bold;
 }
 

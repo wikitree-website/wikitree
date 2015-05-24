@@ -1,15 +1,16 @@
-<div class="input-group" ng-class="{'has-error': empty}">
-    <input class="has-error form-control"
+<div class="input-group">
+    <input class="form-control"
            ng-class="large ? 'input-lg' : 'input-md'"
            placeholder="Search for a Wikipedia article..."
-           typeahead-on-select='onSelect($item, $model, $label)'
+           typeahead-on-select="goToArticle()"
            type="text"
-           ng-model="searchBar"
+           ng-model="inputText"
+           ng-keypress="tryEnter($event)"
            typeahead="suggestion for suggestion in search.getSuggestions($viewValue)"/>
         <span class="input-group-btn">
             <button class="btn btn-default"
                     ng-class="large ? 'btn-lg' : 'btn-md'"
-                    ng-click="goToArticle()"
+                    ng-click="goToArticle(true)"
                     type="button">
                 <i class="fa fa-search"></i>
             </button>
