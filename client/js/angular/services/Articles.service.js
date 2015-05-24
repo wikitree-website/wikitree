@@ -18,11 +18,11 @@
 
             function getFromAPI(title) {
 
-                console.log('Gettng article from API...', title);
+                console.log('Getting article from API...', title);
 
                 var timestamp = Date.now();
                 return $q(function (resolve, reject) {
-                    $rootScope.$emit('articles:loadstart', timestamp);
+                    $rootScope.$emit('mediawikiapi:loadstart', timestamp);
                     $http.jsonp('https://en.wikipedia.org/w/api.php', {
                         params: {
                             action: 'parse',
@@ -34,7 +34,7 @@
                         }
                     }).
                         success(function (data) {
-                            $rootScope.$emit('articles:loadend', timestamp);
+                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
                             if (data && data.parse && data.parse.title) {
                                 resolve(data.parse);
                             } else {
@@ -42,7 +42,7 @@
                             }
                         }).
                         error(function () {
-                            $rootScope.$emit('articles:loadend', timestamp);
+                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
                             reject(null);
                         });
                 });
@@ -60,12 +60,12 @@
                         resolve(byTitle[title]);
                     } else {
                         getFromAPI(title).
-                            then(function (parse) {
-                                if (parse) {
+                            then(function (result) {
+                                if (result) {
                                     var article = new Article({
-                                        title: parse.title,
-                                        content: parse.text['*'],
-                                        categories: parse.categorieshtml['*']
+                                        title: result.title,
+                                        content: result.text['*'],
+                                        categories: result.categorieshtml['*']
                                     });
                                     byTitle[article.title] = article;
                                     resolve(article);
@@ -90,12 +90,12 @@
                         resolve(byUnsafeTitle[unsafeTitle]);
                     } else {
                         getFromAPI(unsafeTitle).
-                            then(function (parse) {
-                                if (parse) {
+                            then(function (result) {
+                                if (result) {
                                     var article = new Article({
-                                        title: parse.title,
-                                        content: parse.text['*'],
-                                        categories: parse.categorieshtml['*']
+                                        title: result.title,
+                                        content: result.text['*'],
+                                        categories: result.categorieshtml['*']
                                     });
                                     byUnsafeTitle[unsafeTitle] = article;
                                     byTitle[article.title] = article;

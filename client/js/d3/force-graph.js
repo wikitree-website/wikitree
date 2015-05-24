@@ -116,11 +116,9 @@ ForceGraph.prototype.updateSize = function () {
     self.width = self.containerEl.clientWidth;
     self.height = self.containerEl.clientHeight;
 
-    // NOTE TODO FIXME
-    // self is the worst solution to the problem
-    // for the love of god, find a better solution
+    // protect from bad timing
     if (!(self.width && self.height)) {
-        console.error('BAD! graph size updating with no container size');
+        console.error('graph size updating with no container size');
         return;
     }
 
@@ -143,11 +141,9 @@ ForceGraph.prototype.updateCurrentNode = function () {
 ForceGraph.prototype.updateNodesAndLinks = function () {
     var self = this;
 
-    // NOTE TODO FIXME
-    // self is the worst solution to the problem
-    // for the love of god, find a better solution
+    // protect from bad timing
     if (!(self.width && self.height)) {
-        console.error('BAD! graph nodes+links updating with no container size');
+        console.error('graph size updating with no container size');
         return;
     }
 
@@ -196,10 +192,10 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
             .call(self.drag);
     newNode
         .append('svg:text')
-            .attr('class', 'title')
+            .attr('class', 'name')
             .attr('dx', 6)
             .attr('dy', -6)
-            .text(function (d) { return d.title })
+            .text(function (d) { return d.name })
             .on('click', self.nodeClick)
             .call(self.drag);
 

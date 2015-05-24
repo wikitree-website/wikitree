@@ -7,7 +7,9 @@
             search.term = '';
 
             search.getSuggestions = function (term) {
+
                 console.log('Fetching suggestions...', term);
+
                 return $http.jsonp('https://en.wikipedia.org/w/api.php', {
                     params: {
                         action: 'opensearch',
