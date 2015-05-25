@@ -180,14 +180,22 @@
                     }
 
                     function makeTitleCallback(node) {
-                        return function (title, noSetCurrent) {
+                        return function (title, noSetCurrent, isSearch) {
                             // user clicked an iframe title!
                             title = decodeURIComponent(title);
-                            CurrentSession.handleTitle({
-                                title: title,
-                                noSetCurrent: noSetCurrent,
-                                sourceNodeId: node.uuid
-                            });
+                            if (isSearch) {
+                                CurrentSession.handleTitleSearch({
+                                    title: title,
+                                    noSetCurrent: noSetCurrent,
+                                    sourceNodeId: node.uuid
+                                });
+                            } else {
+                                CurrentSession.handleTitle({
+                                    title: title,
+                                    noSetCurrent: noSetCurrent,
+                                    sourceNodeId: node.uuid
+                                });
+                            }
                         };
                     }
 
