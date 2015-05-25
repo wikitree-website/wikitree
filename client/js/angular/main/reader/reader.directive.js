@@ -1,8 +1,14 @@
 (function() {
     angular.module('wikitree.main.reader').
 
-        directive('reader', ['$rootScope', 'CurrentSession', 'Sessions', 'Articles', 'Searches',
-            function($rootScope, CurrentSession, Sessions, Articles, Searches) {
+        directive('reader', [
+            '$rootScope',
+            'CurrentSession',
+            'Sessions',
+            'Articles',
+            'Searches',
+            'Categories',
+            function($rootScope, CurrentSession, Sessions, Articles, Searches, Categories) {
 
                 var link = function(scope, element, attrs) {
 
@@ -153,10 +159,21 @@
 
                         // load node into iframe
                         switch (node.type) {
+                            case 'category': loadCategory(node); break;
                             case 'article': loadArticle(node); break;
                             case 'search': loadSearch(node); break;
                         }
 
+                    }
+
+                    function loadCategory(node) {
+                        Categories.getByTitle(node.title).
+                            then(function (category) {
+                                iframe.loadCategory(category, makeTitleCallback(node));
+                            }).
+                            catch(function () {
+                                iframe.loadError('System error: unable to load "' + node.title + '"');
+                            });
                     }
 
                     function loadArticle(node) {
@@ -184,12 +201,14 @@
                             // user clicked an iframe title!
                             title = decodeURIComponent(title);
                             if (isSearch) {
+                                // skip to search
                                 CurrentSession.handleTitleSearch({
                                     title: title,
                                     noSetCurrent: noSetCurrent,
                                     sourceNodeId: node.uuid
                                 });
                             } else {
+                                // handle title
                                 CurrentSession.handleTitle({
                                     title: title,
                                     noSetCurrent: noSetCurrent,
