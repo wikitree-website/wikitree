@@ -189,11 +189,15 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 
 			console.log('iFrame click:', href);
 
-			// check type of anchor
+			/**
+			 * Process href
+			 */
+
 			if (href.match(/^#/)) {
+
 				// within page
+
 				// animate scroll to
-				// https://css-tricks.com/snippets/jquery/smooth-scrolling/
 				var target = this.hash.slice(1);
 				var $target = $('[id="' + target +'"]');
 				if (!($target && $target.length)) {
@@ -203,14 +207,20 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 					scrollTop: $target.offset().top
 				}, 500);
 				return;
+
 			} else if (href.match(/^\/wiki\/(File|Image|Media):/)) {
+
 				// file page (won't work with mediawiki API)
+
 				// open in new window
 				href = 'https://en.wikipedia.org' + href;
 				window.parent.open(href, '_blank');
 				return;
+
 			} else if (href.match(/^\/wiki\//)) {
+
 				// wiki page!
+
 				// callback
 				callback(
 					// extract /wiki/<title>
@@ -218,8 +228,27 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 					// suppress set new current?
 					e.ctrlKey || e.metaKey || e.shiftKey
 				);
+				return;
+
+			} else if (href.match(/title=Special:Search/) && href.match(/search=([^&]*)/)) {
+
+				// search page!
+
+				// callback
+				callback(
+					// extract and prettify search query
+					href.match(/search=([^&]*)/)[1].replace(/_/, ' '),
+					// suppress set new current?
+					e.ctrlKey || e.metaKey || e.shiftKey,
+					// isSearch
+					true
+				);
+				return;
+
 			} else {
+
 				// unknown
+
 				// open in new window
 				if (!href.match(/\/\//)) {
 					// no protocol, assume wikipedia
@@ -227,6 +256,7 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 				}
 				window.parent.open(href, '_blank');
 				return;
+
 			}
 		});
 	}
