@@ -65,7 +65,8 @@
                                     var article = new Article({
                                         title: result.title,
                                         content: result.text['*'],
-                                        categories: result.categorieshtml['*']
+                                        categories: result.categorieshtml['*'],
+                                        displaytitle: result.displaytitle
                                     });
                                     byTitle[article.title] = article;
                                     resolve(article);
@@ -95,7 +96,8 @@
                                     var article = new Article({
                                         title: result.title,
                                         content: result.text['*'],
-                                        categories: result.categorieshtml['*']
+                                        categories: result.categorieshtml['*'],
+                                        displaytitle: result.displaytitle
                                     });
                                     byUnsafeTitle[unsafeTitle] = article;
                                     byTitle[article.title] = article;

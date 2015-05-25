@@ -46,14 +46,72 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 </head>
 <body class="mediawiki ltr sitedir-ltr ns-0 ns-subject skin-vector action-view">
 
-<!-- load templates here -->
+<!-- templates load here -->
 <div id="content-container"></div>
 
-<!-- error template -->
-<script type="text/template" id="template-error">
-	<h4 id="wikitree-error">
-		<%= message %>
-	</h4>
+<!-- category template -->
+<script type="text/template" id="template-category">
+	<div id="content" class="mw-body" role="main">
+		<a id="top"></a>
+		<div id="siteNotice"><div id="centralNotice"></div></div>
+		<div class="mw-indicators"></div>
+		<h1 id="firstHeading" class="firstHeading" lang="en">
+			<%= category.displaytitle %>
+		</h1>
+		<div id="bodyContent" class="mw-body-content">
+			<div id="siteSub">
+				From Wikipedia, the free encyclopedia
+			</div>
+			<div id="contentSub"></div>
+			<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr">
+				<%= category.content %>
+			</div>
+
+			<% if (category.subcategories) { %>
+				<div lang="en" dir="ltr">
+					<div id="mw-subcategories">
+					<h2>Subcategories</h2>
+					<div lang="en" dir="ltr" class="mw-content-ltr">
+						<div class="mw-category">
+							<ul>
+								<% category.subcategories.forEach(function (subcategory) { %>
+									<li>
+										<a href="/wiki/<%- subcategory.title %>">
+											<%- subcategory.title %>
+										</a>
+									</li>
+								<% }); %>
+							</ul>
+						</div>
+					</div>
+				</div>
+			<% } %>
+
+			<% if (category.memberpages) { %>
+				<div lang="en" dir="ltr">
+					<div id="mw-pages">
+					<h2>Pages in category "<%- category.name %>"</h2>
+					<div lang="en" dir="ltr" class="mw-content-ltr">
+						<div class="mw-category">
+							<ul>
+								<% category.memberpages.forEach(function (page) { %>
+									<li>
+										<a href="/wiki/<%- page.title %>">
+											<%- page.title %>
+										</a>
+									</li>
+								<% }); %>
+							</ul>
+						</div>
+					</div>
+				</div>
+			<% } %>
+
+			<div id="wikipedia-categories">
+				<%= category.categories %>
+			</div>
+		</div>
+	</div>
 </script>
 
 <!-- article template -->
@@ -129,6 +187,14 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 	</div>
 
 </script>
+
+<!-- error template -->
+<script type="text/template" id="template-error">
+	<h4 id="wikitree-error">
+		<%= message %>
+	</h4>
+</script>
+
 <script type="text/javascript" src="/lib/lodash/lodash.min.js"></script>
 <script type="text/javascript" src="/lib/moment/min/moment.min.js"></script>
 <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
@@ -138,10 +204,21 @@ a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:non
 	var $container = $('#content-container');
 
 	var templates = {
+		category: _.template($('#template-category').html()),
 		article: _.template($('#template-article').html()),
 		search: _.template($('#template-search').html()),
 		error: _.template($('#template-error').html())
 	};
+
+	function loadCategory(category, callback) {
+		$container.html(
+			templates.category({
+				category: category
+			})
+		);
+		$htmlbody.scrollTop(0);
+		linkOverride($container, callback);
+	}
 
 	function loadArticle(article, callback) {
 		$container.html(
