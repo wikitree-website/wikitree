@@ -175,7 +175,7 @@
                                 iframe.loadSearch(search, makeTitleCallback(node));
                             }).
                             catch(function () {
-                                iframe.loadError('System error: unable to load article "' + node.title + '"');
+                                iframe.loadError('System error: unable to load search "' + node.query + '"');
                             });
                     }
 
