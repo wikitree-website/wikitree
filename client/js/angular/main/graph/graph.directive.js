@@ -7,9 +7,10 @@
                 var link = function(scope, element, attrs) {
 
                     // make d3 graph instance
-                    var $graph = $('#new-map');
+                    var containerEl = element[0];
+                    var $container = $(containerEl);
                     var graph = new ForceGraph(
-                        $graph[0],
+                        containerEl,
                         CurrentSession,
                         Sessions,
                         Articles
@@ -37,11 +38,13 @@
 
                     // handle reader resize
                     $rootScope.$on('split:resize', function (e, data) {
-                        $graph.css({ right: data });
+                        $container.css({ right: data });
                         graph.updateSize();
                     });
 
-                    // handle menu open / close
+                    /**
+                     * Menu open/close
+                     */
 
                     function animateGraphLeft(lefts) {
                         (function animateFrame() {
@@ -50,7 +53,7 @@
                                 return;
                             }
                             var left = lefts.pop();
-                            $graph.css({ left: left });
+                            $container.css({ left: left });
                             graph.updateSize();
                             setTimeout(function () {
                                 requestAnimationFrame(animateFrame);
