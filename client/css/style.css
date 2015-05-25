@@ -34,6 +34,7 @@ html, body {
     bottom: 0;
 }
 
+
 /**
  * Screen too small
  */
@@ -60,6 +61,11 @@ html, body {
 /**
  * Home page stylings
  */
+
+.alert-beta {
+    border-radius: 0;
+    text-align: center;
+}
 
 #home-graph {
     position: absolute;
