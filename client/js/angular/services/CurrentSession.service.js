@@ -257,56 +257,58 @@
 				 * Find or Add nest/chain
 				 */
 
-				function findOrAddArticle(title, callback) {
+				function findOrAddArticle(title) {
 
 					// is this a category?
 					if (title.match(/^Category:/)) {
 						// skip to special handler
-						findOrAddCategory(title, callback);
-						return;
+						return findOrAddCategory(title);
 					}
 
-					Articles.getByUnsafeTitle(title).
+					return Articles.getByUnsafeTitle(title).
 						then(function (article) {
-							callback({
+							return{
 								type: 'article',
 								name: article.title,
 								title: article.title
-							});
+							};
 						}).
-						catch(function () {
+						catch(function (err) {
+							console.log('In findOrAddArticle', err);
 							// no result? try searching
-							findOrAddSearch(title, callback);
+							return findOrAddSearch(title);
 						});
 				}
 
-				function findOrAddCategory(title, callback) {
-					Categories.getByUnsafeTitle(title).
+				function findOrAddCategory(title) {
+					return Categories.getByUnsafeTitle(title).
 						then(function (category) {
-							callback({
+							return {
 								type: 'category',
 								name: category.title,
 								title: category.title
-							});
+							};
 						}).
-						catch(function () {
+						catch(function (err) {
+							console.log('In findOrAddCategory', err);
 							// no result? try searching
-							findOrAddSearch(title, callback);
+							return findOrAddSearch(title);
 						});
 				}
 
-				function findOrAddSearch(query, callback) {
-					Searches.getByQuery(query).
+				function findOrAddSearch(query) {
+					return Searches.getByQuery(query).
 						then(function (search) {
-							callback({
+							return {
 								type: 'search',
 								name: 'Search "' + query + '"',
 								query: query
-							});
+							};
 						}).
-						catch(function () {
+						catch(function (err) {
+							console.log('In findOrAddSearch', err);
 							// no dice
-							callback(null);
+							return null;
 						});
 				}
 
@@ -468,17 +470,31 @@
 						// 3. find or add link (?)
 						// 4. set current node (?)
 
-						findOrAddArticle(title, function (result) {
+						findOrAddArticle(title).
+							then(function (result) {
 
-							// TODO handle failure
-							if (!result) {
-								alert('Sorry, something went wrong for "' + title + '"');
-								return;
-							};
+								// TODO handle failure
+								if (!result) {
+									alert('Sorry, something went wrong for "' + title + '"');
+									return;
+								};
 
-							findOrAddNode(result, function (node) {
-								if (sourceNodeId) {
-									findOrAddLink(node, sourceNodeId, function (link) {
+								return findOrAddNode(result, function (node) {
+									if (sourceNodeId) {
+										findOrAddLink(node, sourceNodeId, function (link) {
+
+											trigger('update:nodes+links');
+
+											if (!noSetCurrent) {
+												history.setCurrentId(node.uuid);
+												trigger('update:currentnode');
+											}
+
+											var endTime = Date.now();
+											console.log('handleTitle complete: ', endTime - startTime);
+
+										});
+									} else {
 
 										trigger('update:nodes+links');
 
@@ -490,22 +506,9 @@
 										var endTime = Date.now();
 										console.log('handleTitle complete: ', endTime - startTime);
 
-									});
-								} else {
-
-									trigger('update:nodes+links');
-
-									if (!noSetCurrent) {
-										history.setCurrentId(node.uuid);
-										trigger('update:currentnode');
 									}
-
-									var endTime = Date.now();
-									console.log('handleTitle complete: ', endTime - startTime);
-
-								}
+								});
 							});
-						});
 					},
 
 					handleTitleSearch: function (args) {
@@ -527,17 +530,31 @@
 						// 3. find or add link (?)
 						// 4. set current node (?)
 
-						findOrAddSearch(title, function (result) {
+						findOrAddSearch(title).
+							then(function (result) {
 
-							// TODO handle failure
-							if (!result) {
-								alert('Sorry, something went wrong for "' + title + '"');
-								return;
-							};
+								// TODO handle failure
+								if (!result) {
+									alert('Sorry, something went wrong for "' + title + '"');
+									return;
+								};
 
-							findOrAddNode(result, function (node) {
-								if (sourceNodeId) {
-									findOrAddLink(node, sourceNodeId, function (link) {
+								return findOrAddNode(result, function (node) {
+									if (sourceNodeId) {
+										findOrAddLink(node, sourceNodeId, function (link) {
+
+											trigger('update:nodes+links');
+
+											if (!noSetCurrent) {
+												history.setCurrentId(node.uuid);
+												trigger('update:currentnode');
+											}
+
+											var endTime = Date.now();
+											console.log('handleTitle complete: ', endTime - startTime);
+
+										});
+									} else {
 
 										trigger('update:nodes+links');
 
@@ -549,22 +566,9 @@
 										var endTime = Date.now();
 										console.log('handleTitle complete: ', endTime - startTime);
 
-									});
-								} else {
-
-									trigger('update:nodes+links');
-
-									if (!noSetCurrent) {
-										history.setCurrentId(node.uuid);
-										trigger('update:currentnode');
 									}
-
-									var endTime = Date.now();
-									console.log('handleTitle complete: ', endTime - startTime);
-
-								}
+								});
 							});
-						});
 					},
 
 					/**
