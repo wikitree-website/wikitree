@@ -152,7 +152,6 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
     var links = self.ng.session.getLinks().slice();
 
     // give nodes starting positions
-    // and determine node size range
     var centerX = self.width / 2;
     var centerY = self.height / 2;
     nodes.forEach(function (node) {
