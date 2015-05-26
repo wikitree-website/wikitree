@@ -19,7 +19,7 @@ body {
 
 html, body {
     background-color: #BBB;
-    /*background-image: url('/img/noise.png');*/
+    background-image: url('/img/noise.png');
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
 
