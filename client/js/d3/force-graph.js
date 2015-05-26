@@ -108,7 +108,7 @@ ForceGraph.prototype.init = function () {
             .attr('orient', 'auto')
         .append('path')
             .attr('d', 'M0,-5 L10,0 L0,5')
-            .style('fill', '#AAA');
+            .style('fill', '#A0A0A0');
 };
 
 ForceGraph.prototype.updateSize = function () {
