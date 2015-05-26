@@ -18,8 +18,9 @@ body {
  */
 
 html, body {
-    background-color: #CCC;
-    background-image: url('/img/noise.png');
+    background-color: #BBB;
+    /*background-image: url('/img/noise.png');*/
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .modal-700 {
@@ -96,7 +97,8 @@ html, body {
 .home .page-title {
     padding-bottom: 20px;
     text-align: center;
-    font-size: 64px;
+    font-weight: bold;
+    font-size: 81px;
     color: #222;
 }
 
@@ -218,6 +220,8 @@ html, body {
 }
 
 .menu-item.header .title a {
+    font-weight: bold;
+    font-size: 26px;
     color: #333;
 }
 
@@ -476,7 +480,7 @@ g.node.active.fixed circle {
 
 
 line.link {
-    stroke: #AAA;
+    stroke: #A0A0A0;
     stroke-width: 3px;
     stroke-dasharray: 4, 3;
 }
