@@ -64,7 +64,7 @@
                     // wait for all calls to complete
                     $q.all([getPageContent, getSubcategories, getMemberpages]).
                         then(function (values) {
-                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
+                            $rootScope.$broadcast('mediawikiapi:loadend', timestamp);
 
                             var page = values[0];
                             var subcategories = values[1];
@@ -102,16 +102,14 @@
                                 result.name = result.title.slice('Category:'.length);
                                 resolve(result);
                             } else {
+                                console.error('Category API error', arguments);
                                 reject(null);
                             }
 
                         }).
                         catch(function () {
-                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
-
-                            console.error('cat api err');
-                            console.log(arguments);
-
+                            $rootScope.$broadcast('mediawikiapi:loadend', timestamp);
+                            console.error('Category API error', arguments);
                             reject(null);
                         });
                 });

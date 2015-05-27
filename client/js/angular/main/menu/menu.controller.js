@@ -32,16 +32,16 @@
                 $scope.toggleMenu = function () {
                     $scope.open = !$scope.open;
                     if ($scope.open) {
-                        $rootScope.$emit('menu:open');
+                        $rootScope.$broadcast('menu:open');
                     } else {
-                        $rootScope.$emit('menu:close');
+                        $rootScope.$broadcast('menu:close');
                     }
                 };
 
                 $scope.sortableOptions = {
                     update: function(e, ui) {
                         $scope.$broadcast('session:cancel_edit');
-                        $rootScope.$emit('session:sort', {
+                        $rootScope.$broadcast('session:sort', {
                             start: ui.item.sortable.index,
                             stop:  ui.item.sortable.dropindex
                         });
@@ -50,7 +50,7 @@
                 }
 
                 $scope.toggleNodePin = function () {
-                    $rootScope.$emit('request:graph:toggle_node_pin');
+                    $rootScope.$broadcast('request:graph:toggle_node_pin');
                 };
 
                 $scope.removeCurrentNode = function () {
@@ -61,7 +61,7 @@
                 };
 
                 $scope.locateCurrentNode = function () {
-                    $rootScope.$emit('request:graph:locate_current_node');
+                    $rootScope.$broadcast('request:graph:locate_current_node');
                 };
 
         }]);

@@ -1,7 +1,11 @@
 (function() {
     angular.module('wikitree').
-
-        factory('Sessions', ['$rootScope', '$location', 'localStorageService', 'Utilities', 'CurrentSession',
+        factory('Sessions', [
+            '$rootScope',
+            '$location',
+            'localStorageService',
+            'Utilities',
+            'CurrentSession',
             function($rootScope, $location, localStorageService, Utilities, CurrentSession) {
 
                 function Session() {

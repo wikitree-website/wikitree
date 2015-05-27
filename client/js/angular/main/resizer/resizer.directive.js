@@ -1,106 +1,108 @@
 (function() {
     angular.module('wikitree.main.resizer').
-        directive('resizer', ['$rootScope', 'CurrentSession', function($rootScope, CurrentSession) {
-            var link = function(scope, element, attrs) {
+        directive('resizer', [
+            '$rootScope',
+            'Resizer',
+            'CurrentSession',
+            function($rootScope, Resizer, CurrentSession) {
+                var link = function(scope, element, attrs) {
 
-                var MIN_SIZE = 300;
-                var MIN_GAP = 120;
+                    var $window = $(window);
+                    var $resizer = $('#resizer');
+                    var resizerHalf = ($resizer.width() / 2);
 
-                var $window = $(window);
-                var $resizer = $('#resizer');
-                var resizerHalf = ($resizer.width() / 2);
+                    function resizeToRatio() {
+                        Resizer.size = Resizer.ratio * window.innerWidth;
+                        setRightSize(Resizer.size);
+                        restoreElement();
+                    }
 
-                var ratio = 3/5; // updated on set size
+                    function setRightSize(size) {
+                        var winWidth = window.innerWidth;
+                        // make sure size is reasonable
+                        if (winWidth - size < Resizer.MIN_GAP) return;
+                        if (size < Resizer.MIN_SIZE) return;
+                        // update measurements
+                        Resizer.size = size;
+                        Resizer.ratio = size / winWidth;
+                        // tell the world
+                        $rootScope.$broadcast('split:resize');
+                    }
 
-                function resizeToRatio() {
-                    setRightSize(ratio * window.innerWidth);
-                    restoreElement();
-                }
-
-                function setRightSize(size) {
-                    var winWidth = window.innerWidth;
-                    // make sure size is reasonable
-                    if (winWidth - size < MIN_GAP) return;
-                    if (size < MIN_SIZE) return;
-                    // update ratio
-                    ratio = size / winWidth;
-                    // tell the world
-                    $rootScope.$emit('split:resize', size);
-                }
-
-                function fillElement() {
-                    $resizer.css({
-                        width: '100%',
-                        left: 0,
-                        right: 0
-                    });
-                }
-
-                function restoreElement() {
-                    var size = ratio * window.innerWidth;
-                    $resizer.css({
-                        width: '', // reset
-                        left: '', // reset
-                        right: size - resizerHalf
-                    });
-                }
-
-                /**
-                 * Initialize
-                 */
-
-                resizeToRatio();
-
-                /**
-                 * Handle dragging
-                 */
-
-                // start drag
-                $resizer.on('mousedown', function (e) {
-                    // fill screen to prevent iframe steal
-                    scope.$apply(function () {
-                        fillElement();
-                    });
-                    // handle drag on any movement
-                    $window.on('mousemove', dragHandler);
-                    // release drag handler on next mouseup
-                    $window.one('mouseup', function (e) {
-                        // put resizer back in place
-                        scope.$apply(function () {
-                            restoreElement();
+                    function fillElement() {
+                        $resizer.css({
+                            width: '100%',
+                            left: 0,
+                            right: 0
                         });
-                        // unbind drag event for now
-                        $window.unbind('mousemove', dragHandler);
-                    });
-                });
+                    }
 
-                // during drag
-                function dragHandler(e) {
-                    e.preventDefault();
-                    scope.$apply(function () {
-                        setRightSize(window.innerWidth - e.pageX);
+                    function restoreElement() {
+                        $resizer.css({
+                            width: '', // reset
+                            left: '', // reset
+                            right: Resizer.size - resizerHalf
+                        });
+                    }
+
+                    /**
+                     * Initialize
+                     */
+
+                    resizeToRatio();
+
+                    /**
+                     * Handle dragging
+                     */
+
+                    // start drag
+                    $resizer.on('mousedown', function (e) {
+                        // fill screen to prevent iframe steal
+                        scope.$apply(function () {
+                            fillElement();
+                        });
+                        // handle drag on any movement
+                        $window.on('mousemove', dragHandler);
+                        // release drag handler on next mouseup
+                        $window.one('mouseup', function (e) {
+                            // put resizer back in place
+                            scope.$apply(function () {
+                                restoreElement();
+                            });
+                            // unbind drag event for now
+                            $window.unbind('mousemove', dragHandler);
+                        });
                     });
+
+                    // during drag
+                    function dragHandler(e) {
+                        e.preventDefault();
+                        scope.$apply(function () {
+                            setRightSize(window.innerWidth - e.pageX);
+                        });
+                    }
+
+                    /**
+                     * Handle window resize
+                     */
+
+                    $window.on('resize', function () {
+                        scope.$apply(function () {
+                            resizeToRatio();
+                        });
+                    });
+
+                };
+
+                return {
+                    restrict: 'E',
+                    replace: true,
+                    templateUrl: "js/angular/main/resizer/resizer.template.html",
+                    //controller: 'resizerController',
+                    scope: {},
+                    link: link
                 }
-
-                /**
-                 * Handle window resize
-                 */
-
-                $window.on('resize', function () {
-                    scope.$apply(function () {
-                        resizeToRatio();
-                    });
-                });
-
-            };
-
-            return {
-                restrict: 'E',
-                replace: true,
-                templateUrl: "js/angular/main/resizer/resizer.template.html",
-                //controller: 'resizerController',
-                scope: {},
-                link: link
             }
-        }]);
+        ]
+    );
 })();

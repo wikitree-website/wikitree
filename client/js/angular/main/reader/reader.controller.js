@@ -1,17 +1,18 @@
 (function() {
     angular.module('wikitree.main.reader').
         controller('readerController', [
-            '$rootScope',
             '$scope',
+            'Resizer',
+            'Loading',
             'CurrentSession',
             'Sessions',
             'Articles',
             'Searches',
             'Categories',
-            function($rootScope, $scope, CurrentSession, Sessions, Articles, Searches, Categories) {
+            function($scope, Resizer, Loading, CurrentSession, Sessions, Articles, Searches, Categories) {
 
                 // for reader width
-                $scope.readerWidth = '60%';
+                $scope.readerWidth = Resizer.size + 'px';
 
                 // for frame node load
                 $scope.currentNodeName = null;
@@ -19,34 +20,35 @@
                 $scope.hasReferences = false;
 
                 // for loading indicator
-                $scope.loadingCount = 0;
+                // start with 1 for initial load
+                $scope.loadingCount = Loading.count;
 
                 // for prev/next buttons
                 $scope.hasBackward = CurrentSession.hasBackward();
                 $scope.hasForward = CurrentSession.hasForward();
 
                 // keep history buttons updated
-                $rootScope.$on('update:currentnode', function () {
+                $scope.$on('update:currentnode', function () {
                     $scope.hasBackward = CurrentSession.hasBackward();
                     $scope.hasForward = CurrentSession.hasForward();
                 });
 
                 // keep loading indicator updated
-                $rootScope.$on('mediawikiapi:loadstart', function () {
-                    $scope.loadingCount++;
+                $scope.$on('mediawikiapi:loadstart', function () {
+                    $scope.loadingCount = Loading.count;
                 });
-                $rootScope.$on('mediawikiapi:loadend', function () {
-                    $scope.loadingCount--;
+                $scope.$on('mediawikiapi:loadend', function () {
+                    $scope.loadingCount = Loading.count;
                 });
 
                 // keep iframe content updated
-                $rootScope.$on('update:currentnode', function () {
+                $scope.$on('update:currentnode', function () {
                     $scope.updateFrameNode();
                 });
 
                 // keep reader width updated
-                $rootScope.$on('split:resize', function (e, data) {
-                    $scope.readerWidth = data + 'px';
+                $scope.$on('split:resize', function (e, data) {
+                    $scope.readerWidth = Resizer.size + 'px';
                 });
 
                 /**
