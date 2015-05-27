@@ -1,6 +1,9 @@
 (function() {
     angular.module('wikitree.main.reader').
-        controller('readerController', ['$rootScope', '$scope', 'CurrentSession',
+        controller('readerController', [
+            '$rootScope',
+            '$scope',
+            'CurrentSession',
             function($rootScope, $scope, CurrentSession) {
 
             	$scope.scrollToReferences = function () {
@@ -27,5 +30,6 @@
 					link.click();
                 };
 
-            }]);
+            }
+        ]);
 })();

@@ -1,17 +1,17 @@
-var path = require('path'),
-    gulp = require('gulp'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    watch = require('gulp-watch'),
-    del = require('del'),
-    nodemon = require('gulp-nodemon'),
-    mincss = require('gulp-minify-css'),
-    rename = require('gulp-rename'),
-    clone = require('gulp-clone'),
-    order = require('gulp-order'),
-    debug = require('gulp-debug'),
-    sourcemaps = require('gulp-sourcemaps'),
-    es = require('event-stream');
+var del = require('del');
+var path = require('path');
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var watch = require('gulp-watch');
+var nodemon = require('gulp-nodemon');
+var mincss = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var clone = require('gulp-clone');
+var order = require('gulp-order');
+var debug = require('gulp-debug');
+var sourcemaps = require('gulp-sourcemaps');
+var es = require('event-stream');
 
 gulp.task('build-client-css', function() {
 
@@ -71,7 +71,7 @@ gulp.task('build-client-js', function(){
 
     // copy the concat file, uglify and rename
     var minJS = allJS.pipe(clone())
-        .pipe(uglify())
+        .pipe(uglify().on('error', console.log))
         .pipe(rename('app.min.js'));
 
     // merge the two files to one dest
@@ -138,12 +138,3 @@ gulp.task('default', ['clean'], function(){
 gulp.task('test', function(){
     return;
 });
-
-// ** commented out in case heroku is used at any time (using a gulp buildpack)
-//gulp.task('heroku:production', function() {
-//    gulp.start('build');
-//});
-//
-//gulp.task('heroku:development', function() {
-//    gulp.start('build');
-//});
