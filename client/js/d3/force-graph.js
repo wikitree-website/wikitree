@@ -290,7 +290,9 @@ ForceGraph.prototype.makeNodeClick = function () {
             self.toggleNodePin(d, d3.select(this.parentNode));
         } else {
             // set this node as current
-            self.scope.setCurrentNode(d.uuid);
+            self.scope.$apply(function () {
+                self.scope.setCurrentNode(d.uuid);
+            });
         }
     };
 };

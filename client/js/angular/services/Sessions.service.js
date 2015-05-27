@@ -104,22 +104,16 @@
                     }
                 };
 
+                /**
+                 * Save events
+                 */
+
                 $(window).on('beforeunload', function () {
                     Sessions.save();
                 });
 
-                var nodeLength = CurrentSession.getNodes().length;
-                var linkLength = CurrentSession.getLinks().length;
-                CurrentSession.addListener('update:nodes+links', function () {
-                    var newNodeLength = CurrentSession.getNodes().length;
-                    var newLinkLength = CurrentSession.getLinks().length;
-                    if (newNodeLength !== nodeLength || newLinkLength !== linkLength) {
-                        nodeLength = newNodeLength;
-                        linkLength = newLinkLength;
-                        setTimeout(function () {
-                            Sessions.save();
-                        }, 1);
-                    }
+                $rootScope.$on('update:nodes+links', function () {
+                    Sessions.save();
                 });
 
                 return Sessions;

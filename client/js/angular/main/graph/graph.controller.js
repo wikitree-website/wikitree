@@ -7,6 +7,9 @@
             'Sessions',
             function ($rootScope, $scope, CurrentSession, Sessions) {
 
+            	// for graph position
+                $scope.positionRight = '60%';
+
 
                 /**
                  * Global events
@@ -26,24 +29,19 @@
 
                 // handle map/reader split resize
                 $rootScope.$on('split:resize', function (e, data) {
-                    $($scope.graph.containerEl).css({ right: data });
+                    $scope.positionRight = data + 'px';
                     $scope.graph.updateSize();
                 });
 
-
-                /**
-                 * Current Session events
-                 */
-
                 // handle model update (nodes + links)
-                CurrentSession.addListener('update:nodes+links', function () {
-                    var nodes = CurrentSession.getNodes().slice();
+                $rootScope.$on('update:nodes+links', function () {
+                	var nodes = CurrentSession.getNodes().slice();
                     var links = CurrentSession.getLinks().slice();
                     $scope.graph.updateNodesAndLinks(nodes, links);
                 });
 
                 // handle model update (current node)
-                CurrentSession.addListener('update:currentnode', function () {
+                $rootScope.$on('update:currentnode', function () {
                     var node = CurrentSession.getCurrentNode();
                     $scope.graph.updateCurrentNode(node);
                 });
