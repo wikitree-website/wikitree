@@ -16,6 +16,7 @@
                 // for frame node load
                 $scope.currentNodeName = null;
                 $scope.missedFrameUpdate = false;
+                $scope.hasReferences = false;
 
                 // for loading indicator
                 $scope.loadingCount = 0;
@@ -82,7 +83,7 @@
 
                 $scope.scrollToReferences = function () {
                     if (!$scope.frameWindow) return;
-                    scope.frameWindow.scrollToReferences();
+                    $scope.frameWindow.scrollToReferences();
                 };
 
                 /**
@@ -122,22 +123,29 @@
                     // save update
                     Sessions.save();
 
+                    // on iframe node load
+                    function onLoad() {
+                        // update reference check
+                        $scope.hasReferences = $scope.frameWindow.checkForReferences();
+                    }
+
                     // load node into iframe
                     switch (node.type) {
-                        case 'category': loadCategory(node); break;
-                        case 'article': loadArticle(node); break;
-                        case 'search': loadSearch(node); break;
+                        case 'category': loadCategory(node, onLoad); break;
+                        case 'article': loadArticle(node, onLoad); break;
+                        case 'search': loadSearch(node, onLoad); break;
                     }
 
                 };
 
-                function loadCategory(node) {
+                function loadCategory(node, callback) {
                     Categories.getByTitle(node.title).
                         then(function (category) {
                             $scope.frameWindow.loadCategory(
                                 category,
                                 makeTitleCallback(node)
                             );
+                            if (callback) callback(category);
                         }).
                         catch(function () {
                             $scope.frameWindow.loadError(
@@ -146,13 +154,14 @@
                         });
                 }
 
-                function loadArticle(node) {
+                function loadArticle(node, callback) {
                     Articles.getByTitle(node.title).
                         then(function (article) {
                             $scope.frameWindow.loadArticle(
                                 article,
                                 makeTitleCallback(node)
                             );
+                            if (callback) callback(article);
                         }).
                         catch(function () {
                             $scope.frameWindow.loadError(
@@ -161,13 +170,14 @@
                         });
                 }
 
-                function loadSearch(node) {
+                function loadSearch(node, callback) {
                     Searches.getByQuery(node.query).
                         then(function (search) {
                             $scope.frameWindow.loadSearch(
                                 search,
                                 makeTitleCallback(node)
                             );
+                            if (callback) callback(search);
                         }).
                         catch(function () {
                             $scope.frameWindow.loadError(
