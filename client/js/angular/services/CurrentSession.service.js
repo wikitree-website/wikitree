@@ -392,17 +392,17 @@
 
                     goForward: function () {
                         history.goForward();
-                        $rootScope.$emit('update:currentnode');
+                        $rootScope.$broadcast('update:currentnode');
                     },
 
                     goBackward: function () {
                         history.goBackward();
-                        $rootScope.$emit('update:currentnode');
+                        $rootScope.$broadcast('update:currentnode');
                     },
 
                     setCurrentNode: function (nodeId) {
                         history.setCurrentId(nodeId);
-                        $rootScope.$emit('update:currentnode');
+                        $rootScope.$broadcast('update:currentnode');
                     },
 
                     removeNode: function (nodeId) {
@@ -417,8 +417,8 @@
                         history.removeNode(node.uuid);
 
                         // alert the media
-                        $rootScope.$emit('update:nodes+links');
-                        $rootScope.$emit('update:currentnode');
+                        $rootScope.$broadcast('update:nodes+links');
+                        $rootScope.$broadcast('update:currentnode');
 
                     },
 
@@ -451,11 +451,11 @@
                                     if (sourceNodeId) {
                                         findOrAddLink(node, sourceNodeId, function (link) {
 
-                                            $rootScope.$emit('update:nodes+links');
+                                            $rootScope.$broadcast('update:nodes+links');
 
                                             if (!noSetCurrent) {
                                                 history.setCurrentId(node.uuid);
-                                                $rootScope.$emit('update:currentnode');
+                                                $rootScope.$broadcast('update:currentnode');
                                             }
 
                                             var endTime = Date.now();
@@ -464,11 +464,11 @@
                                         });
                                     } else {
 
-                                        $rootScope.$emit('update:nodes+links');
+                                        $rootScope.$broadcast('update:nodes+links');
 
                                         if (!noSetCurrent) {
                                             history.setCurrentId(node.uuid);
-                                            $rootScope.$emit('update:currentnode');
+                                            $rootScope.$broadcast('update:currentnode');
                                         }
 
                                         var endTime = Date.now();
@@ -511,11 +511,11 @@
                                     if (sourceNodeId) {
                                         findOrAddLink(node, sourceNodeId, function (link) {
 
-                                            $rootScope.$emit('update:nodes+links');
+                                            $rootScope.$broadcast('update:nodes+links');
 
                                             if (!noSetCurrent) {
                                                 history.setCurrentId(node.uuid);
-                                                $rootScope.$emit('update:currentnode');
+                                                $rootScope.$broadcast('update:currentnode');
                                             }
 
                                             var endTime = Date.now();
@@ -524,11 +524,11 @@
                                         });
                                     } else {
 
-                                        $rootScope.$emit('update:nodes+links');
+                                        $rootScope.$broadcast('update:nodes+links');
 
                                         if (!noSetCurrent) {
                                             history.setCurrentId(node.uuid);
-                                            $rootScope.$emit('update:currentnode');
+                                            $rootScope.$broadcast('update:currentnode');
                                         }
 
                                         var endTime = Date.now();
@@ -550,8 +550,8 @@
                         nodes.importState(session.nodes);
                         links.importState(session.links);
 
-                        $rootScope.$emit('update:nodes+links');
-                        $rootScope.$emit('update:currentnode');
+                        $rootScope.$broadcast('update:nodes+links');
+                        $rootScope.$broadcast('update:currentnode');
                     },
 
                     exportState: function() {
@@ -567,7 +567,7 @@
                         nodes.clearState();
                         links.clearState();
 
-                        $rootScope.$emit('update:nodes+links');
+                        $rootScope.$broadcast('update:nodes+links');
                     }
                 };
 

@@ -22,7 +22,7 @@
 
                 var timestamp = Date.now();
                 return $q(function (resolve, reject) {
-                    $rootScope.$emit('mediawikiapi:loadstart', timestamp);
+                    $rootScope.$broadcast('mediawikiapi:loadstart', timestamp);
                     $http.jsonp('https://en.wikipedia.org/w/api.php', {
                         params: {
                             action: 'query',
@@ -35,15 +35,17 @@
                         }
                     }).
                         success(function (data) {
-                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
+                            $rootScope.$broadcast('mediawikiapi:loadend', timestamp);
                             if (data && data.query && data.query.searchinfo) {
                                 resolve(data.query);
                             } else {
+                                console.error('Search API error', arguments);
                                 reject(null);
                             }
                         }).
                         error(function () {
-                            $rootScope.$emit('mediawikiapi:loadend', timestamp);
+                            $rootScope.$broadcast('mediawikiapi:loadend', timestamp);
+                            console.error('Search API error', arguments);
                             reject(null);
                         });
                 });
