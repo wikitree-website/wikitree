@@ -35,6 +35,14 @@ html, body {
     bottom: 0;
 }
 
+.removed {
+    display: none !important;
+}
+
+.hidden {
+    visibility: hidden !important;
+}
+
 
 /**
  * Screen too small
@@ -345,10 +353,6 @@ html, body {
 
 #reader .head .logo {
     cursor: pointer;
-}
-
-#reader .head .logo .spinner {
-    visibility: hidden;
 }
 
 #reader .head .search {

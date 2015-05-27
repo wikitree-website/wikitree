@@ -1,9 +1,10 @@
 (function() {
     angular.module('wikitree.main.resizer').
-
         directive('resizer', ['$rootScope', 'CurrentSession', function($rootScope, CurrentSession) {
-
             var link = function(scope, element, attrs) {
+
+                var MIN_SIZE = 300;
+                var MIN_GAP = 120;
 
                 var $window = $(window);
                 var $resizer = $('#resizer');
@@ -19,8 +20,8 @@
                 function setRightSize(size) {
                     var winWidth = window.innerWidth;
                     // make sure size is reasonable
-                    if (winWidth - size < 60) return;
-                    if (size < 300) return;
+                    if (winWidth - size < MIN_GAP) return;
+                    if (size < MIN_SIZE) return;
                     // update ratio
                     ratio = size / winWidth;
                     // tell the world
@@ -57,13 +58,17 @@
                 // start drag
                 $resizer.on('mousedown', function (e) {
                     // fill screen to prevent iframe steal
-                    fillElement();
+                    scope.$apply(function () {
+                        fillElement();
+                    });
                     // handle drag on any movement
                     $window.on('mousemove', dragHandler);
                     // release drag handler on next mouseup
                     $window.one('mouseup', function (e) {
                         // put resizer back in place
-                        restoreElement();
+                        scope.$apply(function () {
+                            restoreElement();
+                        });
                         // unbind drag event for now
                         $window.unbind('mousemove', dragHandler);
                     });
@@ -72,7 +77,9 @@
                 // during drag
                 function dragHandler(e) {
                     e.preventDefault();
-                    setRightSize(window.innerWidth - e.pageX);
+                    scope.$apply(function () {
+                        setRightSize(window.innerWidth - e.pageX);
+                    });
                 }
 
                 /**
@@ -80,7 +87,9 @@
                  */
 
                 $window.on('resize', function () {
-                    resizeToRatio();
+                    scope.$apply(function () {
+                        resizeToRatio();
+                    });
                 });
 
             };
@@ -94,5 +103,4 @@
                 link: link
             }
         }]);
-
 })();

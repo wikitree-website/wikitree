@@ -1,6 +1,6 @@
 (function() {
     angular.module('wikitree.main.graph').
-        directive('graph', [function() {
+        directive('graph', ['$rootScope', function($rootScope) {
             return {
                 restrict: 'E',
                 replace: true,

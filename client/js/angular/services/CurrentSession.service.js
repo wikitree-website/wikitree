@@ -1,11 +1,12 @@
 (function() {
     angular.module('wikitree').
         factory('CurrentSession', [
+        	'$rootScope',
             'Utilities',
             'Articles',
             'Searches',
             'Categories',
-            function (Utilities, Articles, Searches, Categories) {
+            function ($rootScope, Utilities, Articles, Searches, Categories) {
 
                 /**
                  * Models current Wikipedia map
@@ -355,44 +356,11 @@
 
 
                 /**
-                 * Event subscribers
-                 */
-
-                var callbacks = {
-                    'update:nodes+links': [],
-                    'update:currentnode': []
-                };
-
-                function trigger(eventName) {
-
-                    var startTime = Date.now();
-
-                    callbacks[eventName].forEach(function (callback) {
-                        // they must determine
-                        // what has changed
-                        // for themselves
-                        callback(true);
-                    });
-
-                    var endTime = Date.now();
-                    console.log('trigger complete: ', eventName, endTime - startTime);
-                }
-
-
-                /**
                  *
                  * Public interface
                  *
                  */
                 var CurrentSession = {
-
-                    /**
-                     * Register for state changes
-                     */
-
-                    addListener: function (eventName, callback) {
-                        callbacks[eventName].push(callback);
-                    },
 
                     /**
                      * Read state
@@ -424,17 +392,17 @@
 
                     goForward: function () {
                         history.goForward();
-                        trigger('update:currentnode');
+                        $rootScope.$emit('update:currentnode');
                     },
 
                     goBackward: function () {
                         history.goBackward();
-                        trigger('update:currentnode');
+                        $rootScope.$emit('update:currentnode');
                     },
 
                     setCurrentNode: function (nodeId) {
                         history.setCurrentId(nodeId);
-                        trigger('update:currentnode');
+                        $rootScope.$emit('update:currentnode');
                     },
 
                     removeNode: function (nodeId) {
@@ -449,8 +417,8 @@
                         history.removeNode(node.uuid);
 
                         // alert the media
-                        trigger('update:nodes+links');
-                        trigger('update:currentnode');
+                        $rootScope.$emit('update:nodes+links');
+                        $rootScope.$emit('update:currentnode');
 
                     },
 
@@ -483,11 +451,11 @@
                                     if (sourceNodeId) {
                                         findOrAddLink(node, sourceNodeId, function (link) {
 
-                                            trigger('update:nodes+links');
+                                            $rootScope.$emit('update:nodes+links');
 
                                             if (!noSetCurrent) {
                                                 history.setCurrentId(node.uuid);
-                                                trigger('update:currentnode');
+                                                $rootScope.$emit('update:currentnode');
                                             }
 
                                             var endTime = Date.now();
@@ -496,11 +464,11 @@
                                         });
                                     } else {
 
-                                        trigger('update:nodes+links');
+                                        $rootScope.$emit('update:nodes+links');
 
                                         if (!noSetCurrent) {
                                             history.setCurrentId(node.uuid);
-                                            trigger('update:currentnode');
+                                            $rootScope.$emit('update:currentnode');
                                         }
 
                                         var endTime = Date.now();
@@ -543,28 +511,28 @@
                                     if (sourceNodeId) {
                                         findOrAddLink(node, sourceNodeId, function (link) {
 
-                                            trigger('update:nodes+links');
+                                            $rootScope.$emit('update:nodes+links');
 
                                             if (!noSetCurrent) {
                                                 history.setCurrentId(node.uuid);
-                                                trigger('update:currentnode');
+                                                $rootScope.$emit('update:currentnode');
                                             }
 
                                             var endTime = Date.now();
-                                            console.log('handleTitle complete: ', endTime - startTime);
+                                            console.log('handleTitleSearch complete: ', endTime - startTime);
 
                                         });
                                     } else {
 
-                                        trigger('update:nodes+links');
+                                        $rootScope.$emit('update:nodes+links');
 
                                         if (!noSetCurrent) {
                                             history.setCurrentId(node.uuid);
-                                            trigger('update:currentnode');
+                                            $rootScope.$emit('update:currentnode');
                                         }
 
                                         var endTime = Date.now();
-                                        console.log('handleTitle complete: ', endTime - startTime);
+                                        console.log('handleTitleSearch complete: ', endTime - startTime);
 
                                     }
                                 });
@@ -582,8 +550,8 @@
                         nodes.importState(session.nodes);
                         links.importState(session.links);
 
-                        trigger('update:nodes+links');
-                        trigger('update:currentnode');
+                        $rootScope.$emit('update:nodes+links');
+                        $rootScope.$emit('update:currentnode');
                     },
 
                     exportState: function() {
@@ -599,7 +567,7 @@
                         nodes.clearState();
                         links.clearState();
 
-                        trigger('update:nodes+links');
+                        $rootScope.$emit('update:nodes+links');
                     }
                 };
 

@@ -1,16 +1,16 @@
-<div id="reader" class="overlay">
+<div id="reader" class="overlay" style="width: {{ readerWidth }}">
     <div class="inner">
         <div class="head">
             <div class="logo">
-                <img ng-click="openSourceArticle()" class="w" src="/img/w.png">
-                <img class="spinner" src="/img/spinner.gif">
+                <img ng-class="{'removed': loadingCount > 0}" ng-click="openSourceArticle()" class="w" src="/img/w.png">
+                <img ng-class="{'invisible': loadingCount < 1}" class="spinner" src="/img/spinner.gif">
             </div>
             <div class="history">
                 <div class="btn-group" role="group" aria-label="Article history">
-                    <button id="history-prev" type="button" class="btn btn-default">
+                    <button ng-click="historyBackward()" ng-disabled="!hasBackward" id="history-prev" type="button" class="btn btn-default">
                         <i class="fa fa-arrow-left"></i>
                     </button>
-                    <button id="history-next" type="button" class="btn btn-default">
+                    <button ng-click="historyForward()" ng-disabled="!hasForward" id="history-next" type="button" class="btn btn-default">
                         <i class="fa fa-arrow-right"></i>
                     </button>
                 </div>
