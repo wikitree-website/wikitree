@@ -6,7 +6,7 @@
             'CurrentSession',
             function($rootScope, $scope, CurrentSession) {
 
-            	$scope.scrollToReferences = function () {
+                $scope.scrollToReferences = function () {
                     $rootScope.$emit('request:reader:scroll_to_references');
                 };
 
@@ -25,9 +25,9 @@
                             break;
                     }
                     var link = document.createElement('a');
-					link.target = '_blank';
-					link.href = url;
-					link.click();
+                    link.target = '_blank';
+                    link.href = url;
+                    link.click();
                 };
 
             }

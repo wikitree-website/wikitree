@@ -7,7 +7,7 @@
                 templateUrl: "js/angular/search/search.template.html",
                 controller: 'searchController',
                 scope: {
-                	large: '@'
+                    large: '@'
                 }
             }
         }]);
