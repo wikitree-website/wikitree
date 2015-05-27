@@ -1,18 +1,12 @@
-function ForceGraph(containerEl, session, sessions, articles) {
+function ForceGraph(containerEl, scope) {
     var self = this;
 
     /**
      * Properties
      */
 
-    // angular things
-    self.ng = {};
-    self.ng.session = session;
-    self.ng.sessions = sessions;
-    self.ng.articles = articles;
-
-    // user pressed keycode reference
-    self.keysPressed = {};
+    // angular scope
+    self.scope = scope;
 
     // html container
     self.containerEl = containerEl;
@@ -20,6 +14,9 @@ function ForceGraph(containerEl, session, sessions, articles) {
     // dimensions
     self.width = containerEl.clientWidth;
     self.height = containerEl.clientHeight;
+
+    // user pressed keycode reference
+    self.keysPressed = {};
 
     // d3 selections
     self.svg;
@@ -44,7 +41,7 @@ function ForceGraph(containerEl, session, sessions, articles) {
     self.init();
 
     /**
-     * Global events
+     * Window events
      */
 
     d3.select(window)
@@ -59,12 +56,6 @@ function ForceGraph(containerEl, session, sessions, articles) {
         .on('keyup', function () {
             self.keysPressed[d3.event.keyCode] = false;
         });
-
-    /**
-     * Complete
-     */
-
-    return self;
 
 }
 
@@ -130,15 +121,14 @@ ForceGraph.prototype.updateSize = function () {
         .start();
 };
 
-ForceGraph.prototype.updateCurrentNode = function () {
+ForceGraph.prototype.updateCurrentNode = function (node) {
     var self = this;
-    var currentNode = self.ng.session.getCurrentNode();
     self.node.classed('active', function (d) {
-        return d.uuid === currentNode.uuid;
+        return d.uuid === node.uuid;
     });
 };
 
-ForceGraph.prototype.updateNodesAndLinks = function () {
+ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     var self = this;
 
     // protect from bad timing
@@ -146,10 +136,6 @@ ForceGraph.prototype.updateNodesAndLinks = function () {
         console.error('graph size updating with no container size');
         return;
     }
-
-    // grab copies of nodes & links from angular
-    var nodes = self.ng.session.getNodes().slice();
-    var links = self.ng.session.getLinks().slice();
 
     // give nodes starting positions
     var centerX = self.width / 2;
@@ -238,7 +224,7 @@ ForceGraph.prototype.makeForce = function () {
         .alpha(0.1)
         .on('tick', this.tick)
         .on('end', function () {
-            self.ng.sessions.save();
+            self.scope.saveSession();
         });
 };
 
@@ -284,7 +270,7 @@ ForceGraph.prototype.makeDrag = function () {
             if (isDragging) {
                 self.tick();
                 isDragging = false;
-                self.ng.sessions.save();
+                self.scope.saveSession();
                 // prevent selecting on drag
                 d.justDragged = true;
                 setTimeout(function () {
@@ -304,7 +290,7 @@ ForceGraph.prototype.makeNodeClick = function () {
             self.toggleNodePin(d, d3.select(this.parentNode));
         } else {
             // set this node as current
-            self.ng.session.setCurrentNode(d.uuid);
+            self.scope.setCurrentNode(d.uuid);
         }
     };
 };
@@ -320,7 +306,7 @@ ForceGraph.prototype.toggleNodePin = function (nodeData, nodeSelection) {
     nodeData.fixed = !nodeData.fixed;
     nodeSelection.classed('fixed', nodeData.fixed);
     self.force.start();
-    self.ng.sessions.save();
+    self.scope.saveSession();
 };
 
 ForceGraph.prototype.centerOnNode = function (node) {
