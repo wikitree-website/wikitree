@@ -1,0 +1,50 @@
+/**
+ * Home page stylings
+ */
+
+.alert-beta {
+    border-radius: 0;
+    text-align: center;
+}
+
+#home-graph {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.home .up-left {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.home .up-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+}
+
+.home .up-right .account {
+    padding-bottom: 4px;
+}
+
+.home .page-title {
+    padding-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 81px;
+    color: #222;
+}
+
+.home .jumbotron {
+    max-width: 700px;
+    margin: auto;
+    margin-top: 160px;
+    padding: 0;
+    background: none;
+}

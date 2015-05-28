@@ -1,0 +1,67 @@
+/**
+ * Typography hacks via Medium
+ */
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -moz-font-feature-settings: "liga" on;
+}
+
+
+/**
+ * Globals
+ */
+
+html, body {
+    background-color: #BBB;
+    background-image: url('/img/noise.png');
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+.modal-700 {
+    min-width: 750px;
+}
+
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.removed {
+    display: none !important;
+}
+
+.hidden {
+    visibility: hidden !important;
+}
+
+
+/**
+ * Screen too small
+ */
+.small-display-screen {
+    display: none;
+}
+@media (max-width: 700px) {
+    .small-display-screen {
+        display: block;
+        padding: 60px 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100000;
+        text-align: center;
+        font-weight: bold;
+        background: white;
+    }
+}

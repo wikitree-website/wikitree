@@ -20,7 +20,7 @@
                     function setRightSize(size) {
                         var winWidth = window.innerWidth;
                         // make sure size is reasonable
-                        if (winWidth - size < Resizer.MIN_GAP) return;
+                        if (winWidth - size < Resizer.MIN_REMAINDER) return;
                         if (size < Resizer.MIN_SIZE) return;
                         // update measurements
                         Resizer.size = size;
