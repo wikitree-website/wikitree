@@ -14,6 +14,10 @@
 
                 $rootScope.$on('mediawikiapi:loadend', function () {
                     Loading.count--;
+                    // protect from bad timing
+                    if (Loading.count < 0) {
+                        Loading.count = 0;
+                    }
                 });
 
                 return Loading;

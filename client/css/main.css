@@ -32,10 +32,10 @@
     z-index: 700;
     width: 270px;
     background-color: #ECECEC;
-    -webkit-transition: all ease 0.1s;
-    -moz-transition: all ease 0.1s;
-    -o-transition: all ease 0.1s;
-    transition: all ease 0.1s;
+    -webkit-transition: all ease 0.12s;
+    -moz-transition: all ease 0.12s;
+    -o-transition: all ease 0.12s;
+    transition: all ease 0.12s;
 }
 
 .overlay#menu.ng-hide {
