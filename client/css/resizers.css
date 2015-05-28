@@ -1,0 +1,9 @@
+#resizer {
+    width: 40px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 9000;
+    cursor: col-resize;
+    cursor: ew-resize;
+}
