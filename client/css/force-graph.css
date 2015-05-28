@@ -1,0 +1,64 @@
+/**
+ * D3 force graph styles
+ */
+
+svg {
+    position: relative;
+    z-index: 10;
+}
+
+g.node {
+
+}
+
+
+g.node circle {
+    fill: #FFF;
+    stroke: #FFF;
+    stroke-width: 12px;
+    cursor: pointer;
+}
+
+g.node text.name {
+    fill: #333;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+g.node:hover text.name,
+g.node text.name:hover {
+    font-weight: bold;
+}
+
+
+g.node.active circle {
+    fill: #FC6;
+    stroke: #FC6;
+}
+
+g.node.active text.name {
+    font-weight: bold;
+}
+
+
+g.node.fixed circle {
+    fill: #676767;
+    stroke: #FFF;
+}
+
+g.node.active.fixed circle {
+    fill: #676767;
+    stroke: #FC6;
+}
+
+
+line.link {
+    stroke: #A0A0A0;
+    stroke-width: 3px;
+    stroke-dasharray: 4, 3;
+}
+
+line.link.linkback {
+    stroke: transparent;
+}

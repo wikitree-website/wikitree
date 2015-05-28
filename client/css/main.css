@@ -1,126 +1,4 @@
 /**
- * Typography hacks via Medium
- */
-html {
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-}
-body {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -moz-font-feature-settings: "liga" on;
-}
-
-
-/**
- * Globals
- */
-
-html, body {
-    background-color: #BBB;
-    background-image: url('/img/noise.png');
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
-}
-
-.modal-700 {
-    min-width: 750px;
-}
-
-.wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.removed {
-    display: none !important;
-}
-
-.hidden {
-    visibility: hidden !important;
-}
-
-
-/**
- * Screen too small
- */
-.small-display-screen {
-    display: none;
-}
-@media (max-width: 700px) {
-    .small-display-screen {
-        display: block;
-        padding: 60px 10px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 100000;
-        text-align: center;
-        font-weight: bold;
-        background: white;
-    }
-}
-
-
-/**
- * Home page stylings
- */
-
-.alert-beta {
-    border-radius: 0;
-    text-align: center;
-}
-
-#home-graph {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-}
-
-.home .up-left {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-.home .up-right {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    text-align: right;
-}
-
-.home .up-right .account {
-    padding-bottom: 4px;
-}
-
-.home .page-title {
-    padding-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 81px;
-    color: #222;
-}
-
-.home .jumbotron {
-    max-width: 700px;
-    margin: auto;
-    margin-top: 160px;
-    padding: 0;
-    background: none;
-}
-
-
-
-/**
  * Main page stylings
  */
 
@@ -272,7 +150,8 @@ html, body {
 
 .menu-item.saved-sessions > .title {
     margin: 0;
-    padding: 15px 8px;
+    padding: 12px 6px;
+    font-size: 20px;
 }
 .menu-item.saved-sessions > .title a {
     color: #333;
@@ -292,17 +171,21 @@ html, body {
     display: block;
     position: relative;
     margin-bottom: 1px;
-    padding: 12px 13px;
+    padding: 12px 13px 14px;
     text-decoration: none;
     color: #333;
     background-color: #FFF;
+    cursor: pointer;
 }
 
 .menu-item.saved-sessions .session.active {
-    padding-left: 9px;
+    padding-right: 9px;
+    border-right: 5px solid #333;
+    /*border-top: 1px solid #CCC;
+    border-left: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;*/
     background-color: #DDD;
-    border-left: 5px solid #333;
-    color: #222;
+    /*color: #222;*/
 }
 
 .menu-item.saved-sessions .session:hover {
@@ -315,21 +198,24 @@ html, body {
 }
 
 .menu-item.saved-sessions .session:hover .controls {
-    display: inline;
+    display: block;
+    margin-top: -22px;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 50%;
+    right: 7px;
 }
 
 .menu-item.saved-sessions .session .title {
     margin: 0;
-    margin-bottom: 1px;
+    margin-bottom: 4px;
+    font-size: 16px;
 }
 
 .menu-item.saved-sessions .session .date {
-    margin-left: 1px;
+    margin-left: 0.1em;
+    line-height: 12px;
     font-size: 10px;
-    color: #555;
+    color: #777;
 }
 
 .menu-item.saved-sessions .session.active .date,
@@ -423,72 +309,4 @@ html, body {
     left: 0;
     right: 60%; /* width of reader */
     bottom: 0;
-}
-
-
-
-
-/**
- * D3 force graph styles
- */
-
-svg {
-    position: relative;
-    z-index: 10;
-}
-
-g.node {
-
-}
-
-
-g.node circle {
-    fill: #FFF;
-    stroke: #FFF;
-    stroke-width: 12px;
-    cursor: pointer;
-}
-
-g.node text.name {
-    fill: #333;
-    font-family: sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-g.node:hover text.name,
-g.node text.name:hover {
-    font-weight: bold;
-}
-
-
-g.node.active circle {
-    fill: #FC6;
-    stroke: #FC6;
-}
-
-g.node.active text.name {
-    font-weight: bold;
-}
-
-
-g.node.fixed circle {
-    fill: #676767;
-    stroke: #FFF;
-}
-
-g.node.active.fixed circle {
-    fill: #676767;
-    stroke: #FC6;
-}
-
-
-line.link {
-    stroke: #A0A0A0;
-    stroke-width: 3px;
-    stroke-dasharray: 4, 3;
-}
-
-line.link.linkback {
-    stroke: transparent;
 }

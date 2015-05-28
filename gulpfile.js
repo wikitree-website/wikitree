@@ -16,11 +16,20 @@ var es = require('event-stream');
 gulp.task('build-client-css', function() {
 
     var allCSS = gulp.src([
+        // all css files
         path.join(
             __dirname,
             'client',
             'css',
-            'style.css'
+            '**',
+            '*.css'
+        ),
+        // except legacy.css
+        '!' + path.join(
+            __dirname,
+            'client',
+            'css',
+            'legacy.css'
         )
     ])
         .pipe(concat('app.css'));
@@ -44,8 +53,16 @@ gulp.task('build-client-css', function() {
 gulp.task('build-client-js', function(){
 
     // write all files, in order to a concat file
-    var allJS = gulp.src(path.join(__dirname, 'client', 'js', '**', '*.js'))
-        .pipe(order([
+    var allJS = gulp.src([
+        path.join(
+            __dirname,
+            'client',
+            'js',
+            '**',
+            '*.js'
+        )
+    ]).
+        pipe(order([
             'd3/*.js',
             'angular/wikitree.module.js',
             'angular/wikitree.routes.js',
@@ -127,7 +144,8 @@ gulp.task('default', ['clean'], function(){
         __dirname,
         'client',
         'css',
-        'style.css'
+        '**',
+        '*.css'
     ), function() {
         gulp.start('build-client-css');
     });

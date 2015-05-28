@@ -9,8 +9,24 @@
         </h5>
         <input type="text" ng-show="editing" ng-click="$event.stopPropagation()" ng-model="session.rename" escpress="cancel_edit()" enterpress="rename()"/>
         <div class="date">
+
             <!--Last modified {{ session.date | date : medium }}-->
-            <span> Saved {{ session.date | amCalendar }}</span> <!--<time title="{{ session.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}" am-time-ago="session.date"></time>-->
+
+            <!-- <span> Saved {{ session.date | amCalendar }}</span> -->
+
+            <span>
+                <i class="fa fa-floppy-o"></i>&nbsp;
+                {{ session.date | amCalendar }}
+            </span>
+
+            <!-- <span>
+                Created {{ session.date | amDateFormat:'l' }}
+                &nbsp;&ndash;&nbsp;
+                Updated {{ session.date | amDateFormat:'l' }}
+            </span> -->
+
+            <!--<time title="{{ session.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}" am-time-ago="session.date"></time>-->
+
         </div>
         <div class="controls">
 
