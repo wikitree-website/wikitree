@@ -218,6 +218,10 @@
     color: #777;
 }
 
+.menu-item.saved-sessions .session .date i {
+    margin-right: 0.1em;
+}
+
 .menu-item.saved-sessions .session.active .date,
 .menu-item.saved-sessions .session:hover .date {
     color: #444;
