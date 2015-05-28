@@ -27,15 +27,26 @@
                 var nodes = [];
                 var links = [];
 
+                var nodesById = {};
+                var linksByNodeIds = {};
+
                 var requestID = null;
                 var timeoutID = null
 
                 var limit = 200;
                 var count = 0;
 
+                /**
+                 * Grow network
+                 */
+
                 function addRandomNode() {
 
-                    if (count > limit) return;
+                    if (count > limit) {
+                        // big crunch-> linkAllNodes();
+                        return;
+                    }
+
                     count++;
 
                     if (!nodes.length) {
@@ -44,15 +55,23 @@
                             window.innerHeight / 2
                         ));
                     } else {
+
                         var sourceIndex = Math.floor(Math.random() * nodes.length);
                         var source = nodes[sourceIndex];
+
                         var node = new Node(
                             source.x + Utilities.makeJitter(10),
                             source.y + Utilities.makeJitter(10)
                         );
+
                         var link = new Link(source, node);
+
                         nodes.push(node);
                         links.push(link);
+
+                        nodesById[node.uuid] = node;
+                        linksByNodeIds[source.uuid + ',' + node.uuid] = link;
+
                     }
 
                     graph.updateNodesAndLinks(nodes, links);
@@ -63,14 +82,71 @@
 
                 }
 
+
+                /**
+                 * Bind network
+                 */
+
+                function linkAllNodes() {
+
+                    var pairs = [];
+                    var pairsByIds = {};
+
+                    nodes.forEach(function (nodeA) {
+                        nodes.forEach(function (nodeB) {
+                            if (nodeA.uuid === nodeB.uuid) return;
+                            if (pairsByIds[nodeA.uuid + ',' + nodeB.uuid]) return;
+                            if (pairsByIds[nodeB.uuid + ',' + nodeA.uuid]) return;
+                            if (linksByNodeIds[nodeA.uuid + ',' + nodeB.uuid]) return;
+                            if (linksByNodeIds[nodeB.uuid + ',' + nodeA.uuid]) return;
+                            var pair = [nodeA, nodeB];
+                            pairsByIds[nodeA.uuid + ',' + nodeB.uuid] = pair;
+                            pairs.push(pair);
+                        });
+                    });
+
+                    pairs = Utilities.shuffleArr(pairs);
+
+                    function linkPair() {
+                        var pair = pairs.pop();
+                        var nodeA = pair[0];
+                        var nodeB = pair[1];
+                        var link = new Link(nodeA, nodeB);
+                        links.push(link);
+                        linksByNodeIds[nodeA.uuid + ',' + nodeB.uuid] = link;
+                        graph.updateNodesAndLinks(nodes, links);
+                    }
+
+                    function timeLoop() {
+                        linkPair();
+                        timeoutID = setTimeout(function() {
+                            requestID = window.requestAnimationFrame(timeLoop);
+                        }, 600 + (Math.random() * 600));
+                    }
+
+                    timeLoop();
+                }
+
+
+                /**
+                 * Beginning
+                 */
+
                 timeoutID = setTimeout(function() {
                     requestID = window.requestAnimationFrame(addRandomNode);
                 }, 600);
+
+
+                /**
+                 * End
+                 */
 
                 $scope.$on('$destroy', function () {
                     clearTimeout(timeoutID);
                     window.cancelAnimationFrame(requestID);
                 });
+
+
 
             }]);
 })();
