@@ -20,7 +20,6 @@
                 $scope.hasReferences = false;
 
                 // for loading indicator
-                // start with 1 for initial load
                 $scope.loadingCount = Loading.count;
 
                 // for prev/next buttons
@@ -119,6 +118,10 @@
                         }
                     }
 
+                    /**
+                     * Passed, load content
+                     */
+
                      // update current name
                     $scope.currentNodeName = node.name;
 
@@ -190,23 +193,31 @@
 
                 function makeTitleCallback(node) {
                     return function (title, noSetCurrent, isSearch) {
-                        // user clicked an iframe title!
-                        title = decodeURIComponent(title);
-                        if (isSearch) {
-                            // skip to search
-                            CurrentSession.handleTitleSearch({
-                                title: title,
-                                noSetCurrent: noSetCurrent,
-                                sourceNodeId: node.uuid
-                            });
-                        } else {
-                            // handle title
-                            CurrentSession.handleTitle({
-                                title: title,
-                                noSetCurrent: noSetCurrent,
-                                sourceNodeId: node.uuid
-                            });
-                        }
+                        $scope.$apply(function () {
+
+                            // user clicked an iframe title!
+                            title = decodeURIComponent(title);
+
+                            if (isSearch) {
+
+                                // skip to search
+                                CurrentSession.handleTitleSearch({
+                                    title: title,
+                                    noSetCurrent: noSetCurrent,
+                                    sourceNodeId: node.uuid
+                                });
+
+                            } else {
+
+                                // handle title
+                                CurrentSession.handleTitle({
+                                    title: title,
+                                    noSetCurrent: noSetCurrent,
+                                    sourceNodeId: node.uuid
+                                });
+
+                            }
+                        });
                     };
                 }
 
