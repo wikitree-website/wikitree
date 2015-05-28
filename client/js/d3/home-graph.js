@@ -80,6 +80,9 @@ HomeGraph.prototype.updateSize = function () {
 
 HomeGraph.prototype.updateNodesAndLinks = function (nodes, links) {
 
+    nodes = nodes.slice();
+    links = links.slice();
+
     console.log('home update');
 
     this.force.nodes(nodes);
@@ -116,9 +119,7 @@ HomeGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .attr('dy', -6);
 
     // keep things moving
-    if (!this.isDragging) {
-        this.force.start();
-    }
+    this.force.start();
 
 };
 
