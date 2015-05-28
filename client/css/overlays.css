@@ -1,0 +1,35 @@
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.overlay > .inner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+}
+
+.overlay#menu {
+    left: 0;
+    z-index: 700;
+    width: 270px;
+    background-color: #ECECEC;
+    -webkit-transition: all ease 0.12s;
+    -moz-transition: all ease 0.12s;
+    -o-transition: all ease 0.12s;
+    transition: all ease 0.12s;
+}
+
+.overlay#menu.ng-hide {
+    left: -270px;
+}
+
+.overlay#reader {
+    right: 0;
+    z-index: 600;
+    width: 60%;
+    background-color: #ECECEC;
+}
