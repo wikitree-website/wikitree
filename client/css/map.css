@@ -4,4 +4,5 @@
     left: 0;
     right: 60%; /* width of reader */
     bottom: 0;
+    overflow: hidden;
 }

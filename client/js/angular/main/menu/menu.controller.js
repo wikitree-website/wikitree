@@ -49,17 +49,6 @@
                     }
                 }
 
-                $scope.toggleNodePin = function () {
-                    $rootScope.$broadcast('request:graph:toggle_node_pin');
-                };
-
-                $scope.removeCurrentNode = function () {
-                    var node = CurrentSession.getCurrentNode();
-                    if (window.confirm('Remove the article "' + node.title + '" from your session?')) {
-                        CurrentSession.removeNode(node.uuid);
-                    }
-                };
-
                 $scope.locateCurrentNode = function () {
                     $rootScope.$broadcast('request:graph:locate_current_node');
                 };
