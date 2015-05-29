@@ -76,7 +76,7 @@
                 Sessions.restore = function(idx) {
                     Sessions.active = idx;
                     localStorageService.set('active', Sessions.active);
-                    console.log('clicked', idx, Sessions.index[idx]);
+                    console.log('Sessions.restore', idx, Sessions.index[idx]);
 
                     var restoredSessionUUID = Sessions.index[idx].uuid;
                     var restoredSession = localStorageService.get(restoredSessionUUID);

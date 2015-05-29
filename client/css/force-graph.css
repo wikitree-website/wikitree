@@ -62,3 +62,13 @@ line.link {
 line.link.linkback {
     stroke: transparent;
 }
+
+.node-popover {
+    min-width: 58px;
+    position: absolute;
+    text-align: center;
+}
+
+.node-popover .popover-content {
+    padding: 6px;
+}

@@ -15,12 +15,6 @@
                  * Global events
                  */
 
-                // handle "toggle node pin" button
-                $scope.$on('request:graph:toggle_node_pin', function () {
-                    var node = CurrentSession.getCurrentNode();
-                    $scope.graph.toggleNodePin(node);
-                });
-
                 // handle "locate current node" button
                 $scope.$on('request:graph:locate_current_node', function () {
                     var node = CurrentSession.getCurrentNode();
@@ -57,6 +51,14 @@
 
                 $scope.setCurrentNode = function (nodeId) {
                     CurrentSession.setCurrentNode(nodeId);
+                };
+
+                $scope.removeNode = function (nodeId) {
+                    var node = CurrentSession.getNode(nodeId);
+                    if (!node) return;
+                    if (window.confirm('Remove the node "' + node.name + '" from your session?')) {
+                        CurrentSession.removeNode(node.uuid);
+                    }
                 };
 
 

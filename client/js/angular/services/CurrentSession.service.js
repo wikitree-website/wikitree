@@ -127,6 +127,10 @@
                     this.py = undefined; // the y-coordinate of the previous node position.
                     this.fixed = undefined; // a boolean indicating whether node position is locked.
                     this.weight = undefined; // the node weight; the number of associated links.
+                    // custom d3 force graph attributes
+                    this.justDragged = undefined;
+                    this.isDragging = undefined;
+                    this.hovered = undefined;
                 }
 
                 nodes = {
@@ -376,6 +380,10 @@
 
                     getLinks: function () {
                         return links.arr;
+                    },
+
+                    getNode: function (nodeId) {
+                        return nodes.byId[nodeId];
                     },
 
                     hasForward: function () {
