@@ -10,11 +10,12 @@
 
 
         .overlay#reader {
-            width: 42%;
+            width: 700px;
         }
 
         .overlay#menu {
             left: -270px;
+            display: none;
         }
         .menu-item.header .open-button {
             /*visibility: visible;*/
@@ -28,22 +29,24 @@
             font-size: 48px;
         }
 
-      /*  g.node circle.fixed {
-            fill: #FFF;
-            stroke: #FFF;
+
+        #ischool {
+            width: 30px;
+            height: 30px;
+            position: fixed;
+            left: 15px;
+            bottom: 15px;
+            z-index: 10000;
         }
-
-        g.node.active circle.fixed {
-            fill: #FC6;
-            stroke: #FC6;
-        }*/
-
 
 
 
     </style>
 </head>
 <body>
+
+    <img id="ischool" src="/img/ischool.png">
+
     <div class="main">
         <div id="map">
             <div id="space-graph">
@@ -51,404 +54,7 @@
                     <div class="scrolled">
                         <div class="content">
                             <!-- SVG inserts here -->
-
-                            <div id="test"></div>
-
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="menu" class="overlay">
-            <div class="inner">
-                <div class="menu-item header">
-                    <button type="button" class="close-button btn btn-default btn-sm">
-                        <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="open-button btn btn-default btn-sm">
-                        <i class="fa fa-chevron-right"></i>
-                    </button>
-                    <h3 class="title">
-                        <a href="/dummies/returning.html">
-                            Wikitree
-                        </a>
-                    </h3>
-                </div>
-                <!-- <div class="menu-item account">
-                    <div class="icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="text">
-                        <h5>Saved to George Costanza</h5>
-                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-account">
-                            <i class="fa fa-user"></i>
-                            &nbsp;Account&nbsp;
-                        </button>
-                        <button type="button" class="btn btn-default btn-xs">
-                            <i class="fa fa-sign-out"></i>
-                            &nbsp;Log out&nbsp;
-                        </button>
-                    </div>
-                </div> -->
-                <div class="menu-item account">
-                    <div class="icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <div class="text">
-                        <h5>Saved to local browser</h5>
-                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-sign-in">
-                            <i class="fa fa-sign-in"></i>
-                            &nbsp;Sign in&nbsp;
-                        </button>
-                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-register">
-                            <i class="fa fa-user"></i>
-                            &nbsp;Register&nbsp;
-                        </button>
-                    </div>
-                </div>
-                <div class="menu-item new-session">
-                    <div class="button">
-                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modal-new-session">
-                            <i class="fa fa-files-o"></i>
-                            &nbsp;New session&nbsp;
-                        </button>
-                    </div>
-                </div>
-                <div class="menu-item saved-sessions">
-                    <h4 class="title">
-                        <!-- <a href="#" data-toggle="modal" data-target="#modal-sessions">
-                            Saved sessions&nbsp;
-                        </a> -->
-                        Saved sessions&nbsp;
-                    </h4>
-                    <div class="sessions">
-                        <a class="session active" href="#">
-                            <h5 class="title">
-                                Normal mode
-                            </h5>
-                            <div class="date">
-                                Last modified 5:32pm
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                INFO 470 - Research paper
-                            </h5>
-                            <div class="date">
-                                Last modified Feb 11th
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                INFO 481 mgmt styles
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Programming paradigms
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Fringe physics &amp; philosophy
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Human spirituality &amp; wellness
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Wikirace III
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Wikirace II
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Wikirace I
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                String theory
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Quantum chromodynamics
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Anatomy
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Evolutionary biology
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                History of the human race
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                How many sessions will people have, really?
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                It's getting hard to think of more names
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                I feel like I'll only have 3, maybe 4 tops
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Isn't the fun in mixing all the nodes together and seeing how seemingly unrelated articles interweave?
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Oh but like, school projects
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Right, research tool
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Not just aimless wanderings
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Focused expeditions through the infosphere. The Wikisphere.
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Mapping the explorer's journey
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                        <a class="session" href="#">
-                            <h5 class="title">
-                                Hi
-                            </h5>
-                            <div class="date">
-                                Last modified Nov 12th, 2014
-                            </div>
-                            <div class="controls">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal-edit-session">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="menu-item site-links">
-                    <div class="links">
-                        <a href="#">
-                            About
-                        </a>
-                        &nbsp;|&nbsp;
-                        <a href="#">
-                            Help
-                        </a>
-                        &nbsp;|&nbsp;
-                        <a href="#">
-                            Contact
-                        </a>
                     </div>
                 </div>
             </div>
@@ -641,7 +247,6 @@
                 .on('drag', function (d, i) {
                     if (!isDragging) {
                         d.fixed = true;
-                        d3.select(this).classed('fixed', true);
                         isDragging = true;
                     }
                     force.start();
