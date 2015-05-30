@@ -26,6 +26,7 @@ g.node text.name {
     cursor: pointer;
 }
 
+g.node.hovered,
 g.node:hover text.name,
 g.node text.name:hover {
     font-weight: bold;
@@ -67,6 +68,11 @@ line.link.linkback {
     min-width: 58px;
     position: absolute;
     text-align: center;
+    background-color: #EEE;
+}
+
+.node-popover.bottom > .arrow:after {
+    border-bottom-color: #EEE;
 }
 
 .node-popover .popover-content {

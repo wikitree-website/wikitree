@@ -227,7 +227,8 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         self.nodePopoversById[d.uuid] = new NodePopover(
             self.containerEl,
             self.scope,
-            d
+            d,
+            this
         );
     });
 

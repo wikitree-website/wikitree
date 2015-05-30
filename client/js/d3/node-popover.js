@@ -1,9 +1,11 @@
-function NodePopover(containerEl, scope, node) {
+function NodePopover(containerEl, scope, node, nodeEl) {
     var self = this;
     // properties
     self.containerEl = containerEl;
     self.scope = scope;
     self.node = node;
+    self.nodeEl = nodeEl;
+    self.nodeSelect = d3.select(nodeEl);
     self.$el = undefined;
     self.width = undefined;
     self.height = undefined;
@@ -70,6 +72,16 @@ NodePopover.prototype.addEventListeners = function () {
     });
 };
 
+NodePopover.prototype.show = function () {
+    var self = this;
+    setTimeout(function () {
+        if (!self.hidden) return;
+        self.hidden = false;
+        self.$el.show();
+        self.nodeSelect.classed('hovered', true);
+    }, 1);
+};
+
 NodePopover.prototype.hide = function () {
     var self = this;
     setTimeout(function () {
@@ -77,15 +89,7 @@ NodePopover.prototype.hide = function () {
         if (self.hidden) return;
         self.hidden = true;
         self.$el.hide();
-    }, 1);
-};
-
-NodePopover.prototype.show = function () {
-    var self = this;
-    setTimeout(function () {
-        if (!self.hidden) return;
-        self.hidden = false;
-        self.$el.show();
+        self.nodeSelect.classed('hovered', false);
     }, 1);
 };
 
