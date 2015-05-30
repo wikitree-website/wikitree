@@ -328,6 +328,10 @@ ForceGraph.prototype.makeDrag = function () {
         .on('drag', function (d, i) {
             if (!d.isDragging) {
                 d.isDragging = true;
+
+                // hide popover on drag
+                self.nodePopoversById[d.uuid].$el.hide();
+
                 if (!self.keysPressed[16]) {
                     // only fix if user not holding shift
                     d3.select(this.parentNode).classed('fixed', true);
@@ -348,6 +352,10 @@ ForceGraph.prototype.makeDrag = function () {
                 self.tick();
                 self.scope.saveSession();
                 d.isDragging = false;
+
+                // show popover when done drag
+                self.nodePopoversById[d.uuid].$el.show();
+
                 // prevent selecting on drag
                 d.justDragged = true;
                 setTimeout(function () {
