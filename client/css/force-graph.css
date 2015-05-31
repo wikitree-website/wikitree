@@ -45,10 +45,15 @@ g.node {
 
 
 g.node circle {
-    fill: #FFF;
-    stroke: #FFF;
-    stroke-width: 12px;
     cursor: pointer;
+}
+
+g.node circle.disc {
+    fill: #FFF;
+}
+
+g.node circle.pin {
+    fill: transparent;
 }
 
 g.node text.name {
@@ -67,7 +72,6 @@ g.node text.name:hover {
 
 g.node.active circle {
     fill: #FC6;
-    stroke: #FC6;
 }
 
 g.node.active text.name {
@@ -75,14 +79,8 @@ g.node.active text.name {
 }
 
 
-g.node.fixed circle {
+g.node.fixed circle.pin {
     fill: #676767;
-    stroke: #FFF;
-}
-
-g.node.active.fixed circle {
-    fill: #676767;
-    stroke: #FC6;
 }
 
 line.underlink {

@@ -250,10 +250,20 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .attr('transform', function(d) {
                 return 'translate(' + d.x + ',' + d.y + ')';
             });
-    // circle
+    // disc
     enterNode
         .append('svg:circle')
-            .attr('r', 9)
+            .attr('r', 15)
+            .attr('class', 'disc')
+            .on('mouseover', self.nodeMouseover)
+            .on('mouseout', self.nodeMouseout)
+            .on('click', self.nodeClick)
+            .call(self.drag);
+    // pin
+    enterNode
+        .append('svg:circle')
+            .attr('r', 3)
+            .attr('class', 'pin')
             .on('mouseover', self.nodeMouseover)
             .on('mouseout', self.nodeMouseout)
             .on('click', self.nodeClick)
