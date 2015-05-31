@@ -292,13 +292,16 @@ ForceGraph.prototype.updatePopovers = function () {
     var translate = self.zoom.translate();
     var translateX = translate[0];
     var translateY = translate[1];
+    // node popovers
     Object.keys(self.nodePopoversById).forEach(function (id) {
         var popover = self.nodePopoversById[id];
         if (popover.hidden) return;
         var x = popover.node.x * scale + translateX;
         var y = popover.node.y * scale + translateY;
+        y += 10 * scale; // shift below center
         popover.position(x, y);
     });
+    // link popovers
     Object.keys(self.linkPopoversById).forEach(function (id) {
         var popover = self.linkPopoversById[id];
         if (popover.hidden) return;
@@ -322,6 +325,7 @@ ForceGraph.prototype.updateNodePopover = function (popover) {
     var translateY = translate[1];
     var x = popover.node.x * scale + translateX;
     var y = popover.node.y * scale + translateY;
+    y += 10 * scale; // shift below center
     popover.position(x, y);
 };
 

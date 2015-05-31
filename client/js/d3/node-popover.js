@@ -98,7 +98,7 @@ NodePopover.prototype.hide = function () {
 NodePopover.prototype.position = function (x, y) {
     var self = this;
     self.$el.css({
-        top: y - self.halfheight + 28,
+        top: y - self.halfheight + 16,
         left: x - self.halfwidth
     });
 };
