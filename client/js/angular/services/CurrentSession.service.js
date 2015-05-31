@@ -187,7 +187,7 @@
                     this.uuid = args.uuid || Utilities.makeUUID();
                     this.sourceId = args.sourceId;
                     this.targetId = args.targetId;
-                    this.linkback = false;
+                    this.linkbackId = undefined;
                     // d3 force graph attributes
                     // https://github.com/mbostock/d3/wiki/Force-Layout#links
                     this.source = nodes.byId[this.sourceId];
@@ -210,6 +210,7 @@
                         return link;
                     },
                     removeLink: function (sourceId, targetId) {
+                        if (!links.byNodeIds[sourceId]) return null;
                         var link = links.byNodeIds[sourceId][targetId];
                         if (!link) return null;
                         links.arr = links.arr.filter(function (l) { return l.uuid !== link.uuid });
@@ -230,6 +231,15 @@
                             delete links.byNodeIds[sourceId][nodeId];
                         });
 
+                    },
+                    removeDeepById: function (linkId) {
+                        var link = links.byId[linkId];
+                        if (!link) return;
+                        var nodeA = link.source;
+                        var nodeB = link.target;
+                        // remove both directions
+                        links.removeLink(nodeA.uuid, nodeB.uuid);
+                        links.removeLink(nodeB.uuid, nodeA.uuid);
                     },
                     exportState: function () {
                         return {
@@ -349,7 +359,7 @@
                         links.byNodeIds[targetId][sourceId]) {
                         // add new link, but mark as duplicate
                         link = links.addLink(sourceId, targetId);
-                        link.linkback = true;
+                        link.linkbackId = links.byNodeIds[targetId][sourceId].uuid;
                     } else {
                         // add new link
                         link = links.addLink(sourceId, targetId);
@@ -384,6 +394,10 @@
 
                     getNode: function (nodeId) {
                         return nodes.byId[nodeId];
+                    },
+
+                    getLink: function (linkId) {
+                        return links.byId[linkId];
                     },
 
                     hasForward: function () {
@@ -427,6 +441,20 @@
                         // alert the media
                         $rootScope.$broadcast('update:nodes+links');
                         $rootScope.$broadcast('update:currentnode');
+
+                    },
+
+                    removeLink: function (linkId) {
+
+                        // validate existence
+                        var link = links.byId[linkId];
+                        if (!link) return;
+
+                        // remove from collections
+                        links.removeDeepById(link.uuid);
+
+                        // alert the media
+                        $rootScope.$broadcast('update:nodes+links');
 
                     },
 

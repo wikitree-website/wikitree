@@ -23,6 +23,7 @@ function ForceGraph(containerEl, scope) {
     self.rect;
     self.group;
     self.node;
+    self.underlink;
     self.link;
 
     // d3 layouts & behaviors
@@ -35,6 +36,8 @@ function ForceGraph(containerEl, scope) {
     self.nodeClick = self.makeNodeClick();
     self.nodeMouseover = self.makeNodeMouseover();
     self.nodeMouseout = self.makeNodeMouseout();
+    self.linkMouseover = self.makeLinkMouseover();
+    self.linkMouseout = self.makeLinkMouseout();
 
     // popovers
     self.nodePopoversById = {};
@@ -67,35 +70,44 @@ function ForceGraph(containerEl, scope) {
 
 ForceGraph.prototype.init = function () {
     var self = this;
+
     self.svg = d3.select(self.containerEl)
         .append('svg')
         .attr('width', self.width)
         .attr('height', self.height);
+
     self.rect = self.svg
-        .append('rect')
+        .append('svg:rect')
         .attr('width', '100%')
         .attr('height', '100%')
         .style('fill', 'none')
         .style('pointer-events', 'all')
         .call(self.zoom)
         .on('dblclick.zoom', null);
+
     self.group = self.svg
-        .append('g');
+        .append('svg:g');
+
+    self.underlink = self.group
+        .append('svg:g')
+        .attr('class', 'underlinks')
+        .selectAll('line.underlink');
+
     self.link = self.group
         .append('svg:g')
         .attr('class', 'links')
         .selectAll('line.link');
+
     self.node = self.group
         .append('svg:g')
         .attr('class', 'nodes')
         .selectAll('g.node');
 
-    // link arrow markers
     self.svg.append('defs')
         .selectAll('marker')
-            .data(['arrow'])
+            .data(['link-arrow', 'link-arrow-hover'])
             .enter()
-        .append('marker')
+        .append('svg:marker')
             .attr('id', function(d) { return d; })
             .attr('viewBox', '0 -5 10 10')
             .attr('refX', 21)
@@ -104,8 +116,7 @@ ForceGraph.prototype.init = function () {
             .attr('markerHeight', 4)
             .attr('orient', 'auto')
         .append('path')
-            .attr('d', 'M0,-5 L10,0 L0,5')
-            .style('fill', '#A0A0A0');
+            .attr('d', 'M0,-5 L10,0 L0,5');
 };
 
 ForceGraph.prototype.updateSize = function () {
@@ -143,6 +154,10 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         return;
     }
 
+    /**
+     * Prep data
+     */
+
     // give nodes starting positions
     var centerX = self.width / 2;
     var centerY = self.height / 2;
@@ -157,6 +172,27 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     self.force.nodes(nodes);
     self.force.links(links);
 
+    /**
+     * Update underlinks (needed for hearing mouse hovers)
+     */
+
+    // update underlink elements
+    self.underlink = self.underlink.data(links, function (d) { return d.uuid; });
+    // remove the old
+    self.underlink.exit().remove();
+    // add the new
+    self.underlink
+        .enter()
+            .append('svg:line')
+            .attr('class', 'underlink')
+            .classed('linkback', function (d) { return d.linkbackId; })
+            .on('mouseover', self.linkMouseover)
+            .on('mouseout', self.linkMouseout);
+
+    /**
+     * Update links
+     */
+
     // update link elements
     self.link = self.link.data(links, function (d) { return d.uuid; });
     // remove the old
@@ -165,7 +201,7 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         // clean out popovers
         if (self.linkPopoversById[d.uuid]) {
             self.linkPopoversById[d.uuid].$el.remove();
-            self.linkPopoversById[d.uuid] = null;
+            delete self.linkPopoversById[d.uuid];
         }
     });
     exitLink.remove();
@@ -174,18 +210,27 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         .enter()
             .append('svg:line')
             .attr('class', 'link')
-            .style('marker-end', 'url(#arrow)')
-            .classed('linkback', function (d) { return d.linkback; });
+            .classed('linkback', function (d) { return d.linkbackId; });
     // popover
-    // enterLink.each(function (d) {
-    //     self.linkPopoversById[d.uuid] = new LinkPopover(
-    //         self.containerEl,
-    //         self.scope,
-    //         d
-    //     );
-    // });
+    enterLink.each(function (d) {
+        if (d.linkbackId) {
+            var popover = self.linkPopoversById[d.linkbackId];
+            if (!popover) return;
+            popover.addLinkback(d3.select(this));
+        } else {
+            self.linkPopoversById[d.uuid] = new LinkPopover(
+                self.containerEl,
+                self.scope,
+                d,
+                d3.select(this)
+            );
+        }
+    });
 
-    // update node elements
+    /**
+     * Update nodes
+     */
+
     self.node = self.node.data(nodes, function (d) { return d.uuid; });
     // remove the old
     var exitNode = self.node.exit();
@@ -228,9 +273,13 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             self.containerEl,
             self.scope,
             d,
-            this
+            d3.select(this)
         );
     });
+
+    /**
+     * Nudge graph
+     */
 
     // keep things moving
     self.force.start();
@@ -246,25 +295,51 @@ ForceGraph.prototype.updatePopovers = function () {
     Object.keys(self.nodePopoversById).forEach(function (id) {
         var popover = self.nodePopoversById[id];
         if (popover.hidden) return;
-        var x = popover.node.x * scale;
-        var y = popover.node.y * scale;
-        x += translateX;
-        y += translateY;
+        var x = popover.node.x * scale + translateX;
+        var y = popover.node.y * scale + translateY;
         popover.position(x, y);
+    });
+    Object.keys(self.linkPopoversById).forEach(function (id) {
+        var popover = self.linkPopoversById[id];
+        if (popover.hidden) return;
+        var node1 = popover.link.source;
+        var node2 = popover.link.target;
+        var x1 = node1.x * scale + translateX;
+        var y1 = node1.y * scale + translateY;
+        var x2 = node2.x * scale + translateX;
+        var y2 = node2.y * scale + translateY;
+        var centerX = (x1 + x2) / 2;
+        var centerY = (y1 + y2) / 2;
+        popover.position(centerX, centerY);
     });
 };
 
-ForceGraph.prototype.updatePopover = function (popover) {
+ForceGraph.prototype.updateNodePopover = function (popover) {
     var self = this;
     var scale = self.zoom.scale();
     var translate = self.zoom.translate();
     var translateX = translate[0];
     var translateY = translate[1];
-    var x = popover.node.x * scale;
-    var y = popover.node.y * scale;
-    x += translateX;
-    y += translateY;
+    var x = popover.node.x * scale + translateX;
+    var y = popover.node.y * scale + translateY;
     popover.position(x, y);
+};
+
+ForceGraph.prototype.updateLinkPopover = function (popover) {
+    var self = this;
+    var scale = self.zoom.scale();
+    var translate = self.zoom.translate();
+    var translateX = translate[0];
+    var translateY = translate[1];
+    var node1 = popover.link.source;
+    var node2 = popover.link.target;
+    var x1 = node1.x * scale + translateX;
+    var y1 = node1.y * scale + translateY;
+    var x2 = node2.x * scale + translateX;
+    var y2 = node2.y * scale + translateY;
+    var centerX = (x1 + x2) / 2;
+    var centerY = (y1 + y2) / 2;
+    popover.position(centerX, centerY);
 };
 
 ForceGraph.prototype.makeTick = function () {
@@ -277,6 +352,11 @@ ForceGraph.prototype.makeTick = function () {
         return 'translate(' + d.x + ',' + d.y + ')';
     }
     return function () {
+        self.underlink
+            .attr('x1', x1)
+            .attr('y1', y1)
+            .attr('x2', x2)
+            .attr('y2', y2);
         self.link
             .attr('x1', x1)
             .attr('y1', y1)
@@ -387,7 +467,7 @@ ForceGraph.prototype.makeNodeMouseover = function () {
     return function (d) {
         d.hovered = true;
         var popover = self.nodePopoversById[d.uuid];
-        self.updatePopover(popover);
+        self.updateNodePopover(popover);
         popover.show();
     };
 };
@@ -398,6 +478,28 @@ ForceGraph.prototype.makeNodeMouseout = function () {
         if (d.isDragging) return;
         d.hovered = false;
         var popover = self.nodePopoversById[d.uuid];
+        popover.hide();
+    };
+};
+
+ForceGraph.prototype.makeLinkMouseover = function () {
+    var self = this;
+    return function (d) {
+        d.hovered = true;
+        d3.select(this).classed('hovered', true);
+        var popover = self.linkPopoversById[d.uuid];
+        self.updateLinkPopover(popover);
+        popover.show();
+    };
+};
+
+ForceGraph.prototype.makeLinkMouseout = function () {
+    var self = this;
+    return function (d) {
+        if (d.isDragging) return;
+        d.hovered = false;
+        d3.select(this).classed('hovered', false);
+        var popover = self.linkPopoversById[d.uuid];
         popover.hide();
     };
 };
