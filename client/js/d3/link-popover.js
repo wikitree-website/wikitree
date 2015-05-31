@@ -1,11 +1,12 @@
-function NodePopover(containerEl, scope, node, nodeSelect) {
+function LinkPopover(containerEl, scope, link, linkSelect) {
     var self = this;
 
     // properties
     self.containerEl = containerEl;
     self.scope = scope;
-    self.node = node;
-    self.nodeSelect = nodeSelect;
+    self.link = link;
+    self.linkSelect = linkSelect;
+    self.linkbackSelect = undefined;
     self.$el = undefined;
     self.width = undefined;
     self.height = undefined;
@@ -20,19 +21,15 @@ function NodePopover(containerEl, scope, node, nodeSelect) {
 
 }
 
-NodePopover.prototype.makeElement = function () {
+LinkPopover.prototype.makeElement = function () {
     var self = this;
     // create popover
     self.$el = $(
-        '<div class="node-popover popover bottom">' +
-            '<div class="arrow"></div>' +
+        '<div class="link-popover popover">' +
             '<div class="popover-content">' +
-                '<div class="btn-group" role="group" aria-label="Node controls">' +
-                    '<button type="button" class="pin-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-thumb-tack"></i>' +
-                    '</button>' +
+                '<div class="btn-group" role="group" aria-label="Link controls">' +
                     '<button type="button" class="del-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-trash-o"></i>' +
+                        '<i class="fa fa-unlink"></i>' +
                     '</button>' +
                 '</div>' +
             '</div>' +
@@ -49,7 +46,7 @@ NodePopover.prototype.makeElement = function () {
     self.hide();
 };
 
-NodePopover.prototype.addEventListeners = function () {
+LinkPopover.prototype.addEventListeners = function () {
     var self = this;
     // hover on
     self.$el.on('mouseover', function () {
@@ -59,46 +56,53 @@ NodePopover.prototype.addEventListeners = function () {
     self.$el.on('mouseout', function () {
         self.hovered = false;
         setTimeout(function () {
-            if (!self.node.hovered) {
+            if (!self.link.hovered) {
                 self.hide();
             }
         }, 1);
     });
-    // pin button
-    self.$el.find('.pin-button').on('click', function () {
-        self.scope.graph.toggleNodePin(self.node);
-    });
     // delete button
     self.$el.find('.del-button').on('click', function () {
-        self.scope.removeNode(self.node.uuid);
+        self.scope.removeLink(self.link.uuid);
     });
 };
 
-NodePopover.prototype.show = function () {
+LinkPopover.prototype.addLinkback = function (linkbackSelect) {
+    var self = this;
+    self.linkbackSelect = linkbackSelect;
+};
+
+LinkPopover.prototype.show = function () {
     var self = this;
     setTimeout(function () {
         if (!self.hidden) return;
         self.hidden = false;
         self.$el.show();
-        self.nodeSelect.classed('hovered', true);
+        self.linkSelect.classed('hovered', true);
+        if (self.linkbackSelect) {
+            self.linkbackSelect.classed('hovered', true);
+        }
     }, 1);
 };
 
-NodePopover.prototype.hide = function () {
+LinkPopover.prototype.hide = function () {
     var self = this;
     setTimeout(function () {
         if (self.hovered) return;
         if (self.hidden) return;
         self.hidden = true;
         self.$el.hide();
-        self.nodeSelect.classed('hovered', false);
+        self.linkSelect.classed('hovered', false);
+        if (self.linkbackSelect) {
+            self.linkbackSelect.classed('hovered', false);
+        }
     }, 1);
 };
 
-NodePopover.prototype.position = function (x, y) {
+LinkPopover.prototype.position = function (x, y) {
     var self = this;
     self.$el.css({
-        top: y - self.halfheight + 28,
+        top: y - self.halfheight,
         left: x - self.halfwidth
     });
 };

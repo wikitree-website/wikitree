@@ -61,6 +61,16 @@
                     }
                 };
 
+                $scope.removeLink = function (linkId) {
+                    var link = CurrentSession.getLink(linkId);
+                    if (!link) return;
+                    var nodeA = link.source;
+                    var nodeB = link.target;
+                    if (window.confirm('Remove the link between "' + nodeA.name + '" and "' + nodeB.name + '" from your session?')) {
+                        CurrentSession.removeLink(link.uuid);
+                    }
+                };
+
 
             }
         ]);

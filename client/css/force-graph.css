@@ -1,4 +1,36 @@
 /**
+ * Map markup elements
+ */
+
+.node-popover {
+    min-width: 54px;
+    position: absolute;
+    text-align: center;
+    background-color: #EEE;
+}
+
+.node-popover.bottom > .arrow:after {
+    border-bottom-color: #EEE;
+}
+
+.node-popover .popover-content {
+    padding: 4px;
+}
+
+.link-popover {
+    min-width: 34px;
+    position: absolute;
+    text-align: center;
+    background-color: #EEE;
+}
+
+.link-popover .popover-content {
+    padding: 4px;
+}
+
+
+
+/**
  * D3 force graph styles
  */
 
@@ -53,28 +85,37 @@ g.node.active.fixed circle {
     stroke: #FC6;
 }
 
+line.underlink {
+    stroke: transparent;
+    stroke-width: 12px;
+    pointer-events: all;
+}
+
+line.underlink.linkback {
+    pointer-events: none;
+}
 
 line.link {
     stroke: #A0A0A0;
     stroke-width: 3px;
     stroke-dasharray: 4, 3;
+    marker-end: url(#link-arrow);
+    pointer-events: none;
+}
+
+line.link.hovered {
+    stroke: #676767;
+    marker-end: url(#link-arrow-hover);
 }
 
 line.link.linkback {
     stroke: transparent;
 }
 
-.node-popover {
-    min-width: 58px;
-    position: absolute;
-    text-align: center;
-    background-color: #EEE;
+#link-arrow path {
+    fill: #A0A0A0;
 }
 
-.node-popover.bottom > .arrow:after {
-    border-bottom-color: #EEE;
-}
-
-.node-popover .popover-content {
-    padding: 6px;
+#link-arrow-hover path {
+    fill: #676767;
 }
