@@ -109,14 +109,9 @@ HomeGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             });
     newNode
         .append('svg:circle')
-            .attr('r', 12)
-            .classed('fixed', function (d) { return d.fixed; })
+            .attr('r', 18)
+            .attr('class', 'disc')
             .call(this.drag);
-    newNode
-        .append('svg:text')
-            .attr('class', 'title')
-            .attr('dx', 6)
-            .attr('dy', -6);
 
     // keep things moving
     this.force.start();
