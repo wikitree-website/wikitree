@@ -9,7 +9,7 @@
 
                     var $window = $(window);
                     var $resizer = $('#resizer');
-                    var resizerHalf = ($resizer.width() / 2);
+                    var resizerWidth = $resizer.width();
 
                     function resizeToRatio() {
                         Resizer.size = Resizer.ratio * window.innerWidth;
@@ -41,7 +41,7 @@
                         $resizer.css({
                             width: '', // reset
                             left: '', // reset
-                            right: Resizer.size - resizerHalf
+                            right: Resizer.size - resizerWidth + 5
                         });
                     }
 
