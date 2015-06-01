@@ -140,6 +140,13 @@ ForceGraph.prototype.updateSize = function () {
 
 ForceGraph.prototype.updateCurrentNode = function (node) {
     var self = this;
+
+    if (!(node && node.uuid)) {
+        // no current node?
+        self.node.classed('active', false);
+        return;
+    }
+
     self.node.classed('active', function (d) {
         return d.uuid === node.uuid;
     });

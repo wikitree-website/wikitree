@@ -72,16 +72,18 @@
                         history.nextStack = history.nextStack
                             .filter(function (id) { return id !== nodeId });
 
-                        // find a new current node
-                        if (history.prevStack.length) {
-                            // try previous first
-                            history.currentId = history.prevStack.pop();
-                        } else if (history.nextStack.length) {
-                            // how about next
-                            history.currentId = history.nextStack.pop();
-                        } else {
-                            // uh oh
-                            history.currentId = null;
+                        // find a new current node?
+                        if (history.currentId === nodeId) {
+                            if (history.prevStack.length) {
+                                // try previous first
+                                history.currentId = history.prevStack.pop();
+                            } else if (history.nextStack.length) {
+                                // how about next
+                                history.currentId = history.nextStack.pop();
+                            } else {
+                                // uh oh
+                                history.currentId = null;
+                            }
                         }
 
                         // we did what we could
@@ -432,6 +434,8 @@
                         // validate existence
                         var node = nodes.byId[nodeId];
                         if (!node) return;
+
+                        console.log('removeNode', node.name);
 
                         // remove from collections
                         nodes.removeNode(node.uuid);
