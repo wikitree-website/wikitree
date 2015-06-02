@@ -20,6 +20,7 @@ function ForceGraph(containerEl, scope) {
 
     // d3 selections
     self.svg;
+    self.defs;
     self.rect;
     self.group;
     self.node;
@@ -76,6 +77,9 @@ ForceGraph.prototype.init = function () {
         .attr('width', self.width)
         .attr('height', self.height);
 
+    self.defs = self.svg
+        .append('svg:defs');
+
     self.rect = self.svg
         .append('svg:rect')
         .attr('width', '100%')
@@ -103,7 +107,7 @@ ForceGraph.prototype.init = function () {
         .attr('class', 'nodes')
         .selectAll('g.node');
 
-    self.svg.append('defs')
+    self.defs
         .selectAll('marker')
             .data(['link-arrow', 'link-arrow-hover'])
             .enter()

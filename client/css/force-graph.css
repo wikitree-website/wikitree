@@ -63,9 +63,8 @@ g.node text.name {
     cursor: pointer;
 }
 
-g.node.hovered,
-g.node:hover text.name,
-g.node text.name:hover {
+g.node.hovered text.name,
+g.node:hover text.name {
     font-weight: bold;
 }
 
