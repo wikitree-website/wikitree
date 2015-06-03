@@ -34,6 +34,16 @@
                 Sessions.index  = localStorageService.get('index')  || [];
                 Sessions.active = localStorageService.get('active') || 0;
 
+                // kill last version's sessions
+                if (Sessions.index.length > 0) {
+                    var test_sesh = localStorageService.get(Sessions.index[0].uuid);
+                    if (test_sesh && !test_sesh.hasOwnProperty('search')) {
+                        $rootScope.$broadcast('$routeChangeEnd');
+                        $location.path('/welcome');
+                        localStorageService.clearAll();
+                    }
+                }
+
                 // a sort happened!  gotta know where your active session is...
                 // fired in menu.controller.js
                 $rootScope.$on('session:sort', function (event, data) {
