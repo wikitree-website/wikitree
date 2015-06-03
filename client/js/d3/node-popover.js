@@ -67,6 +67,8 @@ NodePopover.prototype.addEventListeners = function () {
     // pin button
     self.$el.find('.pin-button').on('click', function () {
         self.scope.graph.toggleNodePin(self.node);
+        self.hovered = false;
+        self.hide();
     });
     // delete button
     self.$el.find('.del-button').on('click', function () {
