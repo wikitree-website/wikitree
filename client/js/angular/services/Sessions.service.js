@@ -62,8 +62,9 @@
                         if (active_session) {
                             $location.path('/session/' + active_session.uuid);
                         }
+                    } else {
+                        $location.path('/welcome');
                     }
-                    $location.path('/welcome');
                 };
 
                 Sessions.new = function (name) {
