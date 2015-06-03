@@ -16,6 +16,36 @@
                 this.categories = args.categories;
             }
 
+            //function getFromAPI(title) {
+            //    console.log('Getting article from API...', title);
+            //    var timestamp = Date.now();
+            //    $rootScope.$broadcast('mediawikiapi:loadstart', timestamp);
+            //
+            //    return $http.jsonp('https://en.wikipedia.org/w/api.php', {
+            //        params: {
+            //            action: 'parse',
+            //            prop: 'text|categorieshtml|displaytitle',
+            //            redirects: 'true',
+            //            page: title,
+            //            format: 'json',
+            //            callback: 'JSON_CALLBACK'
+            //        }
+            //
+            //    }).then(function (data) {
+            //        $rootScope.$broadcast('mediawikiapi:loadend', timestamp);
+            //        if (data && data.parse && data.parse.title) {
+            //            return data.parse;
+            //        } else {
+            //            throw "Article API error";
+            //        }
+            //
+            //    }).catch(function (err) {
+            //        console.error(err);
+            //    });
+            //
+            //
+            //}
+
             function getFromAPI(title) {
 
                 console.log('Getting article from API...', title);
@@ -87,6 +117,7 @@
                 });
             };
 
+            // JUST for user input
             Articles.getByUnsafeTitle = function (unsafeTitle) {
                 return $q(function (resolve, reject) {
                     if (byUnsafeTitle[unsafeTitle]) {

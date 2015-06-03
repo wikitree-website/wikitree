@@ -1,5 +1,5 @@
 (function() {
-    angular.module('wikitree.main.menu.session').
+    angular.module('wikitree.session.menu.session_tile').
 
         directive('escpress', [function () {
             return {

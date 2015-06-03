@@ -13,15 +13,15 @@ module.exports = function () {
 	var router = express.Router();
 
 	// public welcome page
-	router.get('/welcome', function (req, res) {
-		if (req.isAuthenticated()) {
-			// already logged in? redirect to root
-			return res.redirect('/');
-		} else {
-			// load welcome page
-			return res.render('welcome.ejs');
-		}
-	});
+	//router.get('/welcome', function (req, res) {
+	//	if (req.isAuthenticated()) {
+	//		// already logged in? redirect to root
+	//		return res.redirect('/');
+	//	} else {
+	//		// load welcome page
+	//		return res.render('welcome.ejs');
+	//	}
+	//});
 
 	// domain.com/api/v1/...
 	router.use('/api/v1', apiRouter());

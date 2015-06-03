@@ -1,7 +1,7 @@
 (function() {
-    angular.module('wikitree.main.menu.session').
+    angular.module('wikitree.session.menu.session_tile').
 
-        controller('sessionController', ['$scope', 'Sessions', function($scope, Sessions) {
+        controller('sessionController', ['$scope', '$location', 'Sessions', function($scope, $location, Sessions) {
 
             $scope.editing = false;
 
@@ -25,8 +25,9 @@
             });
 
             $scope.select = function(idx) {
-                Sessions.restore(idx);
+                //Sessions.restore(idx);
                 $scope.$parent.$broadcast('session:cancel_edit');
+                $location.path('/session/'+$scope.session.uuid);
             };
 
             $scope.delete = function(idx) {

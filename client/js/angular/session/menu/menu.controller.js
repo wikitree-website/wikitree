@@ -1,5 +1,5 @@
 (function() {
-    angular.module('wikitree.main.menu').
+    angular.module('wikitree.session.menu').
 
         controller('menuController', [
             '$rootScope',
@@ -7,12 +7,11 @@
             '$location',
             'Search',
             'Sessions',
-            'CurrentSession',
-            function($rootScope, $scope, $location, Search, Sessions, CurrentSession) {
+            function($rootScope, $scope, $location, Search, Sessions) {
 
-                if (Search.term === '') {
-                    Sessions.restore(Sessions.active);
-                }
+                //if (Search.term === '') {
+                //    Sessions.restore(Sessions.active);
+                //}
 
                 $scope.sessions = Sessions.index;
                 $scope.active = Sessions.active;
@@ -25,8 +24,7 @@
                 $scope.open = false;
 
                 $scope.goHome = function() {
-                    Sessions.save();
-                    $location.path('/');
+                    $location.path('/welcome');
                 };
 
                 $scope.toggleMenu = function () {
@@ -47,7 +45,7 @@
                         });
                         console.log('index', ui.item.sortable.index, 'moved to', ui.item.sortable.dropindex);
                     }
-                }
+                };
 
                 $scope.locateCurrentNode = function () {
                     $rootScope.$broadcast('request:graph:locate_current_node');

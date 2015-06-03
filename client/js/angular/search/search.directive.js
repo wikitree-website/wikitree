@@ -4,10 +4,11 @@
         directive('search', [function() {
             return {
                 restrict: 'E',
-                templateUrl: "js/angular/search/search.template.html",
+                templateUrl: "/js/angular/search/search.template.html",
                 controller: 'searchController',
-                scope: {
-                    large: '@'
+                link: function($scope, $element, $attributes) {
+                    $scope.large = $attributes.large;
+                    $scope.new_session = $attributes.newSession;
                 }
             }
         }]);

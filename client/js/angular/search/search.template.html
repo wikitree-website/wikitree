@@ -2,15 +2,15 @@
     <input class="form-control"
            ng-class="large ? 'input-lg' : 'input-md'"
            placeholder="Search for a Wikipedia article..."
-           typeahead-on-select="goToArticle()"
+           typeahead-on-select="start_search()"
            type="text"
            ng-model="inputText"
            ng-keypress="tryEnter($event)"
-           typeahead="suggestion for suggestion in search.getSuggestions($viewValue)"/>
+           typeahead="suggestion for suggestion in get_suggestions($viewValue)"/>
         <span class="input-group-btn">
             <button class="btn btn-default"
                     ng-class="large ? 'btn-lg' : 'btn-md'"
-                    ng-click="goToArticle(true)"
+                    ng-click="start_search()"
                     type="button">
                 <i class="fa fa-search"></i>
             </button>

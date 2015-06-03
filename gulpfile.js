@@ -71,18 +71,18 @@ gulp.task('build-client-js', function(){
             'angular/search/*.js',
             'angular/home/*.module.js',
             'angular/home/*.js',
-            'angular/main/*.module.js',
-            'angular/main/*.js',
-            'angular/main/menu/*.module.js',
-            'angular/main/menu/*.js',
-            'angular/main/menu/session/*.module.js',
-            'angular/main/menu/session/*.js',
-            'angular/main/reader/*.module.js',
-            'angular/main/reader/*.js',
-            'angular/main/graph/*.module.js',
-            'angular/main/graph/*.js',
-            'angular/main/resizer/*.module.js',
-            'angular/main/resizer/*.js'
+            'angular/session/*.module.js',
+            'angular/session/*.js',
+            'angular/session/menu/*.module.js',
+            'angular/session/menu/*.js',
+            'angular/session/menu/session_tile/*.module.js',
+            'angular/session/menu/session_tile/*.js',
+            'angular/session/reader/*.module.js',
+            'angular/session/reader/*.js',
+            'angular/session/graph/*.module.js',
+            'angular/session/graph/*.js',
+            'angular/session/resizer/*.module.js',
+            'angular/session/resizer/*.js'
         ]))
         .pipe(concat('app.js'));
 

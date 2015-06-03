@@ -401,9 +401,9 @@ ForceGraph.prototype.makeForce = function () {
         .theta(0.9)
         .alpha(0.1)
         .on('tick', this.tick)
-        .on('end', function () {
-            self.scope.saveSession();
-        });
+        //.on('end', function () {
+        //    self.scope.saveSession();
+        //});
 };
 
 ForceGraph.prototype.makeZoom = function () {
