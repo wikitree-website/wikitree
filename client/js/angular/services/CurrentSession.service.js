@@ -435,8 +435,6 @@
                         var node = nodes.byId[nodeId];
                         if (!node) return;
 
-                        console.log('removeNode', node.name);
-
                         // remove from collections
                         nodes.removeNode(node.uuid);
                         links.removeByNode(node.uuid);
