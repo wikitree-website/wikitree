@@ -274,11 +274,7 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     enterNode
         .append('svg:circle')
             .attr('r', 3)
-            .attr('class', 'pin')
-            .on('mouseover', self.nodeMouseover)
-            .on('mouseout', self.nodeMouseout)
-            .on('click', self.nodeClick)
-            .call(self.drag);
+            .attr('class', 'pin');
     // label
     enterNode
         .append('svg:text')

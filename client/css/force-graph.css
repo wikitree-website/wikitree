@@ -54,6 +54,7 @@ g.node circle.disc {
 
 g.node circle.pin {
     fill: transparent;
+    pointer-events: none;
 }
 
 g.node text.name {
