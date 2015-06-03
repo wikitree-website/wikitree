@@ -12,8 +12,9 @@ function ForceGraph(containerEl, scope) {
     self.containerEl = containerEl;
 
     // dimensions
-    self.width = containerEl.clientWidth;
-    self.height = containerEl.clientHeight;
+    var rect = self.containerEl.getBoundingClientRect();
+    self.width = rect.width;
+    self.height = rect.height;
 
     // user pressed keycode reference
     self.keysPressed = {};
@@ -125,8 +126,11 @@ ForceGraph.prototype.init = function () {
 
 ForceGraph.prototype.updateSize = function () {
     var self = this;
-    self.width = self.containerEl.clientWidth;
-    self.height = self.containerEl.clientHeight;
+
+    // get container element size
+    var rect = self.containerEl.getBoundingClientRect();
+    self.width = rect.width;
+    self.height = rect.height;
 
     // protect from bad timing
     if (!(self.width && self.height)) {
@@ -134,6 +138,7 @@ ForceGraph.prototype.updateSize = function () {
         return;
     }
 
+    // update svg & force
     self.svg
         .attr('width', self.width)
         .attr('height', self.height);
