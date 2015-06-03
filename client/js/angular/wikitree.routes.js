@@ -32,13 +32,13 @@
                         }]
                     }
                 }).
-                when('/new/:search_term', {
+                when('/new/:term/:search?', {
                     templateUrl: '/js/angular/session/session.template.html',
                     controller: 'session_controller',
                     controllerAs: 'session',
                     resolve: {
                         init_session: ['Sessions', '$route', function (Sessions, $route) {
-                            return Sessions.new($route.current.params.search_term);
+                            return Sessions.new($route.current.params.term);
                         }]
                     }
                 }).
