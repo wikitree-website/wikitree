@@ -16,6 +16,7 @@
                 // for frame node load
                 $scope.currentNodeName = null;
                 $scope.missedFrameUpdate = false;
+                $scope.hasBeenLoading = false;
                 $scope.hasReferences = false;
 
                 // for loading indicator
@@ -39,9 +40,11 @@
 
                 // keep loading indicator updated
                 $scope.$on('mediawikiapi:loadstart', function () {
+                    $scope.hasBeenLoading = true;
                     $scope.loadingCount = Loading.count;
                 });
                 $scope.$on('mediawikiapi:loadend', function () {
+                    $scope.hasBeenLoading = true;
                     $scope.loadingCount = Loading.count;
                 });
 
@@ -113,6 +116,13 @@
 
                     // make sure we got node
                     if (!node) {
+
+                        // TODO FIXME
+                        // patch for early error
+                        if (!$scope.hasBeenLoading) {
+                            return;
+                        }
+
                         $scope.currentNodeName = null;
                         $scope.frameWindow.loadError(
                             'System error: could not find a current node'
