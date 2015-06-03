@@ -28,7 +28,9 @@
                 // handle map/reader split resize
                 $scope.$on('split:resize', function (e, data) {
                     $scope.positionRight = Resizer.size + 'px';
-                    $scope.graph.updateSize();
+                    setTimeout(function () {
+                        $scope.graph.updateSize();
+                    }, 1);
                 });
 
                 // handle model update (nodes + links)

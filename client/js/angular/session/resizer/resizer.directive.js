@@ -10,12 +10,6 @@
                     var $resizer = $('#resizer');
                     var resizerWidth = $resizer.width();
 
-                    function resizeToRatio() {
-                        Resizer.size = Resizer.ratio * window.innerWidth;
-                        setRightSize(Resizer.size);
-                        restoreElement();
-                    }
-
                     function setRightSize(size) {
                         var winWidth = window.innerWidth;
                         // make sure size is reasonable
@@ -48,7 +42,8 @@
                      * Initialize
                      */
 
-                    resizeToRatio();
+                    setRightSize(Resizer.ratio * window.innerWidth);
+                    restoreElement();
 
                     /**
                      * Handle dragging
@@ -87,7 +82,8 @@
 
                     $window.on('resize', function () {
                         scope.$apply(function () {
-                            resizeToRatio();
+                            setRightSize(Resizer.ratio * window.innerWidth);
+                            restoreElement();
                         });
                     });
 
@@ -96,9 +92,7 @@
                 return {
                     restrict: 'E',
                     replace: true,
-                    templateUrl: "/js/angular/session/resizer/resizer.template.html",
-                    //controller: 'resizerController',
-                    scope: {},
+                    templateUrl: '/js/angular/session/resizer/resizer.template.html',
                     link: link
                 }
             }
