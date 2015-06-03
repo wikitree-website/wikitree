@@ -31,16 +31,16 @@
 
                 var Sessions = {};
 
+
                 Sessions.index  = localStorageService.get('index')  || [];
                 Sessions.active = localStorageService.get('active') || 0;
 
-                // kill last version's sessions
                 if (Sessions.index.length > 0) {
                     var test_sesh = localStorageService.get(Sessions.index[0].uuid);
-                    if (test_sesh && !test_sesh.hasOwnProperty('search')) {
-                        $rootScope.$broadcast('$routeChangeEnd');
-                        $location.path('/welcome');
+                    if (test_sesh && !test_sesh.hasOwnProperty('scrote')) {
                         localStorageService.clearAll();
+                        Sessions.index  = localStorageService.get('index')  || [];
+                        Sessions.active = localStorageService.get('active') || 0;
                     }
                 }
 
@@ -64,6 +64,7 @@
                 });
 
                 Sessions.is_new = function () {
+
                     // any existing sessions?
                     if (Sessions.index.length !== 0) {
                         var active_session = Sessions.index[Sessions.active];
