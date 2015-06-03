@@ -37,7 +37,7 @@
 
                 if (Sessions.index.length > 0) {
                     var test_sesh = localStorageService.get(Sessions.index[0].uuid);
-                    if (test_sesh && !test_sesh.hasOwnProperty('scrote')) {
+                    if (test_sesh && !test_sesh.hasOwnProperty('search')) {
                         localStorageService.clearAll();
                         Sessions.index  = localStorageService.get('index')  || [];
                         Sessions.active = localStorageService.get('active') || 0;
