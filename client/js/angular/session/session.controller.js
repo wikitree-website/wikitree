@@ -3,12 +3,11 @@
 
         controller('session_controller',
             [ '$scope'
-            , '$routeParams'
             , 'Search'
             , 'Sessions'
             , 'Utilities'
             , 'init_session'
-            , function ($scope, $routeParams, Search, Sessions, Utilities, init_session) {
+            , function ($scope, Search, Sessions, Utilities, init_session) {
 
             var session = this;
             
@@ -310,7 +309,7 @@
                     if (prev_stack.length) {
                         // try previous first
                         current_node_id = prev_stack.pop();
-                    } else if (history.next_stack.length) {
+                    } else if (next_stack.length) {
                         // how about next
                         current_node_id = next_stack.pop();
                     } else {
@@ -371,23 +370,23 @@
              * @param {Boolean} no_set_current whether to set new node as current
              * @param {Boolean} isSearch whether this should go straight to search results
              */
-            session.do_search = function (term, src_node_id, no_set_current/*, isSearch*/) {
+            session.do_search = function (term, src_node_id, no_set_current, isSearch) {
                 var start_time = Date.now();
+
+                console.log('term', term);
 
                 if (!(term && term.length)) return;
 
-                //var search;
-                //
-                //if (isSearch) {
-                //    console.log('search?');
-                //    search = Search.findOrAddSearch(term);
-                //} else {
-                //    search = Search.findOrAddArticle(term);
-                //}
+                var search;
 
-                /*search.then(function (result) {*/
-                Search.findOrAddArticle(term).then(function (result) {
+                if (isSearch) {
+                    console.log('search?');
+                    search = Search.findOrAddSearch(term);
+                } else {
+                    search = Search.findOrAddArticle(term);
+                }
 
+                search.then(function (result) {
                         console.log(result);
 
                         // no result?
@@ -428,7 +427,7 @@
              */
             (function activate() {
                 if (init_session.new) {
-                    session.do_search(init_session.start);
+                    session.do_search(init_session.term, null, null, init_session.search);
                     session.new = false;
                 }
 

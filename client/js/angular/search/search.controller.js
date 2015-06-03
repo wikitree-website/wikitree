@@ -12,36 +12,38 @@
 
                 $scope.tryEnter = function ($event) {
                     if ($event.keyCode === 13) {
-                        $scope.start_search();
+                        $scope.start_search(true);
                     }
                 };
 
-                $scope.start_search = function () {
+                $scope.start_search = function (isButton) {
                     var term = $scope.inputText;
-
-                    if (term) {
-                        if ($scope.new_session) {
-                            $location.path('/new/' + term);
-                        } else {
-                            $scope.session.do_search(term)
-                        }
-                    }
 
                     //if (term) {
                     //    if ($scope.new_session) {
-                    //        if (isButton) {
-                    //            $location.path('/new/' + term + '/true');
-                    //        } else {
-                    //            $location.path('/new/' + term);
-                    //        }
+                    //        $location.path('/new/' + term);
                     //    } else {
-                    //        if (isButton) {
-                    //            $scope.session.do_search(term, null, null, true);
-                    //        } else {
-                    //            $scope.session.do_search(term);
-                    //        }
+                    //        $scope.session.do_search(term)
                     //    }
                     //}
+
+                    console.log('is_button', isButton);
+
+                    if (term) {
+                        if ($scope.new_session) {
+                            if (isButton) {
+                                $location.path('/new/' + term + '/true');
+                            } else {
+                                $location.path('/new/' + term);
+                            }
+                        } else {
+                            if (isButton) {
+                                $scope.session.do_search(term, null, null, true);
+                            } else {
+                                $scope.session.do_search(term);
+                            }
+                        }
+                    }
 
                     $scope.inputText = '';
 

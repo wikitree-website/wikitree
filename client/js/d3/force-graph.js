@@ -400,10 +400,8 @@ ForceGraph.prototype.makeForce = function () {
         .friction(0.8)
         .theta(0.9)
         .alpha(0.1)
-        .on('tick', this.tick)
-        //.on('end', function () {
-        //    self.scope.saveSession();
-        //});
+        .on('tick', this.tick);
+
 };
 
 ForceGraph.prototype.makeZoom = function () {
@@ -451,7 +449,6 @@ ForceGraph.prototype.makeDrag = function () {
             d3.event.sourceEvent.stopPropagation();
             if (d.isDragging) {
                 self.tick();
-                self.scope.saveSession();
                 d.isDragging = false;
 
                 // show popover when done drag
@@ -536,7 +533,6 @@ ForceGraph.prototype.toggleNodePin = function (nodeData, nodeSelection) {
     nodeData.fixed = !nodeData.fixed;
     nodeSelection.classed('fixed', nodeData.fixed);
     self.force.start();
-    self.scope.saveSession();
 };
 
 ForceGraph.prototype.centerOnNode = function (node) {
