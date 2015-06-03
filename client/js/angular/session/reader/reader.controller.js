@@ -1,15 +1,14 @@
 (function() {
-    angular.module('wikitree.main.reader').
+    angular.module('wikitree.session.reader').
         controller('readerController', [
             '$scope',
             'Resizer',
             'Loading',
-            'CurrentSession',
             'Sessions',
             'Articles',
             'Searches',
             'Categories',
-            function($scope, Resizer, Loading, CurrentSession, Sessions, Articles, Searches, Categories) {
+            function($scope, Resizer, Loading, Sessions, Articles, Searches, Categories) {
 
                 // for reader width
                 $scope.readerWidth = Resizer.size + 'px';
@@ -23,13 +22,19 @@
                 $scope.loadingCount = Loading.count;
 
                 // for prev/next buttons
-                $scope.hasBackward = CurrentSession.hasBackward();
-                $scope.hasForward = CurrentSession.hasForward();
+                //$scope.hasBackward = CurrentSession.hasBackward();
+                //$scope.hasForward = CurrentSession.hasForward();
+                $scope.hasBackward = $scope.session.has_backward();
+                $scope.hasForward = $scope.session.has_forward();
+
 
                 // keep history buttons updated
                 $scope.$on('update:currentnode', function () {
-                    $scope.hasBackward = CurrentSession.hasBackward();
-                    $scope.hasForward = CurrentSession.hasForward();
+                    //$scope.hasBackward = CurrentSession.hasBackward();
+                    //$scope.hasForward = CurrentSession.hasForward();
+
+                    $scope.hasBackward = $scope.session.has_backward();
+                    $scope.hasForward = $scope.session.has_forward();
                 });
 
                 // keep loading indicator updated
@@ -55,15 +60,18 @@
                  */
 
                 $scope.historyBackward = function () {
-                    CurrentSession.goBackward();
+                    //CurrentSession.goBackward();
+                    $scope.session.go_backward();
                 };
 
                 $scope.historyForward = function () {
-                    CurrentSession.goForward();
+                    //CurrentSession.goForward();
+                    $scope.session.go_forward();
                 };
 
                 $scope.openSourceArticle = function () {
-                    var node = CurrentSession.getCurrentNode();
+                    //var node = CurrentSession.getCurrentNode();
+                    var node = $scope.session.get_current_node_id();
                     if (!(node && node.name)) return;
                     var url = '';
                     switch (node.type) {
@@ -100,7 +108,8 @@
                     }
 
                     // grab current node
-                    var node = CurrentSession.getCurrentNode();
+                    //var node = CurrentSession.getCurrentNode();
+                    var node = $scope.session.get_current_node_id();
 
                     // make sure we got node
                     if (!node) {
@@ -126,7 +135,7 @@
                     $scope.currentNodeName = node.name;
 
                     // save update
-                    Sessions.save();
+                    //Sessions.save();
 
                     // on iframe node load
                     function onLoad() {
@@ -192,31 +201,14 @@
                 }
 
                 function makeTitleCallback(node) {
-                    return function (title, noSetCurrent, isSearch) {
+                    return function (title, noSetCurrent/*, isSearch*/) {
                         $scope.$apply(function () {
 
                             // user clicked an iframe title!
                             title = decodeURIComponent(title);
 
-                            if (isSearch) {
+                            $scope.session.do_search(title, node.uuid, noSetCurrent/*, isSearch*/);
 
-                                // skip to search
-                                CurrentSession.handleTitleSearch({
-                                    title: title,
-                                    noSetCurrent: noSetCurrent,
-                                    sourceNodeId: node.uuid
-                                });
-
-                            } else {
-
-                                // handle title
-                                CurrentSession.handleTitle({
-                                    title: title,
-                                    noSetCurrent: noSetCurrent,
-                                    sourceNodeId: node.uuid
-                                });
-
-                            }
                         });
                     };
                 }
@@ -225,9 +217,9 @@
                  * Load article if there is one
                  */
 
-                if (CurrentSession.getCurrentNode()) {
+                 if ($scope.session.get_current_node_id()) {
                     $scope.updateFrameNode();
-                }
+                 }
 
             }
         ]);

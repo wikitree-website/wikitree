@@ -1,11 +1,11 @@
 (function() {
-    angular.module('wikitree.main.menu.session').
+    angular.module('wikitree.session.menu.session_tile').
 
         directive('session', [function() {
             return {
                 restrict: 'E',
                 replace: true,
-                templateUrl: "js/angular/main/menu/session/session.template.html",
+                templateUrl: "/js/angular/session/menu/session_tile/session_tile.template.html",
                 controller: 'sessionController'
             }
         }]);

@@ -1,10 +1,9 @@
 (function() {
-    angular.module('wikitree.main.resizer').
+    angular.module('wikitree.session.resizer').
         directive('resizer', [
             '$rootScope',
             'Resizer',
-            'CurrentSession',
-            function($rootScope, Resizer, CurrentSession) {
+            function($rootScope, Resizer) {
                 var link = function(scope, element, attrs) {
 
                     var $window = $(window);
@@ -97,7 +96,7 @@
                 return {
                     restrict: 'E',
                     replace: true,
-                    templateUrl: "js/angular/main/resizer/resizer.template.html",
+                    templateUrl: "/js/angular/session/resizer/resizer.template.html",
                     //controller: 'resizerController',
                     scope: {},
                     link: link

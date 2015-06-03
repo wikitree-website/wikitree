@@ -4,7 +4,7 @@
         'LocalStorageModule',
         'ui.bootstrap.alert',
         'wikitree.home',
-        'wikitree.main',
+        'wikitree.session',
         'wikitree.search'
     ]).
     config(['localStorageServiceProvider', function(localStorageServiceProvider) {

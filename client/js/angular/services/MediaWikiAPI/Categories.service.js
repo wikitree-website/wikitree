@@ -155,6 +155,7 @@
                 });
             };
 
+            // JUST for user input
             Categories.getByUnsafeTitle = function (unsafeTitle) {
                 return $q(function (resolve, reject) {
                     if (byUnsafeTitle[unsafeTitle]) {

@@ -1,10 +1,10 @@
 (function() {
-    angular.module('wikitree.main.reader').
+    angular.module('wikitree.session.reader').
         directive('reader', [function() {
             return {
                 restrict: 'E',
                 replace: true,
-                templateUrl: "js/angular/main/reader/reader.template.html",
+                templateUrl: "/js/angular/session/reader/reader.template.html",
                 controller: 'readerController',
                 link: function(scope, element, attrs) {
                     // grab reference to iFrame's window object

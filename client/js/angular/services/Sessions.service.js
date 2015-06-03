@@ -5,19 +5,22 @@
             '$location',
             'localStorageService',
             'Utilities',
-            'CurrentSession',
-            function($rootScope, $location, localStorageService, Utilities, CurrentSession) {
+            function($rootScope, $location, localStorageService, Utilities) {
 
-                function Session() {
+                function Session (term) {
+                    this.new = true;
+                    this.start = term;
                     this.uuid = Utilities.makeUUID();
                     this.data = {
-                        history: {},
-                        nodes: {},
-                        links: {}
+                        current_node_id:   undefined,
+                        prev_stack:        [],
+                        next_stack:        [],
+                        nodes:             [],
+                        links:             []
                     }
                 }
 
-                function SessionIndex(session, name) {
+                function SessionIndex (session, name) {
                     this.uuid = session.uuid;
                     this.name = name;
                     this.rename = name;
@@ -48,44 +51,76 @@
                     }
                 });
 
-                Sessions.new = function(name) {
+                Sessions.is_new = function () {
+                    // any existing sessions?
+                    if (Sessions.index.length !== 0) {
+                        var active_session = Sessions.index[Sessions.active];
+
+                        // pull up the active one
+                        if (active_session) {
+                            $location.path('/session/' + active_session.uuid);
+                        }
+                    }
+                };
+
+                Sessions.new = function (name) {
+                    //debugger
                     Sessions.active = 0;
 
-                    var newSession = new Session();
-                    Sessions.index.unshift(new SessionIndex(newSession, name));
+                    var session = new Session(name);
+                    Sessions.index.unshift(new SessionIndex(session, name));
 
-                    localStorageService.set(newSession.uuid, newSession);
+                    localStorageService.set(session.uuid, session);
                     localStorageService.set('index', Sessions.index);
                     localStorageService.set('active', Sessions.active);
 
-                    CurrentSession.clearState();
+                    console.log('new session', session.uuid);
+
+                    $location.path('/session/'+session.uuid);
+                    return session;
                 };
 
-                Sessions.save = function() {
-                    var currentSessionUUID = Sessions.index[Sessions.active].uuid;
-                    var currentSession = localStorageService.get(currentSessionUUID);
+                Sessions.save = function (uuid, data) {
+                    var session = localStorageService.get(uuid);
 
-                    currentSession.data = CurrentSession.exportState();
-                    localStorageService.set(currentSessionUUID, currentSession);
+                    session.new = false;
+                    session.data = data;
 
                     Sessions.index[Sessions.active].date = Date.now();
                     localStorageService.set('index', Sessions.index);
-                    localStorageService.set('active', Sessions.active);
+
+                    localStorageService.set(uuid, session);
                 };
 
-                Sessions.restore = function(idx) {
-                    Sessions.active = idx;
-                    localStorageService.set('active', Sessions.active);
-                    console.log('Sessions.restore', idx, Sessions.index[idx]);
+                //Sessions.restore = function(idx) {
+                //    Sessions.active = idx;
+                //    localStorageService.set('active', Sessions.active);
+                //    console.log('Sessions.restore', idx, Sessions.index[idx]);
+                //
+                //    var restoredSessionUUID = Sessions.index[idx].uuid;
+                //    var restoredSession = localStorageService.get(restoredSessionUUID);
+                //    localStorageService.set(uuid, session);
+                //};
 
-                    var restoredSessionUUID = Sessions.index[idx].uuid;
-                    var restoredSession = localStorageService.get(restoredSessionUUID);
+                Sessions.restore = function (uuid) {
+                    var session = localStorageService.get(uuid);
 
-                    CurrentSession.clearState();
-                    CurrentSession.importState(restoredSession);
+                    console.log('restored session', session);
+
+                    if (!session) $location.path('/');
+
+                    // LOL
+                    Sessions.active = Sessions.index.indexOf(Sessions.index.
+                        filter(function (session) {
+                            return session.uuid === uuid
+                        })[0]);
+
+                    console.log('active session', Sessions.active);
+
+                    return session;
                 };
 
-                Sessions.delete = function(idx) {
+                Sessions.delete = function (idx) {
                     var deletedSessionUUID = Sessions.index[idx].uuid;
                     localStorageService.remove(deletedSessionUUID);
 
@@ -94,31 +129,23 @@
 
                     // if deleted only session:
                     if (Sessions.index.length == 0) {
-                        window.location = '/';
+                        window.location = '/welcome';
                     // if deleted active session that was last:
                     } else if (idx == Sessions.active) {
+                        var uuid;
                         if (idx == Sessions.index.length) {
-                            Sessions.restore(idx - 1);
+                            //Sessions.restore(idx - 1);          // won't work anymore
+                            uuid = Sessions.index[idx-1].uuid;
                         } else {
-                            Sessions.restore(idx);
+                            //Sessions.restore(idx);              // won't work anymore
+                            uuid = Sessions.index[idx].uuid;
                         }
+                        $location.path('/session/'+uuid);
                     // if deleted session above active
                     } else if (idx < Sessions.active) {
                         Sessions.active--;
                     }
                 };
-
-                /**
-                 * Save events
-                 */
-
-                $(window).on('beforeunload', function () {
-                    Sessions.save();
-                });
-
-                $rootScope.$on('update:nodes+links', function () {
-                    Sessions.save();
-                });
 
                 return Sessions;
         }]);
