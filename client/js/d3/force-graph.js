@@ -16,8 +16,9 @@ function ForceGraph(containerEl, scope) {
     self.width = rect.width;
     self.height = rect.height;
 
-    // user pressed keycode reference
+    // states
     self.keysPressed = {};
+    self.isDragging = false;
 
     // d3 selections
     self.svg;
@@ -446,8 +447,8 @@ ForceGraph.prototype.makeDrag = function () {
             d3.event.sourceEvent.stopPropagation();
         })
         .on('drag', function (d, i) {
-            if (!d.isDragging) {
-                d.isDragging = true;
+            if (!self.isDragging) {
+                self.isDragging = true;
 
                 // hide popover on drag
                 self.nodePopoversById[d.uuid].$el.hide();
@@ -468,17 +469,20 @@ ForceGraph.prototype.makeDrag = function () {
         })
         .on('dragend', function (d, i) {
             d3.event.sourceEvent.stopPropagation();
-            if (d.isDragging) {
+            if (self.isDragging) {
                 self.tick();
-                d.isDragging = false;
+                self.isDragging = false;
 
                 // show popover when done drag
-                self.nodePopoversById[d.uuid].$el.show();
+                var popover = self.nodePopoversById[d.uuid];
+                self.updateNodePopover(popover);
+                popover.$el.show();
 
                 // prevent selecting on drag
                 d.justDragged = true;
                 setTimeout(function () {
                     delete d.justDragged;
+                    popover.show();
                 }, 50);
             }
         });
@@ -504,6 +508,7 @@ ForceGraph.prototype.makeNodeClick = function () {
 ForceGraph.prototype.makeNodeMouseover = function () {
     var self = this;
     return function (d) {
+        if (self.isDragging) return;
         d.hovered = true;
         var popover = self.nodePopoversById[d.uuid];
         self.updateNodePopover(popover);
@@ -515,7 +520,7 @@ ForceGraph.prototype.makeNodeMouseover = function () {
 ForceGraph.prototype.makeNodeMouseout = function () {
     var self = this;
     return function (d) {
-        if (d.isDragging) return;
+        if (self.isDragging) return;
         d.hovered = false;
         var popover = self.nodePopoversById[d.uuid];
         popover.hide();
@@ -525,6 +530,7 @@ ForceGraph.prototype.makeNodeMouseout = function () {
 ForceGraph.prototype.makeLinkMouseover = function () {
     var self = this;
     return function (d) {
+        if (self.isDragging) return;
         d.hovered = true;
         d3.select(this).classed('hovered', true);
         var popover = self.linkPopoversById[d.uuid];
@@ -537,7 +543,7 @@ ForceGraph.prototype.makeLinkMouseover = function () {
 ForceGraph.prototype.makeLinkMouseout = function () {
     var self = this;
     return function (d) {
-        if (d.isDragging) return;
+        if (self.isDragging) return;
         d.hovered = false;
         d3.select(this).classed('hovered', false);
         var popover = self.linkPopoversById[d.uuid];
