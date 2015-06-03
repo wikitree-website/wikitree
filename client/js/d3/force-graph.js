@@ -363,6 +363,22 @@ ForceGraph.prototype.updateLinkPopover = function (popover) {
     popover.position(centerX, centerY);
 };
 
+ForceGraph.prototype.hideAllPopovers = function (exceptId) {
+    var self = this;
+    Object.keys(self.nodePopoversById).forEach(function (id) {
+        if (id == exceptId) return;
+        var popover = self.nodePopoversById[id];
+        if (popover.hidden) return;
+        popover.hide();
+    });
+    Object.keys(self.linkPopoversById).forEach(function (id) {
+        if (id == exceptId) return;
+        var popover = self.linkPopoversById[id];
+        if (popover.hidden) return;
+        popover.hide();
+    });
+};
+
 ForceGraph.prototype.makeTick = function () {
     var self = this;
     function x1(d) { return d.source.x; }
@@ -486,6 +502,7 @@ ForceGraph.prototype.makeNodeMouseover = function () {
         d.hovered = true;
         var popover = self.nodePopoversById[d.uuid];
         self.updateNodePopover(popover);
+        self.hideAllPopovers(d.uuid);
         popover.show();
     };
 };
@@ -507,6 +524,7 @@ ForceGraph.prototype.makeLinkMouseover = function () {
         d3.select(this).classed('hovered', true);
         var popover = self.linkPopoversById[d.uuid];
         self.updateLinkPopover(popover);
+        self.hideAllPopovers(d.uuid);
         popover.show();
     };
 };
