@@ -10,7 +10,7 @@
             , function ($scope, Search, Sessions, Utilities, init_session) {
 
             var session = this;
-            
+
             /**
              * Session state
              */
@@ -119,7 +119,7 @@
                 this.uuid = args.uuid || Utilities.makeUUID();
                 this.sourceId = args.sourceId;
                 this.targetId = args.targetId;
-                this.linkback = args.linkback;
+                this.linkbackId = args.linkbackId;
                 // d3 force graph attributes
                 // https://github.com/mbostock/d3/wiki/Force-Layout#links
                 this.source = nodes_by_id[this.sourceId];
@@ -149,10 +149,18 @@
                 } else if (links_by_node_ids[tgt_node_id] &&
                     links_by_node_ids[tgt_node_id][src_node_id]) {
                     // add node with linkback
-                    add_link(src_node_id, tgt_node_id, true);
+                    add_link(
+                        src_node_id,
+                        tgt_node_id,
+                        links_by_node_ids[tgt_node_id][src_node_id].uuid
+                    );
                 } else {
                     // add node WITHOUT linkback
-                    add_link(src_node_id, tgt_node_id, false);
+                    add_link(
+                        src_node_id,
+                        tgt_node_id,
+                        null
+                    );
                 }
             }
 
@@ -174,11 +182,11 @@
              * @param {Number} target_id ID of target node
              * @param linkback
              */
-            function add_link (source_id, target_id, linkback) {
+            function add_link (source_id, target_id, linkbackId) {
                 var link = new Link({
                     sourceId: source_id,
                     targetId: target_id,
-                    linkback: linkback
+                    linkbackId: linkbackId
                 });
                 links.push(link);
                 if (!links_by_node_ids[source_id]) links_by_node_ids[source_id] = {};
