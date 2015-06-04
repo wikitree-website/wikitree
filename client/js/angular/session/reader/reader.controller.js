@@ -123,10 +123,12 @@
                             return;
                         }
 
-                        $scope.currentNodeName = null;
-                        $scope.frameWindow.loadError(
-                            'System error: could not find a current node'
-                        );
+                        // TEMP TODO FIXME NOTE WARN DANGER
+                        // taking this out for capstone presentation
+                        // $scope.currentNodeName = null;
+                        // $scope.frameWindow.loadError(
+                        //     'System error: could not find a current node'
+                        // );
                         return;
                     }
 
