@@ -441,8 +441,7 @@
 
                 nodes.forEach(function (node) {
                     nodes_by_id[node.uuid] = node;
-                    nodes_by_name[node.uuid] = node;
-
+                    nodes_by_name[node.name] = node;
                 });
 
                 links.forEach(function (link) {
