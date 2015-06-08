@@ -12,6 +12,7 @@
 
                 $scope.tryEnter = function ($event) {
                     if ($event.keyCode === 13) {
+                        $event.preventDefault();
                         $scope.start_search(true);
                     }
                 };

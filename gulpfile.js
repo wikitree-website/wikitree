@@ -79,6 +79,8 @@ gulp.task('build-client-js', function(){
             'angular/session/menu/session_tile/*.js',
             'angular/session/reader/*.module.js',
             'angular/session/reader/*.js',
+            'angular/session/reader/editor/*.module.js',
+            'angular/session/reader/editor/*.js',
             'angular/session/graph/*.module.js',
             'angular/session/graph/*.js',
             'angular/session/resizer/*.module.js',

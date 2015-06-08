@@ -16,6 +16,8 @@
              */
             var id = init_session.uuid;
 
+            var currentNoteNodeId = null;
+
             // history
             var current_node_id = init_session.data.current_node_id;
             var prev_stack = init_session.data.prev_stack;
@@ -72,10 +74,11 @@
              */
             function Node (args) {
                 this.uuid = args.uuid || Utilities.makeUUID();
-                this.type = args.type;
+                this.type = args.type; // article, category, search, note
                 this.name = args.name;
                 this.title = args.title;
                 this.query = args.query;
+                this.body = args.body;
                 // d3 force graph attributes
                 // https://github.com/mbostock/d3/wiki/Force-Layout#nodes
                 this.index = undefined;  // the zero-based index of the node within the nodes array.
@@ -101,7 +104,9 @@
                 });
                 nodes.push(node);
                 nodes_by_id[node.uuid] = node;
-                nodes_by_name[node.name] = node;
+                if (node.type !== 'note') {
+                    nodes_by_name[node.name] = node;
+                }
                 return node;
             }
 
@@ -131,7 +136,7 @@
              * @param {Number} tgt_node_id id of target node
              * @param {Number} src_node_id id of source node
              */
-            function link (tgt_node_id, src_node_id) {
+            function link (src_node_id, tgt_node_id) {
                 var tgt_node = nodes_by_id[tgt_node_id];
                 var src_node = nodes_by_id[src_node_id];
 
@@ -199,17 +204,16 @@
              */
 
             /**
-             * Get the current node ID
-             * @returns {Number}
+             * Get the current node
+             * @returns {Node}
              */
-            session.get_current_node_id = function () {
+            session.get_current_node = function () {
                 return nodes_by_id[current_node_id];
             };
 
             /**
              * Set the currently selected graph node
-             * @param   {Number} nodeId
-             * @returns {Number} id of current node
+             * @param {String} nodeId
              */
             session.set_current_node_id = function (nodeId) {
                 // make sure we're not already here
@@ -223,8 +227,34 @@
                 }
                 next_stack = [];
                 current_node_id = nodeId;
-
                 $scope.$broadcast('update:currentnode');
+            };
+
+            /**
+             * Get the current note node
+             * @returns {Node}
+             */
+            session.getCurrentNoteNode = function () {
+                return nodes_by_id[currentNoteNodeId];
+            };
+
+            /**
+             * Set the current note node id
+             */
+            session.setCurrentNoteNodeId = function (nodeId) {
+                currentNoteNodeId = nodeId;
+                $scope.$broadcast('update:current-note-node');
+            };
+
+            /**
+             * Update a note node
+             */
+            session.updateNoteNodeContent = function (nodeId, name, body) {
+                var node = nodes_by_id[nodeId];
+                if (!node) return;
+                node.name = name;
+                node.body = body;
+                $scope.$broadcast('update:note-node-content', node);
             };
 
             /**
@@ -312,7 +342,7 @@
                         return id !== nodeId
                     });
 
-                // find a new current node
+                // find a new current node?
                 if (current_node_id === nodeId) {
                     if (prev_stack.length) {
                         // try previous first
@@ -325,6 +355,10 @@
                         current_node_id = null;
                     }
                 }
+                // or wipe out current note node?
+                if (currentNoteNodeId === nodeId) {
+                    currentNoteNodeId = null;
+                }
 
                 // remove from nodes //////////////////////////////////////////
 
@@ -332,7 +366,9 @@
                     return n.uuid !== node.uuid
                 });
                 delete nodes_by_id[node.uuid];
-                delete nodes_by_name[node.name];
+                if (node.type !== 'note') {
+                    delete nodes_by_name[node.name];
+                }
 
                 // remove from links //////////////////////////////////////////
 
@@ -350,6 +386,7 @@
                 // alert the media
                 $scope.$broadcast('update:nodes+links');
                 $scope.$broadcast('update:currentnode');
+                $scope.$broadcast('update:current-note-node');
             };
 
             /**
@@ -412,7 +449,7 @@
 
                         // does our node need to be linked?
                         if (src_node_id) {
-                            link(node.uuid, src_node_id);
+                            link(src_node_id, node.uuid);
                         }
 
                         $scope.$broadcast('update:nodes+links');
@@ -430,6 +467,18 @@
                     });
             };
 
+            session.addNewNoteNode = function () {
+                var node = add_node({ type: 'note' });
+                $scope.$broadcast('update:nodes+links');
+                session.setCurrentNoteNodeId(node.uuid);
+                return node;
+            };
+
+            session.addLink = function (sourceId, targetId) {
+                link(sourceId, targetId);
+                $scope.$broadcast('update:nodes+links');
+            };
+
             /**
              * Begin a session
              */
@@ -441,7 +490,9 @@
 
                 nodes.forEach(function (node) {
                     nodes_by_id[node.uuid] = node;
-                    nodes_by_name[node.name] = node;
+                    if (node.type !== 'note') {
+                        nodes_by_name[node.name] = node;
+                    }
                 });
 
                 links.forEach(function (link) {

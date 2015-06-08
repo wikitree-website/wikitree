@@ -9,6 +9,10 @@
     background-color: #EEE;
 }
 
+.note-node-popover {
+    min-width: 76px;
+}
+
 .node-popover.bottom > .arrow:after {
     border-bottom-color: #EEE;
 }
@@ -40,11 +44,6 @@ svg {
 }
 
 g.node {
-
-}
-
-
-g.node circle {
     cursor: pointer;
 }
 
@@ -52,9 +51,24 @@ g.node circle.disc {
     fill: #FFF;
 }
 
+g.node circle.cursor {
+    fill: transparent;
+    pointer-events: none;
+}
+
 g.node circle.pin {
     fill: transparent;
     pointer-events: none;
+}
+
+g.node text.note-icon-back {
+    fill: #FFF;
+    font-size: 29px;
+}
+
+g.node text.note-icon-fore {
+    fill: #A0A0A0;
+    font-size: 30px;
 }
 
 g.node text.name {
@@ -64,20 +78,35 @@ g.node text.name {
     cursor: pointer;
 }
 
+g.node text.name.note-name {
+    fill: #555;
+    font-size: 12px;
+}
+
+g.node body {
+    background: none;
+    font-size: 10px;
+    line-height: 12px;
+    color: #555;
+}
+
 g.node.hovered text.name,
-g.node:hover text.name {
+g.node:hover text.name,
+g.node:hover body {
     font-weight: bold;
 }
 
-
-g.node.active circle {
+g.node.active circle.disc {
     fill: #FC6;
+}
+
+g.node.active text.note-icon-fore {
+    fill: #222;
 }
 
 g.node.active text.name {
     font-weight: bold;
 }
-
 
 g.node.fixed circle.pin {
     fill: #676767;
@@ -90,6 +119,10 @@ line.underlink {
 }
 
 line.underlink.linkback {
+    pointer-events: none;
+}
+
+line.underlink.linking {
     pointer-events: none;
 }
 
@@ -106,7 +139,22 @@ line.link.hovered {
     marker-end: url(#link-arrow-hover);
 }
 
-line.link.linkback {
+line.link.note {
+    stroke: #95AEC7;
+    marker-end: url(#link-arrow-note);
+}
+
+line.link.linking {
+    marker-end: url(#link-arrow-note-linking);
+}
+
+line.link.note.hovered {
+    stroke: #677c91;
+    marker-end: url(#link-arrow-note-hover);
+}
+
+line.link.linkback,
+line.link.note.linkback {
     stroke: transparent;
 }
 
@@ -116,4 +164,13 @@ line.link.linkback {
 
 #link-arrow-hover path {
     fill: #676767;
+}
+
+#link-arrow-note-hover path {
+    fill: #677c91;
+}
+
+#link-arrow-note path,
+#link-arrow-note-linking path {
+    fill: #95AEC7;
 }

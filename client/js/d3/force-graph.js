@@ -17,8 +17,19 @@ function ForceGraph(containerEl, scope) {
     self.height = rect.height;
 
     // states
+    self.mousePosition = {};
     self.keysPressed = {};
+    self.justZoomed = false;
     self.isDragging = false;
+    self.isLinking = false;
+
+    // linking
+    self.linkingCursor = null;
+    self.linkingSource = null;
+
+    // data
+    self.nodes = [];
+    self.links = [];
 
     // d3 selections
     self.svg;
@@ -64,9 +75,42 @@ function ForceGraph(containerEl, scope) {
         // keep track of key presses
         .on('keydown', function () {
             self.keysPressed[d3.event.keyCode] = true;
+            // end linking state? (esc)
+            if (self.keysPressed[27] && self.isLinking) {
+                self.stopLinkingState();
+            }
         })
         .on('keyup', function () {
             self.keysPressed[d3.event.keyCode] = false;
+        })
+        // track cursor
+        .on('mousemove', function () {
+            // update mouse position
+            var scale = self.zoom.scale();
+            var translate = self.zoom.translate();
+            var x = (d3.event.x - translate[0]) / scale;
+            var y = (d3.event.y - translate[1]) / scale;
+            self.mousePosition.x = x;
+            self.mousePosition.y = y;
+            // update linking cursor position?
+            if (!self.isLinking) return;
+            self.linkingCursor.px = x;
+            self.linkingCursor.py = y;
+            self.linkingCursor.x = x;
+            self.linkingCursor.y = y;
+            self.tick();
+            self.force.start();
+        })
+        // end linking state
+        .on('click', function () {
+            // let zoom soak a click
+            if (self.justZoomed) {
+                self.justZoomed = false;
+                return;
+            }
+            // end link state?
+            if (!self.isLinking) return;
+            self.stopLinkingState();
         });
 
 }
@@ -111,12 +155,29 @@ ForceGraph.prototype.init = function () {
 
     self.defs
         .selectAll('marker')
-            .data(['link-arrow', 'link-arrow-hover'])
+            .data([
+                'link-arrow',
+                'link-arrow-hover',
+                'link-arrow-note',
+                'link-arrow-note-hover'])
             .enter()
         .append('svg:marker')
             .attr('id', function(d) { return d; })
             .attr('viewBox', '0 -5 10 10')
             .attr('refX', 21)
+            .attr('refY', 0)
+            .attr('markerWidth', 4)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+        .append('path')
+            .attr('d', 'M0,-5 L10,0 L0,5');
+
+    self.defs
+        .selectAll('marker')
+        .append('svg:marker')
+            .attr('id', 'link-arrow-note-linking')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 7)
             .attr('refY', 0)
             .attr('markerWidth', 4)
             .attr('markerHeight', 4)
@@ -150,16 +211,40 @@ ForceGraph.prototype.updateSize = function () {
 
 ForceGraph.prototype.updateCurrentNode = function (node) {
     var self = this;
-
-    if (!(node && node.uuid)) {
-        // no current node?
-        self.node.classed('active', false);
-        return;
-    }
-
-    self.node.classed('active', function (d) {
-        return d.uuid === node.uuid;
+    self.node.each(function (d) {
+        // notes have their own active
+        if (d.type === 'note') return;
+        // decide if to set active
+        if (node && node.uuid && d.uuid === node.uuid) {
+            d3.select(this).classed('active', true);
+        } else {
+            d3.select(this).classed('active', false);
+        }
     });
+};
+
+ForceGraph.prototype.updateCurrentNoteNode = function (node) {
+    var self = this;
+    self.node.each(function (d) {
+        // notes have their own active
+        if (d.type !== 'note') return;
+        // decide if to set active
+        if (node && node.uuid && d.uuid === node.uuid) {
+            d3.select(this).classed('active', true);
+        } else {
+            d3.select(this).classed('active', false);
+        }
+    });
+};
+
+ForceGraph.prototype.updateNoteNodeContent = function (data) {
+    var self = this;
+    // find node group
+    var g = self.node.filter(function (d) { return d.uuid === data.uuid });
+    // scrape out children
+    g.selectAll('*').remove();
+    // rebuild
+    self.addNoteNode(data, g);
 };
 
 ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
@@ -174,6 +259,30 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     /**
      * Prep data
      */
+
+    self.nodes = nodes.slice();
+    self.links = links.slice();
+
+    // add linking elements?
+    if (self.isLinking) {
+        var cursorNode = {
+            uuid: 'linking-cursor-node',
+            type: 'cursor',
+            x: self.mousePosition.x || undefined,
+            y: self.mousePosition.y || undefined,
+            px: self.mousePosition.x || undefined,
+            py: self.mousePosition.y || undefined,
+            fixed: true
+        }
+        var cursorLink = {
+            source: self.linkingSource,
+            target: cursorNode,
+            linking: true
+        }
+        nodes.push(cursorNode);
+        links.push(cursorLink);
+        self.linkingCursor = cursorNode;
+    }
 
     // give nodes starting positions
     var centerX = self.width / 2;
@@ -203,6 +312,8 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .append('svg:line')
             .attr('class', 'underlink')
             .classed('linkback', function (d) { return d.linkbackId; })
+            .classed('linking', function (d) { return d.linking; })
+            .classed('note', function (d) { return d.source.type === 'note'; })
             .on('mouseover', self.linkMouseover)
             .on('mouseout', self.linkMouseout);
 
@@ -227,7 +338,9 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         .enter()
             .append('svg:line')
             .attr('class', 'link')
-            .classed('linkback', function (d) { return d.linkbackId; });
+            .classed('linkback', function (d) { return d.linkbackId; })
+            .classed('linking', function (d) { return d.linking; })
+            .classed('note', function (d) { return d.source.type === 'note'; });
     // popover
     enterLink.each(function (d) {
         if (d.linkbackId) {
@@ -267,38 +380,23 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .attr('transform', function(d) {
                 return 'translate(' + d.x + ',' + d.y + ')';
             });
-    // disc
-    enterNode
-        .append('svg:circle')
-            .attr('r', 15)
-            .attr('class', 'disc')
-            .on('mouseover', self.nodeMouseover)
-            .on('mouseout', self.nodeMouseout)
-            .on('click', self.nodeClick)
-            .call(self.drag);
-    // pin
-    enterNode
-        .append('svg:circle')
-            .attr('r', 3)
-            .attr('class', 'pin');
-    // label
-    enterNode
-        .append('svg:text')
-            .attr('class', 'name')
-            .attr('dx', 6)
-            .attr('dy', -6)
-            .text(function (d) { return d.name })
-            .on('click', self.nodeClick)
-            .call(self.drag);
-    // popover
     enterNode.each(function (d) {
-        self.nodePopoversById[d.uuid] = new NodePopover(
-            self.containerEl,
-            self.scope,
-            d,
-            d3.select(this)
-        );
+        var g = d3.select(this);
+        switch (d.type) {
+            case 'article':
+            case 'category':
+            case 'search':
+                self.addNode(d, g);
+                break;
+            case 'note':
+                self.addNoteNode(d, g);
+                break;
+            case 'cursor':
+                self.addCursorNode(d, g);
+                break;
+        }
     });
+
 
     /**
      * Nudge graph
@@ -306,6 +404,131 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
 
     // keep things moving
     self.force.start();
+
+};
+
+ForceGraph.prototype.addNode = function (d, g) {
+    var self = this;
+
+    // disc
+    g.append('svg:circle')
+        .attr('r', 16)
+        .attr('class', 'disc')
+        .on('mouseover', self.nodeMouseover)
+        .on('mouseout', self.nodeMouseout)
+        .on('click', self.nodeClick)
+        .call(self.drag);
+
+    // pin
+    g.append('svg:circle')
+        .attr('r', 3)
+        .attr('class', 'pin');
+
+    // name
+    g.append('svg:text')
+        .attr('class', 'name')
+        .attr('dx', 6)
+        .attr('dy', -6)
+        .text(function (d) { return d.name })
+        .on('click', self.nodeClick)
+        .call(self.drag);
+
+    // popover
+    self.nodePopoversById[d.uuid] = new NodePopover(
+        self.containerEl,
+        self.scope,
+        d,
+        g
+    );
+
+};
+
+ForceGraph.prototype.addNoteNode = function (d, g) {
+    var self = this;
+
+    // font awesome unicodes
+    // http://fortawesome.github.io/Font-Awesome/cheatsheet/
+
+    // note background
+    g.append('svg:text')
+        .attr('class', 'note-icon note-icon-back')
+        .attr('dx', 0)
+        .attr('dy', -1)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('font-family', 'FontAwesome')
+        .text('\uf15b') // fa-file
+
+    // note foreground
+    g.append('svg:text')
+        .attr('class', 'note-icon note-icon-fore')
+        .attr('dx', 0)
+        .attr('dy', -1)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('font-family', 'FontAwesome')
+        .text('\uf016') // fa-file-o
+        .on('mouseover', self.nodeMouseover)
+        .on('mouseout', self.nodeMouseout)
+        .on('click', self.nodeClick)
+        .call(self.drag);
+
+    // pin
+    g.append('svg:circle')
+        .attr('r', 3)
+        .attr('class', 'pin');
+
+    // name
+    g.append('svg:text')
+        .attr('class', 'name note-name')
+        .attr('dx', 18)
+        .attr('dy', 4)
+        .text(function (d) { return d.name })
+        .on('click', self.nodeClick)
+        .call(self.drag);
+
+    // body
+    g.append('foreignObject')
+        .attr('width', 240)
+        .attr('height', 120)
+        .attr('x', 18)
+        .attr('y', function (d) {
+            if (d.name && d.name.length) {
+                return 8;
+            } else {
+                return -8;
+            }
+        })
+        .style('overflow', 'visible')
+        .on('click', self.nodeClick)
+        .call(self.drag)
+        .append('xhtml:body')
+            .html(function (d) {
+                return d.body ? d.body.replace(/\n/g, '<br>') : '';
+            })
+            .each(function (d) {
+                var foreignObject = this.parentNode;
+                foreignObject.setAttribute('width', this.clientWidth);
+                foreignObject.setAttribute('height', this.clientHeight);
+            });
+
+    // popover
+    self.nodePopoversById[d.uuid] = new NoteNodePopover(
+        self.containerEl,
+        self.scope,
+        d,
+        g
+    );
+
+};
+
+ForceGraph.prototype.addCursorNode = function (d, g) {
+    var self = this;
+
+    // disc
+    g.append('svg:circle')
+        .attr('r', 1)
+        .attr('class', 'cursor');
 
 };
 
@@ -416,8 +639,29 @@ ForceGraph.prototype.makeForce = function () {
     return d3.layout.force()
         .size([this.width, this.height])
         .linkDistance(100)
-        .linkStrength(0.2)
-        .charge(-400)
+        .linkStrength(function (d) {
+            switch (d.source.type) {
+                case 'article':
+                case 'category':
+                case 'search':
+                    return 0.2;
+                case 'note':
+                case 'cursor':
+                    return 0.1;
+            }
+        })
+        .charge(function (d) {
+            switch (d.type) {
+                case 'article':
+                case 'category':
+                case 'search':
+                    return -400;
+                case 'note':
+                    return -800;
+                case 'cursor':
+                    return 0;
+            }
+        })
         .gravity(0.03)
         .friction(0.8)
         .theta(0.9)
@@ -437,6 +681,8 @@ ForceGraph.prototype.makeZoom = function () {
                 'scale(' + d3.event.scale + ')'
             );
             self.updatePopovers();
+            // prevent greedy click event
+            self.justZoomed = true;
         });
 };
 
@@ -444,9 +690,11 @@ ForceGraph.prototype.makeDrag = function () {
     var self = this;
     return d3.behavior.drag()
         .on('dragstart', function (d, i) {
+            if (self.isLinking) return;
             d3.event.sourceEvent.stopPropagation();
         })
         .on('drag', function (d, i) {
+            if (self.isLinking) return;
             if (!self.isDragging) {
                 self.isDragging = true;
 
@@ -468,6 +716,7 @@ ForceGraph.prototype.makeDrag = function () {
             self.tick();
         })
         .on('dragend', function (d, i) {
+            if (self.isLinking) return;
             d3.event.sourceEvent.stopPropagation();
             if (self.isDragging) {
                 self.tick();
@@ -492,15 +741,37 @@ ForceGraph.prototype.makeNodeClick = function () {
     var self = this;
     return function (d) {
         d3.event.preventDefault();
+        d3.event.stopPropagation();
         if (d.justDragged) return;
-        if (d3.event.shiftKey) {
+        if (self.isLinking) {
+            // clicked link source?
+            if (d.uuid === self.linkingSource.uuid) {
+                // end linking state
+                self.stopLinkingState();
+            } else {
+                // add link to this node
+                self.scope.$apply(function () {
+                    self.scope.addLink(
+                        self.linkingSource.uuid,
+                        d.uuid
+                    );
+                });
+            }
+        } else if (d3.event.shiftKey) {
             // toggle this node's pin state
             self.toggleNodePin(d, d3.select(this.parentNode));
         } else {
-            // set this node as current
-            self.scope.$apply(function () {
-                self.scope.setCurrentNode(d.uuid);
-            });
+            if (d.type === 'note') {
+                // set this note node as current
+                self.scope.$apply(function () {
+                    self.scope.setCurrentNoteNode(d.uuid);
+                });
+            } else {
+                // set this node as current
+                self.scope.$apply(function () {
+                    self.scope.setCurrentNode(d.uuid);
+                });
+            }
         }
     };
 };
@@ -509,6 +780,7 @@ ForceGraph.prototype.makeNodeMouseover = function () {
     var self = this;
     return function (d) {
         if (self.isDragging) return;
+        if (self.isLinking) return;
         d.hovered = true;
         var popover = self.nodePopoversById[d.uuid];
         self.updateNodePopover(popover);
@@ -521,6 +793,7 @@ ForceGraph.prototype.makeNodeMouseout = function () {
     var self = this;
     return function (d) {
         if (self.isDragging) return;
+        if (self.isLinking) return;
         d.hovered = false;
         var popover = self.nodePopoversById[d.uuid];
         popover.hide();
@@ -531,6 +804,7 @@ ForceGraph.prototype.makeLinkMouseover = function () {
     var self = this;
     return function (d) {
         if (self.isDragging) return;
+        if (self.isLinking) return;
         d.hovered = true;
         d3.select(this).classed('hovered', true);
         var popover = self.linkPopoversById[d.uuid];
@@ -544,6 +818,7 @@ ForceGraph.prototype.makeLinkMouseout = function () {
     var self = this;
     return function (d) {
         if (self.isDragging) return;
+        if (self.isLinking) return;
         d.hovered = false;
         d3.select(this).classed('hovered', false);
         var popover = self.linkPopoversById[d.uuid];
@@ -576,4 +851,25 @@ ForceGraph.prototype.centerOnNode = function (node) {
     var translateY = (h / 2) - y;
     self.zoom.translate([translateX, translateY]);
     self.zoom.event(self.rect.transition().duration(600));
+};
+
+ForceGraph.prototype.startLinkingState = function (node) {
+    var self = this;
+    self.isLinking = true;
+    self.linkingSource = node;
+    self.updateNodesAndLinks(
+        self.nodes,
+        self.links
+    );
+};
+
+ForceGraph.prototype.stopLinkingState = function () {
+    var self = this;
+    self.isLinking = false;
+    self.linkingSource = null;
+    self.linkingCursor = null;
+    self.updateNodesAndLinks(
+        self.nodes,
+        self.links
+    );
 };
