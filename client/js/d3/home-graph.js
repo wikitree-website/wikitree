@@ -48,23 +48,6 @@ HomeGraph.prototype.init = function () {
         .append('svg:g')
         .attr('class', 'nodes')
         .selectAll('g.node');
-
-    // // link arrow markers
-    // this.svg.append('defs')
-    //     .selectAll('marker')
-    //         .data(['arrow'])
-    //         .enter()
-    //     .append('marker')
-    //         .attr('id', function(d) { return d; })
-    //         .attr('viewBox', '0 -5 10 10')
-    //         .attr('refX', 22)
-    //         .attr('refY', 0)
-    //         .attr('markerWidth', 4)
-    //         .attr('markerHeight', 4)
-    //         .attr('orient', 'auto')
-    //     .append('path')
-    //         .attr('d', 'M0,-5 L10,0 L0,5')
-    //         .style('fill', '#AAA');
 };
 
 HomeGraph.prototype.updateSize = function () {

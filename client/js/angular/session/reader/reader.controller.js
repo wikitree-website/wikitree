@@ -1,6 +1,7 @@
 (function() {
     angular.module('wikitree.session.reader').
         controller('readerController', [
+            '$rootScope',
             '$scope',
             'Resizer',
             'Loading',
@@ -8,7 +9,7 @@
             'Articles',
             'Searches',
             'Categories',
-            function($scope, Resizer, Loading, Sessions, Articles, Searches, Categories) {
+            function($rootScope, $scope, Resizer, Loading, Sessions, Articles, Searches, Categories) {
 
                 // for reader width
                 $scope.readerWidth = Resizer.size + 'px';
@@ -16,35 +17,27 @@
                 // for frame node load
                 $scope.currentNodeName = null;
                 $scope.missedFrameUpdate = false;
-                $scope.hasBeenLoading = false;
                 $scope.hasReferences = false;
 
                 // for loading indicator
                 $scope.loadingCount = Loading.count;
 
                 // for prev/next buttons
-                //$scope.hasBackward = CurrentSession.hasBackward();
-                //$scope.hasForward = CurrentSession.hasForward();
                 $scope.hasBackward = $scope.session.has_backward();
                 $scope.hasForward = $scope.session.has_forward();
 
 
                 // keep history buttons updated
                 $scope.$on('update:currentnode', function () {
-                    //$scope.hasBackward = CurrentSession.hasBackward();
-                    //$scope.hasForward = CurrentSession.hasForward();
-
                     $scope.hasBackward = $scope.session.has_backward();
                     $scope.hasForward = $scope.session.has_forward();
                 });
 
                 // keep loading indicator updated
                 $scope.$on('mediawikiapi:loadstart', function () {
-                    $scope.hasBeenLoading = true;
                     $scope.loadingCount = Loading.count;
                 });
                 $scope.$on('mediawikiapi:loadend', function () {
-                    $scope.hasBeenLoading = true;
                     $scope.loadingCount = Loading.count;
                 });
 
@@ -63,18 +56,15 @@
                  */
 
                 $scope.historyBackward = function () {
-                    //CurrentSession.goBackward();
                     $scope.session.go_backward();
                 };
 
                 $scope.historyForward = function () {
-                    //CurrentSession.goForward();
                     $scope.session.go_forward();
                 };
 
                 $scope.openSourceArticle = function () {
-                    //var node = CurrentSession.getCurrentNode();
-                    var node = $scope.session.get_current_node_id();
+                    var node = $scope.session.get_current_node();
                     if (!(node && node.name)) return;
                     var url = '';
                     switch (node.type) {
@@ -91,6 +81,10 @@
                     link.target = '_blank';
                     link.href = url;
                     link.click();
+                };
+
+                $scope.locateCurrentNode = function () {
+                    $rootScope.$broadcast('request:graph:locate_current_node');
                 };
 
                 $scope.scrollToReferences = function () {
@@ -112,17 +106,10 @@
 
                     // grab current node
                     //var node = CurrentSession.getCurrentNode();
-                    var node = $scope.session.get_current_node_id();
+                    var node = $scope.session.get_current_node();
 
                     // make sure we got node
                     if (!node) {
-
-                        // TODO FIXME
-                        // patch for early error
-                        if (!$scope.hasBeenLoading) {
-                            return;
-                        }
-
                         // TEMP TODO FIXME NOTE WARN DANGER
                         // taking this out for capstone presentation
                         // $scope.currentNodeName = null;
@@ -229,7 +216,7 @@
                  * Load article if there is one
                  */
 
-                 if ($scope.session.get_current_node_id()) {
+                 if ($scope.session.get_current_node()) {
                     $scope.updateFrameNode();
                  }
 

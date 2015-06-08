@@ -1,0 +1,77 @@
+.note-editor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    /* revealed via directive */
+    display: none;
+    height: 0px;
+}
+.note-editor .border-top {
+    height: 1px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #CCC;
+}
+.note-editor .border-bottom {
+    height: 1px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #CCC;
+}
+.note-editor > .inner {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    right: 0;
+    bottom: 1px;
+    overflow: hidden;
+    /*background: #EAF4FF;*/
+    background: white;
+}
+
+.note-editor .upper {
+    height: 30px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+}
+
+.note-editor .upper .name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 111px;
+    bottom: 0;
+}
+
+.note-editor .upper .controls {
+    width: 111px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: right;
+}
+
+.note-editor .upper .close {
+    line-height: 1em;
+}
+
+.note-editor .lower {
+    position: absolute;
+    top: 48px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+}
+
+.note-editor .lower textarea {
+    height: 100%;
+}

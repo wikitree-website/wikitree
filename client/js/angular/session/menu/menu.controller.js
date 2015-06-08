@@ -47,8 +47,8 @@
                     }
                 };
 
-                $scope.locateCurrentNode = function () {
-                    $rootScope.$broadcast('request:graph:locate_current_node');
+                $scope.addNoteNode = function () {
+                    $rootScope.$broadcast('request:graph:add_note_node');
                 };
 
         }]);

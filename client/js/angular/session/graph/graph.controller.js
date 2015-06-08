@@ -13,16 +13,20 @@
                  * Global events
                  */
 
-                // handle "toggle node pin" button
-                $scope.$on('request:graph:toggle_node_pin', function () {
-                    var node = $scope.session.get_current_node_id();
-                    $scope.graph.toggleNodePin(node);
-                });
-
                 // handle "locate current node" button
                 $scope.$on('request:graph:locate_current_node', function () {
-                    var node = $scope.session.get_current_node_id();
+                    var node = $scope.session.get_current_node();
                     $scope.graph.centerOnNode(node);
+                });
+
+                // handle "locate node" button
+                $scope.$on('request:graph:locate_node', function (e, node) {
+                    $scope.graph.centerOnNode(node);
+                });
+
+                // handle "add note node" button
+                $scope.$on('request:graph:add_note_node', function () {
+                    $scope.session.addNewNoteNode();
                 });
 
                 // handle map/reader split resize
@@ -42,8 +46,19 @@
 
                 // handle model update (current node)
                 $scope.$on('update:currentnode', function () {
-                    var node = $scope.session.get_current_node_id();
+                    var node = $scope.session.get_current_node();
                     $scope.graph.updateCurrentNode(node);
+                });
+
+                // handle model update (current note node)
+                $scope.$on('update:current-note-node', function () {
+                    var node = $scope.session.getCurrentNoteNode();
+                    $scope.graph.updateCurrentNoteNode(node);
+                });
+
+                // handle model update (note node content)
+                $scope.$on('update:note-node-content', function (e, node) {
+                    $scope.graph.updateNoteNodeContent(node);
                 });
 
 
@@ -53,6 +68,10 @@
 
                 $scope.setCurrentNode = function (nodeId) {
                     $scope.session.set_current_node_id(nodeId);
+                };
+
+                $scope.setCurrentNoteNode = function (nodeId) {
+                    $scope.session.setCurrentNoteNodeId(nodeId);
                 };
 
                 $scope.removeNode = function (nodeId) {
@@ -71,6 +90,10 @@
                     if (window.confirm('Remove the link between "' + nodeA.name + '" and "' + nodeB.name + '" from your session?')) {
                         $scope.session.removeLinkPair(link.uuid);
                     }
+                };
+
+                $scope.addLink = function (sourceId, targetId) {
+                    $scope.session.addLink(sourceId, targetId);
                 };
 
 

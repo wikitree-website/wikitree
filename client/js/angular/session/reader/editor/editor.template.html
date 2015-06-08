@@ -1,0 +1,25 @@
+<div class="note-editor">
+    <div class="border-top"></div>
+    <div class="border-bottom"></div>
+    <div class="inner">
+        <div class="upper">
+            <div class="name">
+                <input type="text" ng-model="editorName" ng-keypress="tryEnter($event)" class="form-control input-sm" placeholder="Add note title...">
+            </div>
+            <div class="controls">
+                <button ng-click="centerNode()" type="button" class="btn btn-default btn-sm">
+                    <i class="fa fa-location-arrow"></i>
+                </button>
+                <button ng-click="saveNote()" type="button" class="btn btn-default btn-sm">
+                    <i class="fa fa-floppy-o"></i>
+                </button>
+                <button ng-click="closeEditor()" type="button" class="btn btn-default btn-sm">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+        <div class="lower">
+            <textarea ng-model="editorBody" class="form-control input-sm" placeholder="Add note body..."></textarea>
+        </div>
+    </div>
+</div>

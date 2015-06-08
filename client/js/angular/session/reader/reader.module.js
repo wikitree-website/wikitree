@@ -1,3 +1,5 @@
 (function() {
-    angular.module('wikitree.session.reader', []);
+    angular.module('wikitree.session.reader', [
+    	'wikitree.session.reader.editor'
+    ]);
 })();
