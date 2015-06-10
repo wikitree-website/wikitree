@@ -1,8 +1,8 @@
 'use strict';
 
 var chalk =  require('chalk');
-var config = require('../config/env');
-var logger = require('./log.js')
+
+var logger = require('./log')
 
 /**
  * Middleware - http error handler
@@ -16,11 +16,11 @@ module.exports = function() {
 
 		if (status === 500 && stack) {
 			// server error, print it
-			console.error(chalk.bold.red('Error 500'));
-			console.error(stack);
+			logger.error(chalk.bold.red('Error 500'));
+			logger.error(stack);
 		} else {
 			// handled error, print it
-			console.error(chalk.bold.red('Error ' + status), message);
+			logger.error(chalk.bold.red('Error ' + status), message);
 		}
 
 		// send error status & json

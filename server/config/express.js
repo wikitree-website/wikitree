@@ -17,7 +17,7 @@ var session = require('express-session');
 var favicon = require('serve-favicon');
 var compress = require('compression');
 
-var config = require('./env');
+var env = require('./env');
 var errors = require('../lib/errors');
 var router = require('../router');
 
@@ -51,7 +51,7 @@ module.exports = function () {
 
 	// express session
 	app.use(session({
-		secret: config.session_secret,
+		secret: env.session_secret,
 		saveUninitialized: true,
 		resave: true
 	}));

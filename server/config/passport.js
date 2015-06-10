@@ -7,7 +7,6 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-var config = require('../config/env');
 var errors = require('../lib/errors');
 
 var userModel = require('../models/user');

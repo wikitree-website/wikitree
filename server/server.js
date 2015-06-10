@@ -1,15 +1,12 @@
 'use strict';
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'local';
-// http://www.hacksparrow.com/running-express-js-in-production-mode.html
-// http://en.wikipedia.org/wiki/Development_environment_(software_development_process)
+var logger = require('./lib/log');
 
-var logger = require('./lib/log.js');
+logger.info('-------------------------------------');
+logger.info(' Starting up servers...');
+logger.info('-------------------------------------');
 
-console.log('-------------------------------------');
-console.log(' Starting up servers...');
-console.log('-------------------------------------');
-logger.info('Environment = "' + process.env.NODE_ENV + '"');
+var env = require('./config/env');
 
 var http = require('http');
 var https = require('https');
@@ -17,13 +14,10 @@ var https = require('https');
 var chalk = require('chalk');
 var Promise = require('bluebird');
 
-var config = require('./config/env');
-var configPassport = require('./config/passport');
-var configExpress = require('./config/express');
+var passport = require('./config/passport');
+var express = require('./config/express');
 
-if (process.env.NO_AUTH) {
-	logger.log(chalk.bold.red("!!!!!!!!!! NOT USING AUTH! !!!!!!!!!!"));
-}
+
 // expose promise for testing
 module.exports = new Promise(function (resolve, reject) {
 	//db.testConnection()
@@ -36,21 +30,21 @@ module.exports = new Promise(function (resolve, reject) {
 			//console.log(chalk.bold.green('Database connection successful'));
 
 			// configure passport & express
-			configPassport();
-			var app = configExpress();
+			passport();
+			var app = express();
 
 			// create HTTPS server and pass express app as handler
 			var httpsServer = https.createServer({
-				key: config.https.private_key,
-				cert: config.https.public_cert
+				key: env.https.private_key,
+				cert: env.https.public_cert
 			}, app);
 
 			// create HTTP server for forwarding to HTTPS
 			var httpServer = http.createServer(function (req, res) {
 				logger.info(chalk.bold.yellow('Redirecting HTTP request: ' + req.url));
-				var redirectUrl = 'https://' + config.domain;
-				if (config.ports.https !== 443) {
-					redirectUrl += ':' + config.ports.https;
+				var redirectUrl = 'https://' + env.domain;
+				if (env.https.port !== 443) {
+					redirectUrl += ':' + env.https.port;
 				}
 				redirectUrl += req.url;
 				res.writeHead(301, {
@@ -60,7 +54,7 @@ module.exports = new Promise(function (resolve, reject) {
 			});
 
 			// start listening for HTTPS
-			httpsServer.listen(config.ports.https, function () {
+			httpsServer.listen(env.https.port, function () {
 				logger.info(
 					chalk.bold.blue(
 						'HTTPS app server listening on port ' +
@@ -70,7 +64,7 @@ module.exports = new Promise(function (resolve, reject) {
 			});
 
 			// start listening for HTTP
-			httpServer.listen(config.ports.http, function () {
+			httpServer.listen(env.http.port, function () {
 				logger.info(
 					chalk.bold.blue(
 						'HTTP redirect server listening on port ' +

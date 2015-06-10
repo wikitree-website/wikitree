@@ -12,7 +12,6 @@ var path = require('path');
 
 var express = require('express');
 
-var config = require('../../config/env');
 var auth = require('../../lib/auth');
 var apiRouter = require('./api');
 var authRouter = require('./auth');
