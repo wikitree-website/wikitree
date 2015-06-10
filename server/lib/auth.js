@@ -2,8 +2,6 @@
 
 var errors = require('./errors');
 
-var noAuth = process.env.NO_AUTH || false;
-
 
 /**
  * Middleware for authentication & authorization
@@ -13,10 +11,6 @@ var noAuth = process.env.NO_AUTH || false;
 // -> api request route
 // require user login
 module.exports.apiRequiresLogin = function(req, res, next) {
-
-	if (noAuth) {
-		return next();
-	}
 
 	// if request isn't authenticated
 	if (!req.isAuthenticated()) {
@@ -30,10 +24,6 @@ module.exports.apiRequiresLogin = function(req, res, next) {
 // -> web request route
 // require user login
 module.exports.webRequiresLogin = function(req, res, next) {
-
-	if (noAuth) {
-		return next();
-	}
 
 	// if request isn't authenticated
 	if (!req.isAuthenticated()) {
@@ -49,10 +39,6 @@ module.exports.webRequiresLogin = function(req, res, next) {
 // require user admin status
 module.exports.apiRequiresAdmin = function(req, res, next) {
 
-	if (noAuth) {
-		return next();
-	}
-
 	// if request user isn't admin
 	if (!req.user.isAdmin) {
 		// send error 403
@@ -65,10 +51,6 @@ module.exports.apiRequiresAdmin = function(req, res, next) {
 // -> web request route
 // require user admin status
 module.exports.webRequiresAdmin = function(req, res, next) {
-
-	if (noAuth) {
-		return next();
-	}
 
 	// if request user isn't admin
 	if (!req.user.isAdmin) {
