@@ -23,13 +23,6 @@ gulp.task('build-client-css', function() {
             'css',
             '**',
             '*.css'
-        ),
-        // except legacy.css
-        '!' + path.join(
-            __dirname,
-            'client',
-            'css',
-            'legacy.css'
         )
     ])
         .pipe(concat('app.css'));
