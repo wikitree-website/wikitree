@@ -29,6 +29,9 @@ Or, for development, just run:
 $ gulp dev
 ```
 
+Congrats! In development, the app should be available on:
+- [http://localhost:1111](http://localhost:1111)
+- [https://localhost:2222](https://localhost:2222)
 
 
 
