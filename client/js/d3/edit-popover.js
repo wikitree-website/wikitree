@@ -34,10 +34,10 @@ EditPopover.prototype.makeElement = function () {
                     '<div class="controls">' +
                         '<div class="btn-group" role="group" aria-label="Editor controls">' +
                             '<button type="button" class="cancel-button btn btn-danger btn-sm">' +
-                                '<i class="fa fa-close"></i>' +
+                                '<i class="fa fa-fw fa-close"></i>' +
                             '</button>' +
                             '<button type="button" class="confirm-button btn btn-success btn-sm">' +
-                                '<i class="fa fa-check"></i>' +
+                                '<i class="fa fa-fw fa-check"></i>' +
                             '</button>' +
                         '</div>' +
                     '</div>' +

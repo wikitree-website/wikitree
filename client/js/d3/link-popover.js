@@ -29,7 +29,7 @@ LinkPopover.prototype.makeElement = function () {
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Link controls">' +
                     '<button type="button" class="del-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-unlink"></i>' +
+                        '<i class="fa fa-fw fa-unlink"></i>' +
                     '</button>' +
                 '</div>' +
             '</div>' +
