@@ -789,10 +789,10 @@ ForceGraph.prototype.makeNodeClick = function () {
             self.toggleNodePin(d, d3.select(this.parentNode));
         } else {
             if (d.type === 'note') {
-                // open note edit popover
+                // toggle note edit popover
                 var popover = self.editPopoversById[d.uuid];
                 self.updateEditPopover(popover);
-                popover.show();
+                popover.toggle();
             } else {
                 // set this node as current
                 self.scope.$apply(function () {
