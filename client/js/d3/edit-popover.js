@@ -113,6 +113,15 @@ EditPopover.prototype.hide = function () {
     }, 1);
 };
 
+EditPopover.prototype.toggle = function () {
+    var self = this;
+    if (self.hidden) {
+        self.show();
+    } else {
+        self.hide();
+    }
+};
+
 EditPopover.prototype.position = function (x, y) {
     var self = this;
     self.$el.css({
