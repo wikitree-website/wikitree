@@ -24,7 +24,7 @@ NodePopover.prototype.makeElement = function () {
     var self = this;
     // create popover
     self.$el = $(
-        '<div class="node-popover popover bottom">' +
+        '<div class="graph-popover node popover bottom">' +
             '<div class="arrow"></div>' +
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Node controls">' +
@@ -52,17 +52,15 @@ NodePopover.prototype.makeElement = function () {
 NodePopover.prototype.addEventListeners = function () {
     var self = this;
     // hover on
-    self.$el.on('mouseover', function () {
+    self.$el.on('mouseenter', function () {
         self.hovered = true;
     });
     // hover off
-    self.$el.on('mouseout', function () {
+    self.$el.on('mouseleave', function () {
         self.hovered = false;
         setTimeout(function () {
-            if (!self.node.hovered) {
-                self.hide();
-            }
-        }, 1);
+            self.hide();
+        }, 50);
     });
     // pin button
     self.$el.find('.pin-button').on('click', function () {
@@ -86,21 +84,33 @@ NodePopover.prototype.show = function () {
     }, 1);
 };
 
-NodePopover.prototype.hide = function () {
+NodePopover.prototype.hide = function (forceful) {
     var self = this;
+
+    if (forceful) {
+        self._hide();
+        return;
+    }
+
     setTimeout(function () {
+        if (self.node.hovered) return;
         if (self.hovered) return;
         if (self.hidden) return;
-        self.hidden = true;
-        self.$el.hide();
-        self.nodeSelect.classed('hovered', false);
-    }, 1);
+        self._hide();
+    }, 100);
+};
+
+NodePopover.prototype._hide = function () {
+    var self = this;
+    self.hidden = true;
+    self.$el.hide();
+    self.nodeSelect.classed('hovered', false);
 };
 
 NodePopover.prototype.position = function (x, y) {
     var self = this;
     self.$el.css({
-        top: y - self.halfheight + 16,
+        top: y - self.halfheight + 18,
         left: x - self.halfwidth
     });
 };

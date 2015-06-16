@@ -50,12 +50,6 @@
                     $scope.graph.updateCurrentNode(node);
                 });
 
-                // handle model update (current note node)
-                $scope.$on('update:current-note-node', function () {
-                    var node = $scope.session.getCurrentNoteNode();
-                    $scope.graph.updateCurrentNoteNode(node);
-                });
-
                 // handle model update (note node content)
                 $scope.$on('update:note-node-content', function (e, node) {
                     $scope.graph.updateNoteNodeContent(node);
@@ -95,7 +89,6 @@
                 $scope.addLink = function (sourceId, targetId) {
                     $scope.session.addLink(sourceId, targetId);
                 };
-
 
             }
         ]);

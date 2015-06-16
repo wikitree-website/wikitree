@@ -9,10 +9,6 @@
             'Sessions',
             function($rootScope, $scope, $location, Search, Sessions) {
 
-                //if (Search.term === '') {
-                //    Sessions.restore(Sessions.active);
-                //}
-
                 $scope.sessions = Sessions.index;
                 $scope.active = Sessions.active;
                 $scope.$watch(function () {
@@ -49,6 +45,10 @@
 
                 $scope.addNoteNode = function () {
                     $rootScope.$broadcast('request:graph:add_note_node');
+                };
+
+                $scope.locateCurrentNode = function () {
+                    $rootScope.$broadcast('request:graph:locate_current_node');
                 };
 
         }]);

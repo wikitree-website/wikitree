@@ -54,8 +54,9 @@ function ForceGraph(containerEl, scope) {
     self.linkMouseout = self.makeLinkMouseout();
 
     // popovers
-    self.nodePopoversById = {};
-    self.linkPopoversById = {};
+    self.nodePopoversById = {}; // nodePopover & noteNodePopover
+    self.linkPopoversById = {}; // linkPopover
+    self.editPopoversById = {}; // editPopover
 
     /**
      * Initialization
@@ -212,23 +213,6 @@ ForceGraph.prototype.updateSize = function () {
 ForceGraph.prototype.updateCurrentNode = function (node) {
     var self = this;
     self.node.each(function (d) {
-        // notes have their own active
-        if (d.type === 'note') return;
-        // decide if to set active
-        if (node && node.uuid && d.uuid === node.uuid) {
-            d3.select(this).classed('active', true);
-        } else {
-            d3.select(this).classed('active', false);
-        }
-    });
-};
-
-ForceGraph.prototype.updateCurrentNoteNode = function (node) {
-    var self = this;
-    self.node.each(function (d) {
-        // notes have their own active
-        if (d.type !== 'note') return;
-        // decide if to set active
         if (node && node.uuid && d.uuid === node.uuid) {
             d3.select(this).classed('active', true);
         } else {
@@ -255,6 +239,7 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         console.error('graph size updating with no container size');
         return;
     }
+
 
     /**
      * Prep data
@@ -298,6 +283,7 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     self.force.nodes(nodes);
     self.force.links(links);
 
+
     /**
      * Update underlinks (needed for hearing mouse hovers)
      */
@@ -317,12 +303,14 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .on('mouseover', self.linkMouseover)
             .on('mouseout', self.linkMouseout);
 
+
     /**
      * Update links
      */
 
     // update link elements
     self.link = self.link.data(links, function (d) { return d.uuid; });
+
     // remove the old
     var exitLink = self.link.exit();
     exitLink.each(function (d) {
@@ -333,6 +321,7 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         }
     });
     exitLink.remove();
+
     // add the new
     var enterLink = self.link
         .enter()
@@ -341,8 +330,8 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
             .classed('linkback', function (d) { return d.linkbackId; })
             .classed('linking', function (d) { return d.linking; })
             .classed('note', function (d) { return d.source.type === 'note'; });
-    // popover
     enterLink.each(function (d) {
+        // add new popover
         if (d.linkbackId) {
             var popover = self.linkPopoversById[d.linkbackId];
             if (!popover) return;
@@ -357,21 +346,29 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
         }
     });
 
+
     /**
      * Update nodes
      */
 
     self.node = self.node.data(nodes, function (d) { return d.uuid; });
+
     // remove the old
     var exitNode = self.node.exit();
     exitNode.each(function (d) {
-        // clean out popovers
+        // clean out any node or note node popovers
         if (self.nodePopoversById[d.uuid]) {
             self.nodePopoversById[d.uuid].$el.remove();
             delete self.nodePopoversById[d.uuid];
         }
+        // clean out any edit popovers
+        if (self.editPopoversById[d.uuid]) {
+            self.editPopoversById[d.uuid].$el.remove();
+            delete self.editPopoversById[d.uuid];
+        }
     });
     exitNode.remove();
+
     // add the new
     var enterNode = self.node.enter()
         .append('svg:g')
@@ -512,12 +509,19 @@ ForceGraph.prototype.addNoteNode = function (d, g) {
                 foreignObject.setAttribute('height', this.clientHeight);
             });
 
-    // popover
+    // note node popover
     self.nodePopoversById[d.uuid] = new NoteNodePopover(
         self.containerEl,
         self.scope,
         d,
         g
+    );
+
+    // edit popover
+    self.editPopoversById[d.uuid] = new EditPopover(
+        self.containerEl,
+        self.scope,
+        d
     );
 
 };
@@ -545,6 +549,15 @@ ForceGraph.prototype.updatePopovers = function () {
         var x = popover.node.x * scale + translateX;
         var y = popover.node.y * scale + translateY;
         y += 10 * scale; // shift below center
+        popover.position(x, y);
+    });
+    // edit popovers
+    Object.keys(self.editPopoversById).forEach(function (id) {
+        var popover = self.editPopoversById[id];
+        if (popover.hidden) return;
+        var x = popover.node.x * scale + translateX;
+        var y = popover.node.y * scale + translateY;
+        x += 10 * scale; // shift to the right
         popover.position(x, y);
     });
     // link popovers
@@ -575,6 +588,18 @@ ForceGraph.prototype.updateNodePopover = function (popover) {
     popover.position(x, y);
 };
 
+ForceGraph.prototype.updateEditPopover = function (popover) {
+    var self = this;
+    var scale = self.zoom.scale();
+    var translate = self.zoom.translate();
+    var translateX = translate[0];
+    var translateY = translate[1];
+    var x = popover.node.x * scale + translateX;
+    var y = popover.node.y * scale + translateY;
+    x += 10 * scale; // shift to the right
+    popover.position(x, y);
+};
+
 ForceGraph.prototype.updateLinkPopover = function (popover) {
     var self = this;
     var scale = self.zoom.scale();
@@ -598,13 +623,13 @@ ForceGraph.prototype.hideAllPopovers = function (exceptId) {
         if (id == exceptId) return;
         var popover = self.nodePopoversById[id];
         if (popover.hidden) return;
-        popover.hide();
+        popover.hide(true);
     });
     Object.keys(self.linkPopoversById).forEach(function (id) {
         if (id == exceptId) return;
         var popover = self.linkPopoversById[id];
         if (popover.hidden) return;
-        popover.hide();
+        popover.hide(true);
     });
 };
 
@@ -680,9 +705,12 @@ ForceGraph.prototype.makeZoom = function () {
                 'translate(' + d3.event.translate + ')' +
                 'scale(' + d3.event.scale + ')'
             );
+
             self.updatePopovers();
+
             // prevent greedy click event
             self.justZoomed = true;
+
         });
 };
 
@@ -720,19 +748,18 @@ ForceGraph.prototype.makeDrag = function () {
             d3.event.sourceEvent.stopPropagation();
             if (self.isDragging) {
                 self.tick();
-                self.isDragging = false;
 
                 // show popover when done drag
                 var popover = self.nodePopoversById[d.uuid];
                 self.updateNodePopover(popover);
                 popover.$el.show();
 
-                // prevent selecting on drag
-                d.justDragged = true;
+                // also prevents selecting on drag
                 setTimeout(function () {
-                    delete d.justDragged;
+                    self.isDragging = false;
                     popover.show();
                 }, 50);
+
             }
         });
 };
@@ -742,7 +769,7 @@ ForceGraph.prototype.makeNodeClick = function () {
     return function (d) {
         d3.event.preventDefault();
         d3.event.stopPropagation();
-        if (d.justDragged) return;
+        if (self.isDragging) return;
         if (self.isLinking) {
             // clicked link source?
             if (d.uuid === self.linkingSource.uuid) {
@@ -762,10 +789,10 @@ ForceGraph.prototype.makeNodeClick = function () {
             self.toggleNodePin(d, d3.select(this.parentNode));
         } else {
             if (d.type === 'note') {
-                // set this note node as current
-                self.scope.$apply(function () {
-                    self.scope.setCurrentNoteNode(d.uuid);
-                });
+                // open note edit popover
+                var popover = self.editPopoversById[d.uuid];
+                self.updateEditPopover(popover);
+                popover.show();
             } else {
                 // set this node as current
                 self.scope.$apply(function () {

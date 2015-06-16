@@ -16,8 +16,6 @@
              */
             var id = init_session.uuid;
 
-            var currentNoteNodeId = null;
-
             // history
             var current_node_id = init_session.data.current_node_id;
             var prev_stack = init_session.data.prev_stack;
@@ -231,22 +229,6 @@
             };
 
             /**
-             * Get the current note node
-             * @returns {Node}
-             */
-            session.getCurrentNoteNode = function () {
-                return nodes_by_id[currentNoteNodeId];
-            };
-
-            /**
-             * Set the current note node id
-             */
-            session.setCurrentNoteNodeId = function (nodeId) {
-                currentNoteNodeId = nodeId;
-                $scope.$broadcast('update:current-note-node');
-            };
-
-            /**
              * Update a note node
              */
             session.updateNoteNodeContent = function (nodeId, name, body) {
@@ -355,10 +337,6 @@
                         current_node_id = null;
                     }
                 }
-                // or wipe out current note node?
-                if (currentNoteNodeId === nodeId) {
-                    currentNoteNodeId = null;
-                }
 
                 // remove from nodes //////////////////////////////////////////
 
@@ -386,7 +364,6 @@
                 // alert the media
                 $scope.$broadcast('update:nodes+links');
                 $scope.$broadcast('update:currentnode');
-                $scope.$broadcast('update:current-note-node');
             };
 
             /**
@@ -470,7 +447,6 @@
             session.addNewNoteNode = function () {
                 var node = add_node({ type: 'note' });
                 $scope.$broadcast('update:nodes+links');
-                session.setCurrentNoteNodeId(node.uuid);
                 return node;
             };
 

@@ -1,37 +1,87 @@
 /**
- * Map markup elements
+ * Popovers
  */
 
-.node-popover {
-    min-width: 54px;
+.graph-popover {
+    max-width: none;
     position: absolute;
     text-align: center;
     background-color: #EEE;
 }
 
-.note-node-popover {
+.graph-popover.node {
+    min-width: 54px;
+}
+
+.graph-popover.note {
     min-width: 76px;
 }
 
-.node-popover.bottom > .arrow:after {
+.graph-popover.edit {
+    min-width: 240px;
+}
+
+.graph-popover.link {
+    min-width: 34px;
+}
+
+.graph-popover .popover-content {
+    position: relative;
+    padding: 4px;
+}
+
+.graph-popover.bottom > .arrow:after {
     border-bottom-color: #EEE;
 }
 
-.node-popover .popover-content {
-    padding: 4px;
+.graph-popover.right > .arrow:after {
+    border-right-color: #EEE;
 }
 
-.link-popover {
-    min-width: 34px;
+
+
+
+/**
+ * Edit popover specifics
+ */
+
+.graph-popover.edit .arrow {
+    margin-top: 0px;
+    top: 10px;
+}
+
+.graph-popover.edit .upper {
+    height: 30px;
     position: absolute;
-    text-align: center;
-    background-color: #EEE;
+    top: 4px;
+    left: 4px;
+    right: 4px;
 }
 
-.link-popover .popover-content {
-    padding: 4px;
+.graph-popover.edit .upper .name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 69px;
+    bottom: 0;
 }
 
+.graph-popover.edit .upper .controls {
+    width: 68px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: right;
+}
+
+.graph-popover.edit .upper .close {
+    line-height: 1em;
+}
+
+.graph-popover.edit .lower {
+    margin-top: 34px;
+}
 
 
 /**
