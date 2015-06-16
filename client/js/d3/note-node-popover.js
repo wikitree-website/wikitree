@@ -24,7 +24,7 @@ NoteNodePopover.prototype.makeElement = function () {
     var self = this;
     // create popover
     self.$el = $(
-        '<div class="node-popover note-node-popover popover bottom">' +
+        '<div class="graph-popover note popover bottom">' +
             '<div class="arrow"></div>' +
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Node controls">' +
@@ -55,17 +55,15 @@ NoteNodePopover.prototype.makeElement = function () {
 NoteNodePopover.prototype.addEventListeners = function () {
     var self = this;
     // hover on
-    self.$el.on('mouseover', function () {
+    self.$el.on('mouseenter', function () {
         self.hovered = true;
     });
     // hover off
-    self.$el.on('mouseout', function () {
+    self.$el.on('mouseleave', function () {
         self.hovered = false;
         setTimeout(function () {
-            if (!self.node.hovered) {
-                self.hide();
-            }
-        }, 1);
+            self.hide();
+        }, 50);
     });
     // pin button
     self.$el.find('.pin-button').on('click', function (e) {
@@ -75,12 +73,6 @@ NoteNodePopover.prototype.addEventListeners = function () {
         self.hovered = false;
         self.hide();
     });
-    // delete button
-    self.$el.find('.del-button').on('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        self.scope.removeNode(self.node.uuid);
-    });
     // link button
     self.$el.find('.link-button').on('click', function (e) {
         e.preventDefault();
@@ -88,6 +80,12 @@ NoteNodePopover.prototype.addEventListeners = function () {
         self.scope.graph.startLinkingState(self.node, self.nodeSelect);
         self.hovered = false;
         self.hide();
+    });
+    // delete button
+    self.$el.find('.del-button').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.scope.removeNode(self.node.uuid);
     });
 };
 
@@ -101,21 +99,33 @@ NoteNodePopover.prototype.show = function () {
     }, 1);
 };
 
-NoteNodePopover.prototype.hide = function () {
+NoteNodePopover.prototype.hide = function (forceful) {
     var self = this;
+
+    if (forceful) {
+        self._hide();
+        return;
+    }
+
     setTimeout(function () {
+        if (self.node.hovered) return;
         if (self.hovered) return;
         if (self.hidden) return;
-        self.hidden = true;
-        self.$el.hide();
-        self.nodeSelect.classed('hovered', false);
-    }, 1);
+        self._hide();
+    }, 100);
+};
+
+NoteNodePopover.prototype._hide = function () {
+    var self = this;
+    self.hidden = true;
+    self.$el.hide();
+    self.nodeSelect.classed('hovered', false);
 };
 
 NoteNodePopover.prototype.position = function (x, y) {
     var self = this;
     self.$el.css({
-        top: y - self.halfheight + 14,
+        top: y - self.halfheight + 16,
         left: x - self.halfwidth
     });
 };

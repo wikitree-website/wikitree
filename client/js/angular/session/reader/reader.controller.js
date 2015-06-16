@@ -83,10 +83,6 @@
                     link.click();
                 };
 
-                $scope.locateCurrentNode = function () {
-                    $rootScope.$broadcast('request:graph:locate_current_node');
-                };
-
                 $scope.scrollToReferences = function () {
                     if (!$scope.frameWindow) return;
                     $scope.frameWindow.scrollToReferences();

@@ -25,7 +25,7 @@ LinkPopover.prototype.makeElement = function () {
     var self = this;
     // create popover
     self.$el = $(
-        '<div class="link-popover popover">' +
+        '<div class="graph-popover link popover">' +
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Link controls">' +
                     '<button type="button" class="del-button btn btn-default btn-xs">' +
@@ -85,18 +85,29 @@ LinkPopover.prototype.show = function () {
     }, 1);
 };
 
-LinkPopover.prototype.hide = function () {
+LinkPopover.prototype.hide = function (forceful) {
     var self = this;
+
+    if (forceful) {
+        self._hide();
+        return;
+    }
+
     setTimeout(function () {
         if (self.hovered) return;
         if (self.hidden) return;
-        self.hidden = true;
-        self.$el.hide();
-        self.linkSelect.classed('hovered', false);
-        if (self.linkbackSelect) {
-            self.linkbackSelect.classed('hovered', false);
-        }
+        self._hide();
     }, 1);
+};
+
+LinkPopover.prototype._hide = function () {
+    var self = this;
+    self.hidden = true;
+    self.$el.hide();
+    self.linkSelect.classed('hovered', false);
+    if (self.linkbackSelect) {
+        self.linkbackSelect.classed('hovered', false);
+    }
 };
 
 LinkPopover.prototype.position = function (x, y) {
