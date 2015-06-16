@@ -29,10 +29,10 @@ NodePopover.prototype.makeElement = function () {
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Node controls">' +
                     '<button type="button" class="pin-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-thumb-tack"></i>' +
+                        '<i class="fa fa-fw fa-thumb-tack"></i>' +
                     '</button>' +
                     '<button type="button" class="del-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-trash-o"></i>' +
+                        '<i class="fa fa-fw fa-trash-o"></i>' +
                     '</button>' +
                 '</div>' +
             '</div>' +

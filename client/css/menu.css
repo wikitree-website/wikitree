@@ -2,7 +2,7 @@
     width: auto;
     height: 30px;
     position: absolute;
-    right: -88px;
+    right: -98px;
     bottom: 10px;
 }
 
@@ -61,7 +61,7 @@
 .menu-item.header .open-button {
     position: absolute;
     top: -1px;
-    right: -52px;
+    right: -56px;
 }
 
 .menu-item.account .icon {

@@ -62,12 +62,12 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 69px;
+    right: 77px;
     bottom: 0;
 }
 
 .graph-popover.edit .upper .controls {
-    width: 68px;
+    width: 76px;
     position: absolute;
     top: 0;
     right: 0;
@@ -81,6 +81,19 @@
 
 .graph-popover.edit .lower {
     margin-top: 34px;
+}
+
+.graph-popover.edit input.input-sm {
+    padding: 5px;
+    padding-right: 0;
+    font-size: 14px;
+}
+
+.graph-popover.edit textarea.input-sm {
+    padding: 5px;
+    padding-right: 0;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 
