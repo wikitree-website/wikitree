@@ -1,8 +1,19 @@
-#menu .map-controls {
-    width: auto;
-    height: 30px;
+
+#menu .btn-sm {
+    /* warning todo, kinda risky override */
+    padding: 8px 10px;
+}
+
+
+#menu .menu-controls {
     position: absolute;
-    right: -98px;
+    top: 10px;
+    right: -48px;
+}
+
+#menu .map-controls {
+    position: absolute;
+    right: -88px;
     bottom: 10px;
 }
 
@@ -50,18 +61,6 @@
     font-weight: bold;
     font-size: 26px;
     color: #333;
-}
-
-.menu-item.header .close-button {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-}
-
-.menu-item.header .open-button {
-    position: absolute;
-    top: -1px;
-    right: -56px;
 }
 
 .menu-item.account .icon {

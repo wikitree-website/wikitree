@@ -70,16 +70,14 @@ NoteNodePopover.prototype.addEventListeners = function () {
         e.preventDefault();
         e.stopPropagation();
         self.scope.graph.toggleNodePin(self.node);
-        self.hovered = false;
-        self.hide();
+        self.hide(true);
     });
     // link button
     self.$el.find('.link-button').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         self.scope.graph.startLinkingState(self.node, self.nodeSelect);
-        self.hovered = false;
-        self.hide();
+        self.hide(true);
     });
     // delete button
     self.$el.find('.del-button').on('click', function (e) {
@@ -108,9 +106,9 @@ NoteNodePopover.prototype.hide = function (forceful) {
     }
 
     setTimeout(function () {
-        if (self.node.hovered) return;
-        if (self.hovered) return;
         if (self.hidden) return;
+        if (self.hovered) return;
+        if (self.node.hovered) return;
         self._hide();
     }, 100);
 };
@@ -118,6 +116,7 @@ NoteNodePopover.prototype.hide = function (forceful) {
 NoteNodePopover.prototype._hide = function () {
     var self = this;
     self.hidden = true;
+    self.hovered = false;
     self.$el.hide();
     self.nodeSelect.classed('hovered', false);
 };

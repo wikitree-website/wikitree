@@ -29,21 +29,21 @@ EditPopover.prototype.makeElement = function () {
             '<div class="popover-content">' +
                 '<div class="upper">' +
                     '<div class="name">' +
-                        '<input type="text" class="form-control input-sm" placeholder="Add note title...">' +
+                        '<input type="text" class="form-control input-sm" placeholder="Add title...">' +
                     '</div>' +
                     '<div class="controls">' +
                         '<div class="btn-group" role="group" aria-label="Editor controls">' +
-                            '<button type="button" class="cancel-button btn btn-danger btn-sm">' +
+                            '<button type="button" class="cancel-button btn btn-danger btn-xs">' +
                                 '<i class="fa fa-fw fa-close"></i>' +
                             '</button>' +
-                            '<button type="button" class="confirm-button btn btn-success btn-sm">' +
+                            '<button type="button" class="confirm-button btn btn-success btn-xs">' +
                                 '<i class="fa fa-fw fa-check"></i>' +
                             '</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
                 '<div class="lower">' +
-                    '<textarea rows="4" class="form-control input-sm" placeholder="Add note body..."></textarea>' +
+                    '<textarea rows="5" class="form-control input-sm" placeholder="Add body..."></textarea>' +
                 '</div>' +
             '</div>' +
         '</div>'
@@ -72,6 +72,16 @@ EditPopover.prototype.addEventListeners = function () {
     self.$el.find('.confirm-button').on('click', function () {
         self.save();
         self.hide();
+    });
+    // input enter press
+    self.$name.on('keypress', function (e) {
+        switch (e.which) {
+            case 13:
+                // save on enter
+                self.save();
+                self.hide();
+                break;
+        }
     });
 };
 
