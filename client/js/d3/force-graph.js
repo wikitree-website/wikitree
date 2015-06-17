@@ -781,9 +781,6 @@ ForceGraph.prototype.makeDrag = function () {
 ForceGraph.prototype.makeNodeClick = function () {
     var self = this;
     return function (d) {
-
-        console.log('node click', d.x, d.y);
-
         d3.event.preventDefault();
         d3.event.stopPropagation();
         if (self.isDragging) return;
