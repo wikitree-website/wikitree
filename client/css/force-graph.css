@@ -10,11 +10,11 @@
 }
 
 .graph-popover.node {
-    min-width: 54px;
+    min-width: 68px;
 }
 
 .graph-popover.note {
-    min-width: 76px;
+    min-width: 94px;
 }
 
 .graph-popover.edit {
@@ -22,7 +22,7 @@
 }
 
 .graph-popover.link {
-    min-width: 34px;
+    min-width: 40px;
 }
 
 .graph-popover .popover-content {
