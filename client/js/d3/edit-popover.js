@@ -43,7 +43,7 @@ EditPopover.prototype.makeElement = function () {
                     '</div>' +
                 '</div>' +
                 '<div class="lower">' +
-                    '<textarea rows="5" class="form-control input-sm" placeholder="Add body..."></textarea>' +
+                    '<textarea rows="5" class="form-control input-sm" placeholder="Add caption..."></textarea>' +
                 '</div>' +
             '</div>' +
         '</div>'
