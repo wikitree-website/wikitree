@@ -187,6 +187,19 @@ ForceGraph.prototype.init = function () {
             .attr('d', 'M0,-5 L10,0 L0,5');
 };
 
+ForceGraph.prototype.getViewCenter = function () {
+    var self = this;
+    var scale = self.zoom.scale();
+    var translate = self.zoom.translate();
+    var translateX = translate[0] / scale;
+    var translateY = translate[1] / scale;
+    var width = self.width / scale;
+    var height = self.height / scale;
+    var x = width / 2 - translateX;
+    var y = height / 2 - translateY;
+    return [x, y];
+};
+
 ForceGraph.prototype.updateSize = function () {
     var self = this;
 
@@ -270,8 +283,9 @@ ForceGraph.prototype.updateNodesAndLinks = function (nodes, links) {
     }
 
     // give nodes starting positions
-    var centerX = self.width / 2;
-    var centerY = self.height / 2;
+    var viewCenter = self.getViewCenter();
+    var centerX = viewCenter[0];
+    var centerY = viewCenter[1];
     nodes.forEach(function (node) {
         if (!(node.x || node.y)) {
             node.x = centerX + (Math.random() * 5);
@@ -767,6 +781,9 @@ ForceGraph.prototype.makeDrag = function () {
 ForceGraph.prototype.makeNodeClick = function () {
     var self = this;
     return function (d) {
+
+        console.log('node click', d.x, d.y);
+
         d3.event.preventDefault();
         d3.event.stopPropagation();
         if (self.isDragging) return;
