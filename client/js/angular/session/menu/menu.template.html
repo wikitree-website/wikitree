@@ -1,12 +1,22 @@
 <div id="menu" class="overlay ng-hide ng-hide-animate" ng-show="open">
+    <div class="menu-controls">
+        <button ng-hide="!open" ng-click="toggleMenu()" type="button" class="open-button btn btn-default btn-sm">
+            <i class="fa fa-fw fa-close"></i>
+        </button>
+        <button ng-hide="open" ng-click="toggleMenu()" type="button" class="open-button btn btn-default btn-sm">
+            <i class="fa fa-fw fa-bars"></i>
+        </button>
+    </div>
+    <div class="map-controls">
+        <button ng-click="locateCurrentNode()" type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-fw fa-location-arrow"></i>
+        </button>
+        <button ng-click="addNoteNode()" type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-fw fa-file-o"></i>
+        </button>
+    </div>
     <div class="inner">
         <div class="menu-item header">
-            <button ng-click="toggleMenu()" type="button" class="close-button btn btn-default btn-sm">
-                <i class="fa fa-fw fa-close"></i>
-            </button>
-            <button ng-hide="open" ng-click="toggleMenu()" type="button" class="open-button btn btn-default btn-sm">
-                <i class="fa fa-fw fa-bars"></i>
-            </button>
             <h3 class="title">
                 <a href="#" ng-click="toggleMenu()">
                     Wikitree
@@ -65,14 +75,6 @@
                     Feedback
                 </a>
             </div>
-        </div>
-        <div class="map-controls">
-            <button ng-click="addNoteNode()" type="button" class="btn btn-default btn-sm">
-                <i class="fa fa-fw fa-file-o"></i>
-            </button>
-            <button ng-click="locateCurrentNode()" type="button" class="btn btn-default btn-sm">
-                <i class="fa fa-fw fa-location-arrow"></i>
-            </button>
         </div>
     </div>
 </div>

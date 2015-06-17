@@ -477,7 +477,7 @@ ForceGraph.prototype.addNoteNode = function (d, g) {
 
     // name
     g.append('svg:text')
-        .attr('class', 'name note-name')
+        .attr('class', 'note')
         .attr('dx', 18)
         .attr('dy', 4)
         .text(function (d) { return d.name })
@@ -548,7 +548,7 @@ ForceGraph.prototype.updatePopovers = function () {
         if (popover.hidden) return;
         var x = popover.node.x * scale + translateX;
         var y = popover.node.y * scale + translateY;
-        y += 10 * scale; // shift below center
+        y += 14 * scale; // shift below center
         popover.position(x, y);
     });
     // edit popovers
@@ -584,7 +584,7 @@ ForceGraph.prototype.updateNodePopover = function (popover) {
     var translateY = translate[1];
     var x = popover.node.x * scale + translateX;
     var y = popover.node.y * scale + translateY;
-    y += 10 * scale; // shift below center
+    y += 14 * scale; // shift below center
     popover.position(x, y);
 };
 
@@ -790,9 +790,20 @@ ForceGraph.prototype.makeNodeClick = function () {
         } else {
             if (d.type === 'note') {
                 // toggle note edit popover
-                var popover = self.editPopoversById[d.uuid];
-                self.updateEditPopover(popover);
-                popover.toggle();
+                var editPopover = self.editPopoversById[d.uuid];
+                var nodePopover = self.nodePopoversById[d.uuid];
+                if (editPopover.hidden) {
+                    // update & show edit popover
+                    self.updateEditPopover(editPopover);
+                    editPopover.show();
+                    // hide node popover
+                    nodePopover.hide(true);
+                } else {
+                    // hide edit popover
+                    editPopover.hide();
+                    // show node popover
+                    nodePopover.show();
+                }
             } else {
                 // set this node as current
                 self.scope.$apply(function () {

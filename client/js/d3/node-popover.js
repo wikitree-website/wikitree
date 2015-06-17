@@ -65,8 +65,7 @@ NodePopover.prototype.addEventListeners = function () {
     // pin button
     self.$el.find('.pin-button').on('click', function () {
         self.scope.graph.toggleNodePin(self.node);
-        self.hovered = false;
-        self.hide();
+        self.hide(true);
     });
     // delete button
     self.$el.find('.del-button').on('click', function () {
@@ -93,9 +92,9 @@ NodePopover.prototype.hide = function (forceful) {
     }
 
     setTimeout(function () {
-        if (self.node.hovered) return;
-        if (self.hovered) return;
         if (self.hidden) return;
+        if (self.hovered) return;
+        if (self.node.hovered) return;
         self._hide();
     }, 100);
 };
@@ -103,6 +102,7 @@ NodePopover.prototype.hide = function (forceful) {
 NodePopover.prototype._hide = function () {
     var self = this;
     self.hidden = true;
+    self.hovered = false;
     self.$el.hide();
     self.nodeSelect.classed('hovered', false);
 };

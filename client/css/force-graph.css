@@ -1,3 +1,11 @@
+
+#map .btn-xs {
+    /* warning todo, kinda risky override */
+    padding: 3px 4px;
+}
+
+
+
 /**
  * Popovers
  */
@@ -10,19 +18,19 @@
 }
 
 .graph-popover.node {
-    min-width: 68px;
+    min-width: 61px;
 }
 
 .graph-popover.note {
-    min-width: 94px;
-}
-
-.graph-popover.edit {
-    min-width: 240px;
+    min-width: 88px;
 }
 
 .graph-popover.link {
-    min-width: 40px;
+    min-width: 37px;
+}
+
+.graph-popover.edit {
+    min-width: 280px;
 }
 
 .graph-popover .popover-content {
@@ -62,15 +70,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 77px;
+    right: 60px;
     bottom: 0;
 }
 
 .graph-popover.edit .upper .controls {
     width: 76px;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 2px;
+    right: 4px;
     bottom: 0;
     text-align: right;
 }
@@ -141,8 +149,9 @@ g.node text.name {
     cursor: pointer;
 }
 
-g.node text.name.note-name {
+g.node text.note {
     fill: #555;
+    font-family: sans-serif;
     font-size: 12px;
 }
 
@@ -151,12 +160,23 @@ g.node body {
     font-size: 10px;
     line-height: 12px;
     color: #555;
+    pointer-events: none;
 }
 
 g.node.hovered text.name,
-g.node:hover text.name,
-g.node:hover body {
+g.node:hover text.name {
     font-weight: bold;
+}
+
+g.node.hovered text.note,
+g.node:hover text.note {
+    font-weight: bold;
+    fill: #333;
+}
+
+g.node.hovered text.note-icon-fore,
+g.node:hover text.note-icon-fore {
+    fill: #555;
 }
 
 g.node.active circle.disc {
