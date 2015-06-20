@@ -28,11 +28,11 @@ NoteNodePopover.prototype.makeElement = function () {
             '<div class="arrow"></div>' +
             '<div class="popover-content">' +
                 '<div class="btn-group" role="group" aria-label="Node controls">' +
-                    '<button type="button" class="pin-button btn btn-default btn-xs">' +
-                        '<i class="fa fa-fw fa-thumb-tack"></i>' +
-                    '</button>' +
                     '<button type="button" class="link-button btn btn-default btn-xs">' +
                         '<i class="fa fa-fw fa-link"></i>' +
+                    '</button>' +
+                    '<button type="button" class="pin-button btn btn-default btn-xs">' +
+                        '<i class="fa fa-fw fa-thumb-tack"></i>' +
                     '</button>' +
                     '<button type="button" class="del-button btn btn-default btn-xs">' +
                         '<i class="fa fa-fw fa-trash-o"></i>' +
