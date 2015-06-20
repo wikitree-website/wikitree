@@ -678,6 +678,17 @@ ForceGraph.prototype.makeForce = function () {
     return d3.layout.force()
         .size([this.width, this.height])
         .linkDistance(100)
+        .linkDistance(function (d) {
+            switch (d.source.type) {
+                case 'article':
+                case 'category':
+                case 'search':
+                    return 100;
+                case 'note':
+                case 'cursor':
+                    return 1;
+            }
+        })
         .linkStrength(function (d) {
             switch (d.source.type) {
                 case 'article':
@@ -686,7 +697,7 @@ ForceGraph.prototype.makeForce = function () {
                     return 0.2;
                 case 'note':
                 case 'cursor':
-                    return 0.1;
+                    return 0.07;
             }
         })
         .charge(function (d) {
