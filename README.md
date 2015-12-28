@@ -21,7 +21,7 @@ $ npm install
 Then, for production, run:
 ```
 $ gulp build
-$ npm start
+$ NODE_ENV=release npm start
 ```
 
 Or, for development, just run:
