@@ -23,6 +23,7 @@
     "nodemon": "1.3.x",
     "passport": "0.2.x",
     "passport-local": "1.0.x",
+    "pm2": "1.1.2",
     "serve-favicon": "2.2.x",
     "uglify-js": "2.4.x",
     "winston": "1.0.x"

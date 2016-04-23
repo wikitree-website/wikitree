@@ -1,0 +1,15 @@
+{
+  "apps" : [
+      {
+        "name": "wikitree",
+        "script": "server/server.js",
+        "watch": true,
+        "env": {
+          "NODE_ENV": "local",
+        },
+        "env_release" : {
+           "NODE_ENV": "release"
+        }
+      }
+  ]
+}
