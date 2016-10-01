@@ -33,5 +33,14 @@ Congrats! In development, the app should be available on:
 - [http://localhost:1111](http://localhost:1111)
 - [https://localhost:2222](https://localhost:2222)
 
+## Deployment
 
+Wikitree now uses `pm2` so do like:
+```
+$ ssh user@server
+$ cd /wikitree/wikitree
+$ pm2 stop all
+$ git pull
+$ pm2 start process.json --env release
+```
 
